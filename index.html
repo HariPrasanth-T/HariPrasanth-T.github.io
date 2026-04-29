@@ -151,6 +151,29 @@ img{max-width:100%}
 }
 .fui-btn:hover{transform:scale(1.1) rotate(8deg);box-shadow:var(--glow-md)}
 .fui-btn.muted{color:var(--muted)}
+.fui-btn.attention{animation:fui-attn 2s var(--ease-out) infinite}
+@keyframes fui-attn{
+  0%,100%{box-shadow:var(--shadow),0 0 0 0 rgba(6,182,212,.5)}
+  50%{box-shadow:var(--glow-md),0 0 0 14px rgba(6,182,212,0)}
+}
+.fui-btn .tip.persist{opacity:1;transform:translateY(-50%) translateX(0);animation:tip-pulse 2.4s var(--ease) infinite}
+@keyframes tip-pulse{0%,100%{transform:translateY(-50%) translateX(0)}50%{transform:translateY(-50%) translateX(-3px)}}
+.fui-label{
+  position:absolute;right:54px;top:50%;transform:translateY(-50%);
+  background:var(--grad);color:#fff;
+  font-size:.7rem;font-weight:800;letter-spacing:.6px;text-transform:uppercase;
+  padding:.4rem .85rem;border-radius:8px;white-space:nowrap;
+  font-family:'JetBrains Mono',monospace;
+  box-shadow:var(--glow-md);pointer-events:none;
+  display:flex;align-items:center;gap:.4rem;
+}
+.fui-label::after{
+  content:'';position:absolute;right:-5px;top:50%;transform:translateY(-50%) rotate(45deg);
+  width:10px;height:10px;background:var(--cyan);
+}
+.fui-label.show{animation:lbl-in .5s var(--ease-out) both,lbl-out .5s 4s var(--ease) forwards}
+@keyframes lbl-in{from{opacity:0;transform:translateY(-50%) translateX(20px)}to{opacity:1;transform:translateY(-50%) translateX(0)}}
+@keyframes lbl-out{to{opacity:0;transform:translateY(-50%) translateX(20px);visibility:hidden}}
 .fui-btn .tip{
   position:absolute;right:54px;top:50%;transform:translateY(-50%) translateX(8px);
   background:var(--card);color:var(--text);
@@ -613,7 +636,12 @@ section{padding:110px 5%;position:relative;z-index:1}
 .cci{width:46px;height:46px;border-radius:11px;flex-shrink:0;background:var(--brand-grad,var(--grad));display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px var(--brand-sh,rgba(29,78,216,.4));transition:transform .3s var(--ease)}
 .ccard:hover .cci{transform:scale(1.08) rotate(-5deg)}
 .cclb{font-size:.66rem;color:var(--text3);text-transform:uppercase;letter-spacing:1px;font-weight:700;font-family:'JetBrains Mono',monospace}
-.ccvl{font-size:.88rem;color:var(--text);font-weight:700;margin-top:.2rem;word-break:break-word}
+.ccvl{font-size:.84rem;color:var(--text);font-weight:700;margin-top:.2rem;word-break:break-all;overflow-wrap:anywhere;line-height:1.4}
+.ccard > div:not(.cci){min-width:0;flex:1;overflow:hidden}
+.p-desc{overflow-wrap:break-word;word-break:break-word}
+.exp-bullet,.about-item,.sc-item,.ai-tool-name,.ai-tool-desc{overflow-wrap:break-word;word-break:break-word}
+.cert-title,.cert-body{overflow-wrap:break-word}
+.cert-card > div:not(.cert-icon){min-width:0;flex:1}
 .ccard[data-b="work"]{--brand-grad:linear-gradient(135deg,#1d4ed8,#06b6d4);--brand-sh:rgba(29,78,216,.3);--brand-bd:rgba(6,182,212,.4)}
 .ccard[data-b="personal"]{--brand-grad:linear-gradient(135deg,#ea4335,#fbbc05);--brand-sh:rgba(234,67,53,.25);--brand-bd:rgba(234,67,53,.35)}
 .ccard[data-b="wa"]{--brand-grad:linear-gradient(135deg,#25d366,#128c7e);--brand-sh:rgba(37,211,102,.28);--brand-bd:rgba(37,211,102,.4)}
@@ -657,9 +685,10 @@ footer span{color:var(--cyan)}
 
 <!-- ═══ FLOATING UI ═══ -->
 <div class="float-ui">
-  <button class="fui-btn" id="theme-btn" title="Switch theme" aria-label="Switch theme">
+  <button class="fui-btn attention" id="theme-btn" title="Switch theme — Dark / Light / Easy Read" aria-label="Switch theme">
+    <span class="fui-label show" id="theme-label">👁 Eye Friendly Theme</span>
     <span class="tip">Theme</span>
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
   </button>
   <button class="fui-btn" id="sound-btn" title="Toggle sound" aria-label="Toggle sound">
     <span class="tip">Sound</span>
@@ -729,7 +758,7 @@ footer span{color:var(--cyan)}
       <div class="h-stat"><div class="s-val"><span class="n counter" data-target="12">0</span><span class="u">+YRS</span></div><div class="s-lab">Experience</div></div>
       <div class="h-stat"><div class="s-val"><span class="n counter" data-target="20">0</span><span class="u">+</span></div><div class="s-lab">Projects</div></div>
       <div class="h-stat"><div class="s-val"><span class="n counter" data-target="5">0</span><span class="u">+</span></div><div class="s-lab">Sectors</div></div>
-      <div class="h-stat"><div class="s-val"><span class="n">132</span><span class="u">kV</span></div><div class="s-lab">Grid Station</div></div>
+      <div class="h-stat"><div class="s-val" style="font-size:1.35rem;letter-spacing:.5px;"><span class="n" style="color:var(--cyan);font-weight:900;text-shadow:0 0 22px color-mix(in srgb,var(--cyan) 50%,transparent);">LV·MV·HV</span></div><div class="s-lab">Voltage Levels</div></div>
     </div>
 
     <!-- HERO SOCIALS — visible on first page -->
@@ -1049,14 +1078,93 @@ footer span{color:var(--cyan)}
     <p class="s-sub">Landmark electrical infrastructure delivered across Oman &amp; India.</p>
   </div>
   <div class="proj-grid">
-    <div class="proj-card reveal tilt"><div class="proj-stripe" style="background:linear-gradient(90deg,#1d4ed8,#06b6d4)"></div><div class="proj-body"><div class="p-icon">🏗️</div><div class="p-client">Eastern Overseas · 2014–19</div><div class="p-title">Al-Batha 3×20MVA Primary Substation</div><div class="p-desc">Designed and commissioned a 33/11kV primary substation with three 20MVA transformers, 33kV outdoor circuit breakers, 11kV AIS switchgear, capacitor banks, and SCADA serving North Al Batinah grid.</div><div class="p-tags"><span class="p-tag">33/11kV</span><span class="p-tag">20MVA</span><span class="p-tag">AIS</span><span class="p-tag">SCADA</span></div></div></div>
-    <div class="proj-card reveal tilt"><div class="proj-stripe" style="background:linear-gradient(90deg,#7c3aed,#1d4ed8)"></div><div class="proj-body"><div class="p-icon">🔌</div><div class="p-client">Eastern Overseas · 2014–19</div><div class="p-title">Mobailah South GIS Substation, Seeb</div><div class="p-desc">Upgraded 33/11kV substation with Siemens GIS switchgear, SCADA, and 33kV GIS indoor power cable terminations. Full pre-commissioning &amp; multi-team coordination.</div><div class="p-tags"><span class="p-tag">33kV GIS</span><span class="p-tag">Siemens</span><span class="p-tag">SCADA</span></div></div></div>
-    <div class="proj-card reveal tilt"><div class="proj-stripe" style="background:linear-gradient(90deg,#059669,#06b6d4)"></div><div class="proj-body"><div class="p-icon">🏭</div><div class="p-client">Gulf Genuine · 2023–24</div><div class="p-title">Al Hadeetha Copper Plant 11kV Distribution</div><div class="p-desc">Full turnkey 11kV system: 40ft containerised substation, ICOG panel, ACDB, PDBs, HT cables, FA system, MEP &amp; camp lighting. OES &amp; IEC compliant.</div><div class="p-tags"><span class="p-tag">11kV</span><span class="p-tag">Containerised</span><span class="p-tag">MEP</span></div></div></div>
-    <div class="proj-card reveal tilt"><div class="proj-stripe" style="background:linear-gradient(90deg,#f59e0b,#ef4444)"></div><div class="proj-body"><div class="p-icon">🚂</div><div class="p-client">Gulf Genuine · 2023–Now</div><div class="p-title">Hafeet Railway — Section 1, Package B</div><div class="p-desc">Power connection for Hafeet Railway: 12×6 distribution substations, 2×2MVA transformer T&amp;C, RMU and HFU systems, full LV electrical connections.</div><div class="p-tags"><span class="p-tag">2MVA</span><span class="p-tag">RMU · HFU</span><span class="p-tag">Railway</span></div></div></div>
-    <div class="proj-card reveal tilt"><div class="proj-stripe" style="background:linear-gradient(90deg,#0f2544,#3b82f6)"></div><div class="proj-body"><div class="p-icon">💨</div><div class="p-client">MADKOUR · 2024–Now</div><div class="p-title">132kV JBB Ali Wind Farm Grid Station</div><div class="p-desc">11kV OHL feeder works and concrete pole construction for Oman's 132kV Wind Farm Grid Station at Jalan Bani Bu Ali — national renewable energy programme.</div><div class="p-tags"><span class="p-tag">132kV</span><span class="p-tag">Wind Farm</span><span class="p-tag">OHL</span></div></div></div>
-    <div class="proj-card reveal tilt"><div class="proj-stripe" style="background:linear-gradient(90deg,#06b6d4,#6366f1)"></div><div class="proj-body"><div class="p-icon">🔋</div><div class="p-client">Gulf Genuine / NEDC · 2024</div><div class="p-title">OETC 57 Grid Stations — Inverter Enhancement</div><div class="p-desc">Enhancement of grid station security systems via new inverter installations across 57 OETC grid stations nationwide — ensuring uninterrupted infrastructure.</div><div class="p-tags"><span class="p-tag">OETC</span><span class="p-tag">57 Sites</span><span class="p-tag">Inverter</span></div></div></div>
-    <div class="proj-card reveal tilt"><div class="proj-stripe" style="background:linear-gradient(90deg,#be185d,#7c3aed)"></div><div class="proj-body"><div class="p-icon">🏛️</div><div class="p-client">Al Haddad · 2022–23</div><div class="p-title">Sultan's Security Force — Zeak Garrison</div><div class="p-desc">Complete 11kV &amp; LT electrical works for military buildings — switching station, substation, ESE lightning, RMU, HFU, MDB/SMDB, control panels, street lighting.</div><div class="p-tags"><span class="p-tag">Military</span><span class="p-tag">11kV</span><span class="p-tag">ESE</span></div></div></div>
-    <div class="proj-card reveal tilt"><div class="proj-stripe" style="background:linear-gradient(90deg,#0f2544,#059669)"></div><div class="proj-body"><div class="p-icon">🛢️</div><div class="p-client">Gulf Genuine / PDO · Now</div><div class="p-title">33kV OHL 25km — NATIH Ring Main, PDO</div><div class="p-desc">25km steel pole OHL construction for NATIH Ring Main at Fahud, Petroleum Development Oman — critical power infrastructure for oil field operations.</div><div class="p-tags"><span class="p-tag">33kV OHL</span><span class="p-tag">PDO</span><span class="p-tag">25km</span></div></div></div>
+    <div class="proj-card reveal tilt">
+      <div class="proj-stripe" style="background:linear-gradient(90deg,#1d4ed8,#06b6d4)"></div>
+      <div class="proj-body">
+        <div class="p-icon">🏗️</div>
+        <div class="p-client">Eastern Overseas LLC · 2014–2019</div>
+        <div class="p-title">Al-Batha 3×20MVA 33/11kV Primary Substation</div>
+        <div class="p-desc">Designed and commissioned a 33/11kV primary substation at Al Suwaiq, North Batinah, featuring <strong>three 20MVA transformers</strong>, 33kV outdoor circuit breakers, 11kV AIS switchgear, capacitor banks, SCADA panel, LVAC panel, 110V DC system, and full power &amp; control cable laying with 33kV indoor terminations. Managed pre-commissioning, civil/MEP/consultant coordination, materials estimation, construction schedules, method statements, JSPs, and as-built drawings.</div>
+        <div class="p-tags"><span class="p-tag">33/11kV</span><span class="p-tag">3×20MVA</span><span class="p-tag">AIS</span><span class="p-tag">SCADA</span><span class="p-tag">Capacitor Banks</span></div>
+      </div>
+    </div>
+
+    <div class="proj-card reveal tilt">
+      <div class="proj-stripe" style="background:linear-gradient(90deg,#7c3aed,#1d4ed8)"></div>
+      <div class="proj-body">
+        <div class="p-icon">🔌</div>
+        <div class="p-client">Eastern Overseas LLC · 2014–2019</div>
+        <div class="p-title">Mobailah South GIS Substation Upgrade, Seeb</div>
+        <div class="p-desc">Upgraded the 33/11kV substation with <strong>Siemens GIS switchgear</strong>, control &amp; relay panels, SCADA panel, LVAC panel, 110V and 30V DC systems, control cable laying, cable tray works, and 33kV GIS indoor power cable terminations. Led pre-commissioning activities and full coordination with civil, MEP, client and consultant teams.</div>
+        <div class="p-tags"><span class="p-tag">33kV GIS</span><span class="p-tag">Siemens</span><span class="p-tag">SCADA</span><span class="p-tag">Cable Termination</span><span class="p-tag">110V DC</span></div>
+      </div>
+    </div>
+
+    <div class="proj-card reveal tilt">
+      <div class="proj-stripe" style="background:linear-gradient(90deg,#059669,#06b6d4)"></div>
+      <div class="proj-body">
+        <div class="p-icon">🏭</div>
+        <div class="p-client">Gulf Genuine Power · 2023–2024</div>
+        <div class="p-title">Al Hadeetha Copper Plant — 11kV Distribution</div>
+        <div class="p-desc">Full turnkey supply, erection, testing, and commissioning of an <strong>11kV electrical distribution system</strong> at Al Wash-hi, Sinow including a custom 40ft container-type substation, transformer yard, ICOG panel, ACDB, PDBs, SLDB, 11kV HT cables, FA system, MEP works, and camp/workshop lighting infrastructure. Managed cable routing, copper-flat earthing, lightning protection, and OES/IEC-compliant safety systems.</div>
+        <div class="p-tags"><span class="p-tag">11kV</span><span class="p-tag">Containerised SS</span><span class="p-tag">MEP</span><span class="p-tag">FA System</span><span class="p-tag">OES/IEC</span></div>
+      </div>
+    </div>
+
+    <div class="proj-card reveal tilt">
+      <div class="proj-stripe" style="background:linear-gradient(90deg,#f59e0b,#ef4444)"></div>
+      <div class="proj-body">
+        <div class="p-icon">🚂</div>
+        <div class="p-client">Gulf Genuine / Tristar · 2023–Ongoing</div>
+        <div class="p-title">Hafeet Railway — Oman Section 1, Package B</div>
+        <div class="p-desc">Power connection contract for the Hafeet Railway including construction of <strong>12×6 distribution substations</strong>, installation, testing and commissioning of <strong>2×2MVA transformers</strong>, RMU, HFU and 4 FPs with full LV electrical connections, terminations, and inspection — coordinated under M/s Tristar Engineering &amp; Construction SPC.</div>
+        <div class="p-tags"><span class="p-tag">2MVA</span><span class="p-tag">RMU · HFU</span><span class="p-tag">Railway</span><span class="p-tag">12×6 SS</span><span class="p-tag">T&amp;C</span></div>
+      </div>
+    </div>
+
+    <div class="proj-card reveal tilt">
+      <div class="proj-stripe" style="background:linear-gradient(90deg,#0f2544,#3b82f6)"></div>
+      <div class="proj-body">
+        <div class="p-icon">💨</div>
+        <div class="p-client">MADKOUR Projects LLC · 2024–Ongoing</div>
+        <div class="p-title">132kV JBB Ali Wind Farm Grid Station</div>
+        <div class="p-desc">11kV OHL feeder works and concrete pole construction for Oman's <strong>132kV Wind Farm Grid Station</strong> at Jalan Bani Bu Ali — a flagship project in the national renewable energy expansion programme contributing to Oman's clean energy transition and grid integration of utility-scale wind power.</div>
+        <div class="p-tags"><span class="p-tag">132kV</span><span class="p-tag">Wind Farm</span><span class="p-tag">11kV OHL</span><span class="p-tag">Renewable</span><span class="p-tag">Concrete Pole</span></div>
+      </div>
+    </div>
+
+    <div class="proj-card reveal tilt">
+      <div class="proj-stripe" style="background:linear-gradient(90deg,#06b6d4,#6366f1)"></div>
+      <div class="proj-body">
+        <div class="p-icon">🔋</div>
+        <div class="p-client">Gulf Genuine Power / NEDC · 2024</div>
+        <div class="p-title">OETC 57 Grid Stations — Inverter Enhancement</div>
+        <div class="p-desc">Enhancement of power supply for grid station security systems through installation of new inverter systems as part of <strong>Tender 46/2024 across 57 OETC grid stations</strong> nationwide — ensuring uninterrupted security infrastructure across Oman's transmission network with standardised installation, testing, and commissioning protocols.</div>
+        <div class="p-tags"><span class="p-tag">OETC</span><span class="p-tag">57 Stations</span><span class="p-tag">Inverter</span><span class="p-tag">Grid Security</span><span class="p-tag">Tender 46/2024</span></div>
+      </div>
+    </div>
+
+    <div class="proj-card reveal tilt">
+      <div class="proj-stripe" style="background:linear-gradient(90deg,#be185d,#7c3aed)"></div>
+      <div class="proj-body">
+        <div class="p-icon">🏛️</div>
+        <div class="p-client">Al Haddad Trading · 2022–2023</div>
+        <div class="p-title">Sultan's Security Force — Zeak Garrison</div>
+        <div class="p-desc">Construction of soldier mess, recruit and recreation buildings for <strong>Sultan's Security Force</strong> with complete 11kV &amp; LT electrical works including a switching station with 11kV metering panel, 11/0.433kV substation, ESE lightning protection, transformers, DC generator, RMU, HFU, OLU, feeder pillars, SLFP, MDB, SMDB, control panels, street light poles, mechanical works, cable laying, terminations and earthing.</div>
+        <div class="p-tags"><span class="p-tag">Military</span><span class="p-tag">11kV SS</span><span class="p-tag">ESE Lightning</span><span class="p-tag">RMU · HFU · OLU</span><span class="p-tag">MEP</span></div>
+      </div>
+    </div>
+
+    <div class="proj-card reveal tilt">
+      <div class="proj-stripe" style="background:linear-gradient(90deg,#0f2544,#059669)"></div>
+      <div class="proj-body">
+        <div class="p-icon">🛢️</div>
+        <div class="p-client">Gulf Genuine / PDO · Ongoing</div>
+        <div class="p-title">33kV OHL 25km — NATIH Ring Main, PDO Fahud</div>
+        <div class="p-desc">Construction of <strong>25km of 33kV OHL steel pole work</strong> on the NATIH Ring Main at Fahud, Petroleum Development Oman, under M/s Gulf Petrochemical Services — delivering critical power supply infrastructure for oil field operations across rugged terrain with full HSE compliance and PDO standards.</div>
+        <div class="p-tags"><span class="p-tag">33kV OHL</span><span class="p-tag">PDO</span><span class="p-tag">Steel Poles</span><span class="p-tag">25km</span><span class="p-tag">Oil Field</span></div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1153,7 +1261,12 @@ setTheme(saved && THEMES.includes(saved) ? saved : 'dark');
 themeBtn.addEventListener('click', () => {
   const cur = document.documentElement.getAttribute('data-theme');
   setTheme(THEMES[(THEMES.indexOf(cur) + 1) % THEMES.length]);
+  themeBtn.classList.remove('attention');
+  const lbl = document.getElementById('theme-label');
+  if (lbl) lbl.remove();
 });
+// auto-hide attention pulse after 8s if user doesn't click
+setTimeout(() => themeBtn.classList.remove('attention'), 8000);
 
 /* ════ Nav, hamburger, scroll ════ */
 const ham = document.getElementById('hamburger');
@@ -1402,20 +1515,10 @@ window.addEventListener('scroll', () => {
   }
 
   /* ════════════════════════════════════════
-     AMBIENT MUSIC — chord progression
+     AMBIENT — gentle sustained electrical hum
+     C-G perfect fifth · no chord changes · headphone-safe
   ════════════════════════════════════════ */
-  // C minor relaxed progression: Cm - Ab - Eb - G
-  const PROGRESSION = [
-    [130.81, 155.56, 196.00],   // Cm: C3, Eb3, G3
-    [103.83, 130.81, 155.56],   // Ab2, C3, Eb3
-    [155.56, 196.00, 233.08],   // Eb3, G3, Bb3
-    [196.00, 246.94, 293.66],   // G3, B3, D4
-  ];
-  // bass notes (one octave down)
-  const BASS = [65.41, 51.91, 77.78, 98.00];
-
   let activeOscs = [];
-
   function killOsc(o, when){
     const ac = getCtx();
     o.gain.gain.cancelScheduledValues(ac.currentTime);
@@ -1424,71 +1527,54 @@ window.addEventListener('scroll', () => {
     setTimeout(()=>{ try{ o.osc.stop(); }catch(e){} }, ((when||1.5) + .1) * 1000);
   }
 
-  function playChord(idx){
-    if (muted) return;
-    const ac = getCtx(); ensureMaster();
-    const chord = PROGRESSION[idx % PROGRESSION.length];
-    const bass = BASS[idx % BASS.length];
-
-    // fade out previous
-    activeOscs.forEach(o => killOsc(o, 1.6));
-    activeOscs = [];
-
-    // bass drone
-    const bo = ac.createOscillator(); bo.type = 'sine'; bo.frequency.value = bass;
-    const bg = ac.createGain(); bg.gain.value = 0;
-    bg.gain.linearRampToValueAtTime(.075, ac.currentTime + 1.2);
-    bo.connect(bg); bg.connect(masterCh);
-    bo.start();
-    activeOscs.push({ osc: bo, gain: bg });
-
-    // chord pad voices
-    chord.forEach((f, i) => {
-      const o1 = ac.createOscillator(); o1.type = 'sine'; o1.frequency.value = f;
-      const o2 = ac.createOscillator(); o2.type = 'triangle'; o2.frequency.value = f * 1.005; // slight detune
-      const g = ac.createGain(); g.gain.value = 0;
-      g.gain.linearRampToValueAtTime(.024 - i * .003, ac.currentTime + 2);
-
-      const lp = ac.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 1400;
-
-      o1.connect(g); o2.connect(g); g.connect(lp); lp.connect(masterCh);
-      o1.start(); o2.start();
-      activeOscs.push({ osc: o1, gain: g });
-      activeOscs.push({ osc: o2, gain: g });
-    });
-
-    // shimmer (high octave sparkle, modulated)
-    const sh = ac.createOscillator(); sh.type = 'sine';
-    sh.frequency.value = chord[2] * 4;
-    const shg = ac.createGain(); shg.gain.value = 0;
-    shg.gain.linearRampToValueAtTime(.008, ac.currentTime + 3);
-
-    const lfo = ac.createOscillator(); lfo.frequency.value = .25;
-    const lfoGain = ac.createGain(); lfoGain.gain.value = .005;
-    lfo.connect(lfoGain); lfoGain.connect(shg.gain);
-
-    sh.connect(shg); shg.connect(masterCh);
-    sh.start(); lfo.start();
-    activeOscs.push({ osc: sh, gain: shg });
-    activeOscs.push({ osc: lfo, gain: shg });
-  }
-
-  let chordIdx = 0;
   function startAmbient(){
     if (muted || ambient) return;
     ambient = true;
-    playChord(chordIdx++);
-    chordTimer = setInterval(()=>{
-      if (muted) return;
-      playChord(chordIdx++);
-    }, 8000);  // 8 seconds per chord
+    const ac = getCtx(); ensureMaster();
+
+    // Single calming open-fifth pad — C2 + G2 + C3 (root + perfect 5th + octave)
+    const NOTES = [
+      { f: 65.41,  v: .035, type: 'sine' },     // C2 — soft bass
+      { f: 98.00,  v: .025, type: 'sine' },     // G2 — perfect fifth (consonant)
+      { f: 130.81, v: .018, type: 'triangle' }, // C3 — gentle warmth
+    ];
+
+    NOTES.forEach(n => {
+      const o = ac.createOscillator();
+      o.type = n.type;
+      o.frequency.value = n.f;
+
+      const g = ac.createGain();
+      g.gain.value = 0;
+      g.gain.linearRampToValueAtTime(n.v, ac.currentTime + 6);  // 6s gentle fade-in
+
+      // gentle low-pass filter for warmth
+      const lp = ac.createBiquadFilter();
+      lp.type = 'lowpass';
+      lp.frequency.value = 700;
+      lp.Q.value = .5;
+
+      // very slow LFO for "breathing" volume — barely perceptible
+      const lfo = ac.createOscillator();
+      lfo.type = 'sine';
+      lfo.frequency.value = .08;  // 1 cycle per 12 seconds
+      const lfoGain = ac.createGain();
+      lfoGain.gain.value = n.v * .25;
+      lfo.connect(lfoGain);
+      lfoGain.connect(g.gain);
+
+      o.connect(g); g.connect(lp); lp.connect(masterCh);
+      o.start(); lfo.start();
+      activeOscs.push({ osc: o, gain: g });
+      activeOscs.push({ osc: lfo, gain: g });
+    });
   }
+
   function stopAmbient(){
     if (!ambient) return;
     ambient = false;
-    if (chordTimer){ clearInterval(chordTimer); chordTimer = null; }
-    activeOscs.forEach(o => killOsc(o, 1.2));
-    setTimeout(()=>{ activeOscs = []; }, 1500);
+    activeOscs.forEach(o => killOsc(o, 2.5));
+    setTimeout(()=>{ activeOscs = []; }, 2700);
   }
 
   /* ── Mute toggle ── */
