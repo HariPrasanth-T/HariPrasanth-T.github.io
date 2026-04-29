@@ -101,6 +101,21 @@ nav.scrolled{border-color:rgba(6,182,212,.25);background:rgba(5,11,20,.96)}
 .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
 .hamburger span{display:block;width:22px;height:2px;background:var(--white);border-radius:2px;transition:.3s}
 
+/* ── Sound toggle ── */
+#sound-btn{
+  position:fixed;bottom:1.6rem;right:1.6rem;z-index:400;
+  width:44px;height:44px;border-radius:50%;
+  background:rgba(5,11,20,.85);
+  border:1px solid rgba(6,182,212,.3);
+  color:var(--cyan);font-size:1.1rem;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .25s;
+  backdrop-filter:blur(12px);
+  box-shadow:0 0 16px rgba(6,182,212,.15);
+}
+#sound-btn:hover{border-color:var(--cyan);box-shadow:0 0 24px rgba(6,182,212,.35);transform:scale(1.1)}
+#sound-btn.muted{color:var(--muted);border-color:rgba(100,112,128,.3);box-shadow:none}
+
 /* ══════════════════════════════════════════
    HERO
 ══════════════════════════════════════════ */
@@ -653,6 +668,9 @@ footer span{color:var(--cyan)}
 </style>
 </head>
 <body>
+
+<!-- ═══ SOUND TOGGLE ═══ -->
+<button id="sound-btn" title="Toggle sound effects" aria-label="Toggle sound">🔊</button>
 
 <!-- ═══ NAV ═══ -->
 <nav id="navbar">
@@ -1234,6 +1252,168 @@ document.querySelectorAll('.tilt-card').forEach(card => {
   });
   card.addEventListener('mouseleave', () => { card.style.transform = ''; });
 });
+</script>
+
+<!-- ═══════════════════════════════════════
+     SOUND EFFECTS — Web Audio API
+═══════════════════════════════════════ -->
+<script>
+(function() {
+  let muted = false;
+  let ctx = null;
+  const btn = document.getElementById('sound-btn');
+
+  function getCtx() {
+    if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+    if (ctx.state === 'suspended') ctx.resume();
+    return ctx;
+  }
+
+  /* ── toggle ── */
+  btn.addEventListener('click', () => {
+    muted = !muted;
+    btn.textContent = muted ? '🔇' : '🔊';
+    btn.classList.toggle('muted', muted);
+    if (!muted) playPowerUp();
+  });
+
+  /* ═══ SOUND GENERATORS ═══ */
+
+  /* Electric spark / zap — short noise burst */
+  function playZap(vol = 0.18) {
+    if (muted) return;
+    const ac = getCtx();
+    const buf = ac.createBuffer(1, ac.sampleRate * 0.07, ac.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 2);
+    const src = ac.createBufferSource();
+    src.buffer = buf;
+    const bpf = ac.createBiquadFilter();
+    bpf.type = 'bandpass'; bpf.frequency.value = 3200; bpf.Q.value = 0.6;
+    const gain = ac.createGain();
+    gain.gain.setValueAtTime(vol, ac.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.07);
+    src.connect(bpf); bpf.connect(gain); gain.connect(ac.destination);
+    src.start();
+  }
+
+  /* Soft electrical hum — for card hover */
+  function playHum(vol = 0.06, freq = 120, dur = 0.18) {
+    if (muted) return;
+    const ac = getCtx();
+    const osc = ac.createOscillator();
+    const gain = ac.createGain();
+    osc.type = 'sawtooth'; osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0, ac.currentTime);
+    gain.gain.linearRampToValueAtTime(vol, ac.currentTime + 0.02);
+    gain.gain.linearRampToValueAtTime(0, ac.currentTime + dur);
+    osc.connect(gain); gain.connect(ac.destination);
+    osc.start(); osc.stop(ac.currentTime + dur);
+  }
+
+  /* Button click — sharp electric tick */
+  function playTick(vol = 0.22) {
+    if (muted) return;
+    const ac = getCtx();
+    const osc = ac.createOscillator();
+    const gain = ac.createGain();
+    osc.type = 'square'; osc.frequency.value = 880;
+    osc.frequency.exponentialRampToValueAtTime(220, ac.currentTime + 0.05);
+    gain.gain.setValueAtTime(vol, ac.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.08);
+    osc.connect(gain); gain.connect(ac.destination);
+    osc.start(); osc.stop(ac.currentTime + 0.08);
+  }
+
+  /* Power-up sweep — on page load / unmute */
+  function playPowerUp() {
+    if (muted) return;
+    const ac = getCtx();
+    const osc = ac.createOscillator();
+    const gain = ac.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(60, ac.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(440, ac.currentTime + 0.6);
+    gain.gain.setValueAtTime(0, ac.currentTime);
+    gain.gain.linearRampToValueAtTime(0.12, ac.currentTime + 0.05);
+    gain.gain.linearRampToValueAtTime(0, ac.currentTime + 0.7);
+    osc.connect(gain); gain.connect(ac.destination);
+    osc.start(); osc.stop(ac.currentTime + 0.7);
+    // layered crackle
+    setTimeout(() => playZap(0.1), 100);
+    setTimeout(() => playZap(0.07), 250);
+  }
+
+  /* Reveal pop — subtle high tick when sections appear */
+  function playRevealPop() {
+    if (muted) return;
+    const ac = getCtx();
+    const osc = ac.createOscillator();
+    const gain = ac.createGain();
+    osc.type = 'sine'; osc.frequency.value = 1200;
+    gain.gain.setValueAtTime(0.06, ac.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.06);
+    osc.connect(gain); gain.connect(ac.destination);
+    osc.start(); osc.stop(ac.currentTime + 0.06);
+  }
+
+  /* ═══ ATTACH SOUNDS ═══ */
+
+  /* Buttons — tick on click */
+  document.querySelectorAll('.btn').forEach(el => {
+    el.addEventListener('click', () => playTick());
+  });
+
+  /* Nav links — zap */
+  document.querySelectorAll('.nav-links a').forEach(el => {
+    el.addEventListener('click', () => playZap(0.1));
+  });
+
+  /* Project cards — hum on hover */
+  document.querySelectorAll('.project-card').forEach(el => {
+    el.addEventListener('mouseenter', () => playHum(0.05, 100 + Math.random() * 60, 0.2));
+  });
+
+  /* Skill cards — lighter hum */
+  document.querySelectorAll('.skill-card').forEach(el => {
+    el.addEventListener('mouseenter', () => playHum(0.04, 80, 0.15));
+  });
+
+  /* Experience nodes — zap on hover */
+  document.querySelectorAll('.exp-node').forEach(el => {
+    el.addEventListener('mouseenter', () => playZap(0.1));
+  });
+
+  /* Contact cards — tick */
+  document.querySelectorAll('.contact-card').forEach(el => {
+    el.addEventListener('mouseenter', () => playTick(0.1));
+  });
+
+  /* Badge — mini zap */
+  const badge = document.querySelector('.hero-badge');
+  if (badge) badge.addEventListener('mouseenter', () => playZap(0.08));
+
+  /* Section reveal — pop on first appear */
+  const soundRevObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        playRevealPop();
+        soundRevObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.section-header').forEach(el => soundRevObs.observe(el));
+
+  /* Page load power-up — after first interaction (browser policy) */
+  let booted = false;
+  document.addEventListener('click', () => {
+    if (!booted) { booted = true; playPowerUp(); }
+  }, { once: true });
+  document.addEventListener('mousemove', () => {
+    if (!booted) { booted = true; playPowerUp(); }
+  }, { once: true });
+
+})();
 </script>
 </body>
 </html>
