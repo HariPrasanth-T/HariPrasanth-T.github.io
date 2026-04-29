@@ -665,20 +665,156 @@ footer span{color:var(--cyan)}
 .reveal.visible,.reveal-l.visible,.reveal-r.visible{opacity:1;transform:none}
 
 /* ════════════════════════════════════════════
-   15. RESPONSIVE
+   15. RESPONSIVE — All Devices
+   📱 320–480 phone · 480–768 large phone
+   📲 768–1024 tablet · 1024–1400 desktop
+   🖥 1400–1920 large desktop · 1920+ TV/4K
 ════════════════════════════════════════════ */
-@media(max-width:980px){.about-grid{grid-template-columns:1fr;gap:2.5rem}.about-card{position:static}}
-@media(max-width:760px){
+
+/* Tablet & small desktop */
+@media(max-width:1024px){
+  .about-grid{grid-template-columns:1fr;gap:2.5rem;max-width:760px}
+  .about-card{position:static}
+  .skills-grid,.proj-grid{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+  section{padding:90px 5%}
+}
+
+/* Tablet portrait */
+@media(max-width:900px){
+  html{font-size:16px}
+  [data-theme="warm"]{font-size:17px}
+  .h-name{font-size:clamp(2.4rem,7vw,3.6rem)}
   .nav-links{display:none}
-  .nav-links.open{display:flex;flex-direction:column;position:absolute;top:64px;left:0;right:0;gap:1.25rem;background:var(--bg);padding:1.5rem 5%;border-bottom:1px solid var(--line2)}
+  .nav-links.open{display:flex;flex-direction:column;position:absolute;top:64px;left:0;right:0;gap:1.25rem;background:var(--bg);padding:1.5rem 5%;border-bottom:1px solid var(--line2);box-shadow:0 8px 32px rgba(0,0,0,.3)}
   .hamburger{display:flex}
   .hero-content{padding-bottom:140px}
   .h-stats{flex-wrap:wrap}
-  .h-stat{padding:.85rem 1.1rem;flex:1;min-width:120px}
+  .h-stat{padding:.85rem 1.15rem;flex:1;min-width:130px}
+  .h-socials{justify-content:flex-start}
+  section{padding:80px 5%}
+}
+
+/* Large phone */
+@media(max-width:640px){
+  html{font-size:15.5px}
+  section{padding:70px 5%}
+  .s-header{margin-bottom:2.8rem}
   .ccard{min-width:100%}
   .scroll-hint{display:none}
+  .h-stat{min-width:46%;padding:.8rem 1rem}
+  .h-stats{width:100%}
+  .s-val{font-size:1.6rem}
+  .h-soc{width:42px;height:42px}
+  .float-ui{bottom:1rem;right:1rem}
+  .fui-btn{width:42px;height:42px}
+  .fui-label{font-size:.65rem;padding:.32rem .65rem}
+  .exp-wrapper{padding-left:0}
+  .exp-company{gap:1rem}
+  .exp-node{width:42px;height:42px;font-size:1rem}
+  .arc-wrap{display:none}
+  .tower-wrap{width:60vw;opacity:.05}
 }
-@media(max-width:480px){section{padding:80px 5%}.s-header{margin-bottom:3rem}}
+
+/* Small phone */
+@media(max-width:420px){
+  html{font-size:15px}
+  section{padding:60px 5%}
+  nav{padding:0 4%}
+  #home{padding:80px 4% 0}
+  .h-name{font-size:2.1rem;letter-spacing:-1.2px}
+  .h-role{font-size:.95rem}
+  .h-tagline{font-size:.92rem}
+  .h-stat{min-width:100%}
+  .h-actions{flex-direction:column;width:100%}
+  .h-actions .btn{width:100%;justify-content:center}
+  .h-soc{width:40px;height:40px}
+  .h-soc svg{width:18px;height:18px}
+  .h-socials{gap:.45rem}
+  .skill-card,.proj-body,.about-card{padding:1.5rem}
+  .ccard{padding:1.25rem 1.4rem}
+  .cci{width:42px;height:42px}
+  .ccvl{font-size:.78rem}
+  .s-title{font-size:1.7rem}
+  .ai-tool{padding:.5rem .55rem}
+  .exp-bullet{font-size:.82rem;padding:.35rem .55rem}
+  .h-badge{padding:.35rem .9rem}
+  .h-badge .txt{font-size:.65rem;letter-spacing:1.2px}
+}
+
+/* Tiny phone */
+@media(max-width:340px){
+  html{font-size:14.5px}
+  .h-name{font-size:1.85rem}
+  .s-title{font-size:1.5rem}
+  .skill-card,.proj-body{padding:1.25rem}
+  .h-stats{padding:.5rem}
+}
+
+/* Large desktop */
+@media(min-width:1400px){
+  html{font-size:18px}
+  .about-grid{max-width:1280px}
+  .skills-grid,.proj-grid{max-width:1280px}
+  .cert-grid{max-width:1180px}
+  .exp-wrapper{max-width:1000px}
+  .cgrid{max-width:1180px}
+  .hero-content{max-width:780px}
+  section{padding:130px 6%}
+}
+
+/* Extra-large / 1080p TV / 4K */
+@media(min-width:1920px){
+  html{font-size:19px}
+  body{font-size:1.02rem}
+  .about-grid,.skills-grid,.proj-grid,.cert-grid,.cgrid{max-width:1500px}
+  .exp-wrapper{max-width:1100px}
+  .hero-content{max-width:900px}
+  section{padding:150px 8%}
+  .s-title{font-size:clamp(2.4rem,3vw,3.5rem)}
+  .h-name{font-size:clamp(3.4rem,4.5vw,5.5rem)}
+  .h-tagline{font-size:1.08rem;max-width:680px}
+  nav{height:74px}
+  #home{padding-top:120px}
+  .float-ui{bottom:2rem;right:2rem}
+  .fui-btn{width:54px;height:54px;font-size:1.4rem}
+  .h-soc{width:50px;height:50px}
+  .h-soc svg{width:22px;height:22px}
+  .skill-card,.proj-body{padding:2.4rem}
+  .ccard{padding:1.8rem 2.2rem}
+  .cci{width:52px;height:52px}
+}
+
+/* Ultra-wide / 4K TV */
+@media(min-width:2560px){
+  html{font-size:21px}
+  .about-grid,.skills-grid,.proj-grid,.cert-grid,.cgrid{max-width:1800px}
+  .exp-wrapper{max-width:1300px}
+  .hero-content{max-width:1100px}
+  section{padding:180px 10%}
+  nav{padding:0 8%}
+  .h-name{font-size:5.5rem}
+}
+
+/* Touch-only fine-tuning */
+@media(hover:none) and (pointer:coarse){
+  .tilt:hover{transform:translateY(-4px) !important}
+  .tilt::before{opacity:0 !important}
+  .h-soc:hover{transform:translateY(-2px) scale(1)}
+}
+
+/* Reduced motion preference */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+  .reveal,.reveal-l,.reveal-r{opacity:1;transform:none}
+  .power-dot,.bolt-pulse,.h-badge::before{animation:none}
+}
+
+/* Landscape phones */
+@media(max-height:500px) and (orientation:landscape){
+  #home{min-height:auto;padding-top:90px;padding-bottom:60px}
+  .scroll-hint{display:none}
+  #c-scope{height:60px}
+}
 </style>
 </head>
 <body>
@@ -758,7 +894,7 @@ footer span{color:var(--cyan)}
       <div class="h-stat"><div class="s-val"><span class="n counter" data-target="12">0</span><span class="u">+YRS</span></div><div class="s-lab">Experience</div></div>
       <div class="h-stat"><div class="s-val"><span class="n counter" data-target="20">0</span><span class="u">+</span></div><div class="s-lab">Projects</div></div>
       <div class="h-stat"><div class="s-val"><span class="n counter" data-target="5">0</span><span class="u">+</span></div><div class="s-lab">Sectors</div></div>
-      <div class="h-stat"><div class="s-val" style="font-size:1.35rem;letter-spacing:.5px;"><span class="n" style="color:var(--cyan);font-weight:900;text-shadow:0 0 22px color-mix(in srgb,var(--cyan) 50%,transparent);">LV·MV·HV</span></div><div class="s-lab">Voltage Levels</div></div>
+      <div class="h-stat"><div class="s-val" style="font-size:1.35rem;letter-spacing:.5px;"><span class="n" style="color:var(--cyan);font-weight:900;text-shadow:0 0 22px color-mix(in srgb,var(--cyan) 50%,transparent);">LV, MV &amp; HV</span></div><div class="s-lab">Voltage Levels</div></div>
     </div>
 
     <!-- HERO SOCIALS — visible on first page -->
@@ -1601,16 +1737,20 @@ window.addEventListener('scroll', () => {
   }, { threshold: 0.3 });
   document.querySelectorAll('.s-header').forEach(el => sObs.observe(el));
 
-  /* boot — first interaction */
+  /* boot — try every possible interaction (browsers block autoplay) */
   let booted = false;
   function boot(){
     if (booted) return; booted = true;
     powerUp();
-    setTimeout(startAmbient, 700);
+    setTimeout(startAmbient, 600);
   }
-  document.addEventListener('click', boot, { once: true });
-  document.addEventListener('mousemove', boot, { once: true });
-  document.addEventListener('touchstart', boot, { once: true });
+  // attempt instant autoplay on load (works on some browsers/mobile)
+  window.addEventListener('load', () => { setTimeout(() => { try { boot(); } catch(e){} }, 100); });
+  // fallback: any interaction triggers it
+  ['click','mousemove','touchstart','touchend','scroll','keydown','wheel','pointerdown','pointermove','focus'].forEach(ev => {
+    document.addEventListener(ev, boot, { once: true, passive: true, capture: true });
+  });
+  window.addEventListener('scroll', boot, { once: true, passive: true });
 })();
 </script>
 </body>
