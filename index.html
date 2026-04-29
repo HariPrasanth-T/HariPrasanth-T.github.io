@@ -235,7 +235,7 @@ nav.scrolled{
 #home{
   position:relative;min-height:100vh;
   display:flex;align-items:center;
-  padding:100px 5% 0;overflow:hidden;
+  padding:110px 5% 220px;overflow:hidden;
   background:
     radial-gradient(ellipse 70% 60% at 65% 40%,color-mix(in srgb,var(--blue) 12%,transparent) 0%,transparent 65%),
     radial-gradient(ellipse 40% 40% at 15% 80%,color-mix(in srgb,var(--cyan) 8%,transparent) 0%,transparent 60%),
@@ -393,7 +393,7 @@ nav.scrolled{
 .btn-outline:hover{background:color-mix(in srgb,var(--cyan) 10%,transparent);border-color:var(--cyan);color:var(--cyan);box-shadow:var(--glow-sm);transform:translateY(-3px)}
 
 /* scroll hint */
-.scroll-hint{position:absolute;bottom:135px;left:5%;z-index:2;display:flex;align-items:center;gap:.7rem;color:var(--muted);font-size:.7rem;letter-spacing:1.3px;text-transform:uppercase;font-family:'JetBrains Mono',monospace}
+.scroll-hint{position:absolute;bottom:8px;right:5%;z-index:2;display:flex;align-items:center;gap:.7rem;color:var(--muted);font-size:.7rem;letter-spacing:1.3px;text-transform:uppercase;font-family:'JetBrains Mono',monospace}
 .s-line{width:30px;height:1px;background:linear-gradient(90deg,var(--cyan),transparent);animation:sl 2s ease-in-out infinite}
 @keyframes sl{0%,100%{width:18px;opacity:.3}50%{width:38px;opacity:1}}
 
@@ -568,8 +568,35 @@ section{padding:110px 5%;position:relative;z-index:1}
 .ai-tool[data-t="gemini"]{--brand-c:#4285f4}
 .ai-tool[data-t="image"]{--brand-c:#31a8ff}
 .ai-tool[data-t="video"]{--brand-c:#ea4335}
-.ai-tool[data-t="web"]{--brand-c:#f7df1e;--text-c:#000}
-.ai-tool[data-t="web"] .ai-tool-icon{color:#000}
+.ai-tool[data-t="web"]{--brand-c:#f59e0b}
+.ai-tool[data-t="pwa"]{--brand-c:#5e60ce}
+
+/* ─── Music auto-start prompt (mini toast, top-center) ─── */
+.music-prompt{
+  position:fixed;top:78px;left:50%;transform:translateX(-50%) translateY(-20px);
+  z-index:450;
+  background:linear-gradient(135deg,rgba(124,58,237,.95),rgba(6,182,212,.95));
+  color:#fff;
+  font-size:.78rem;font-weight:700;letter-spacing:.5px;
+  padding:.6rem 1.1rem;border-radius:30px;
+  display:flex;align-items:center;gap:.55rem;
+  backdrop-filter:blur(14px);
+  box-shadow:0 8px 28px rgba(124,58,237,.3),0 0 0 1px rgba(255,255,255,.1) inset;
+  cursor:pointer;
+  opacity:0;visibility:hidden;
+  transition:opacity .5s var(--ease),transform .5s var(--ease),visibility .5s;
+  font-family:'Inter',sans-serif;
+}
+.music-prompt.show{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0);animation:mp-bob 2.4s ease-in-out infinite}
+.music-prompt:hover{transform:translateX(-50%) translateY(-2px) scale(1.04)}
+@keyframes mp-bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-3px)}}
+.music-prompt-pulse{
+  width:8px;height:8px;border-radius:50%;background:#fff;
+  box-shadow:0 0 8px #fff;
+  animation:mpp 1s ease-in-out infinite;
+}
+@keyframes mpp{0%,100%{opacity:.5}50%{opacity:1}}
+@media(max-width:480px){.music-prompt{font-size:.7rem;padding:.5rem .9rem;top:74px}}
 
 /* ── Software Bars ── */
 .sw-title{text-align:center;margin:3.5rem auto 2rem;font-size:.7rem;font-weight:800;letter-spacing:2.4px;color:var(--cyan);text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:1.2rem;font-family:'JetBrains Mono',monospace}
@@ -818,6 +845,12 @@ footer span{color:var(--cyan)}
 </style>
 </head>
 <body>
+
+<!-- Music auto-start prompt -->
+<div class="music-prompt" id="music-prompt" role="button" aria-label="Enable ambient music">
+  <span class="music-prompt-pulse"></span>
+  <span>🎵 Tap anywhere for ambient music</span>
+</div>
 
 <!-- ═══ FLOATING UI ═══ -->
 <div class="float-ui">
@@ -1101,41 +1134,6 @@ footer span{color:var(--cyan)}
   </div>
   <div class="skills-grid">
 
-    <!-- AI SKILLS CARD — featured -->
-    <div class="skill-card ai-card reveal">
-      <div class="ai-badge">Self-Learnt</div>
-      <div class="sc-head">
-        <div class="sc-icon">🤖</div>
-        <h3>AI &amp; Digital Creation</h3>
-      </div>
-      <div class="ai-tools-grid">
-        <div class="ai-tool" data-t="claude">
-          <div class="ai-tool-icon">C</div>
-          <div><div class="ai-tool-name">Anthropic Claude</div><div class="ai-tool-desc">Prompting · Agents · API workflows</div></div>
-        </div>
-        <div class="ai-tool" data-t="gpt">
-          <div class="ai-tool-icon">G</div>
-          <div><div class="ai-tool-name">ChatGPT (OpenAI)</div><div class="ai-tool-desc">Content · Analysis · Automation</div></div>
-        </div>
-        <div class="ai-tool" data-t="gemini">
-          <div class="ai-tool-icon">✦</div>
-          <div><div class="ai-tool-name">Google Gemini</div><div class="ai-tool-desc">Research · Multimodal workflows</div></div>
-        </div>
-        <div class="ai-tool" data-t="image">
-          <div class="ai-tool-icon">📷</div>
-          <div><div class="ai-tool-name">Image Editing</div><div class="ai-tool-desc">Photoshop · Flex &amp; social design</div></div>
-        </div>
-        <div class="ai-tool" data-t="video">
-          <div class="ai-tool-icon">🎬</div>
-          <div><div class="ai-tool-name">Video Editing</div><div class="ai-tool-desc">Premiere Pro · PowerDirector (Pro)</div></div>
-        </div>
-        <div class="ai-tool" data-t="web">
-          <div class="ai-tool-icon">⌨</div>
-          <div><div class="ai-tool-name">Web Development</div><div class="ai-tool-desc">HTML · CSS · JavaScript (Self-Learnt)</div></div>
-        </div>
-      </div>
-    </div>
-
     <div class="skill-card reveal">
       <div class="sc-head"><div class="sc-icon">⚡</div><h3>Electrical Infrastructure</h3></div>
       <ul class="sc-list">
@@ -1187,6 +1185,45 @@ footer span{color:var(--cyan)}
         <li class="sc-item">IOSH Training &amp; First Aid Certified</li>
         <li class="sc-item">Fire Warden &amp; Electrical Safety Rules</li>
       </ul>
+    </div>
+
+    <!-- AI &amp; DIGITAL CREATION — featured last -->
+    <div class="skill-card ai-card reveal">
+      <div class="ai-badge">Self-Learnt</div>
+      <div class="sc-head">
+        <div class="sc-icon">🤖</div>
+        <h3>AI &amp; Digital Creation</h3>
+      </div>
+      <div class="ai-tools-grid">
+        <div class="ai-tool" data-t="claude">
+          <div class="ai-tool-icon">C</div>
+          <div><div class="ai-tool-name">Anthropic Claude</div><div class="ai-tool-desc">Prompting · Agents · API workflows</div></div>
+        </div>
+        <div class="ai-tool" data-t="gpt">
+          <div class="ai-tool-icon">G</div>
+          <div><div class="ai-tool-name">ChatGPT (OpenAI)</div><div class="ai-tool-desc">Content · Analysis · Automation</div></div>
+        </div>
+        <div class="ai-tool" data-t="gemini">
+          <div class="ai-tool-icon">✦</div>
+          <div><div class="ai-tool-name">Google Gemini</div><div class="ai-tool-desc">Research · Multimodal workflows</div></div>
+        </div>
+        <div class="ai-tool" data-t="image">
+          <div class="ai-tool-icon">📷</div>
+          <div><div class="ai-tool-name">Image Editing</div><div class="ai-tool-desc">Photoshop · Flex &amp; social design</div></div>
+        </div>
+        <div class="ai-tool" data-t="video">
+          <div class="ai-tool-icon">🎬</div>
+          <div><div class="ai-tool-name">Video Editing</div><div class="ai-tool-desc">Premiere Pro · PowerDirector (Pro)</div></div>
+        </div>
+        <div class="ai-tool" data-t="pwa">
+          <div class="ai-tool-icon">📱</div>
+          <div><div class="ai-tool-name">Custom PWA Apps</div><div class="ai-tool-desc">Installable web apps · offline-ready</div></div>
+        </div>
+        <div class="ai-tool" data-t="web">
+          <div class="ai-tool-icon">✨</div>
+          <div><div class="ai-tool-name">Vibe Coding</div><div class="ai-tool-desc">Prompt-driven full-stack builds</div></div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1739,18 +1776,32 @@ window.addEventListener('scroll', () => {
 
   /* boot — try every possible interaction (browsers block autoplay) */
   let booted = false;
+  const mp = document.getElementById('music-prompt');
+  function hideMP(){ if (mp) mp.classList.remove('show'); }
   function boot(){
     if (booted) return; booted = true;
+    hideMP();
     powerUp();
-    setTimeout(startAmbient, 600);
+    setTimeout(startAmbient, 500);
   }
   // attempt instant autoplay on load (works on some browsers/mobile)
-  window.addEventListener('load', () => { setTimeout(() => { try { boot(); } catch(e){} }, 100); });
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      try { boot(); } catch(e){}
+      // if context is still suspended after a moment, show the prompt
+      setTimeout(() => {
+        if (!ctx || ctx.state === 'suspended') { booted = false; if (mp) mp.classList.add('show'); }
+      }, 700);
+    }, 100);
+  });
   // fallback: any interaction triggers it
   ['click','mousemove','touchstart','touchend','scroll','keydown','wheel','pointerdown','pointermove','focus'].forEach(ev => {
     document.addEventListener(ev, boot, { once: true, passive: true, capture: true });
   });
   window.addEventListener('scroll', boot, { once: true, passive: true });
+  if (mp) mp.addEventListener('click', boot);
+  // auto-hide prompt after 12 seconds even without interaction
+  setTimeout(hideMP, 12000);
 })();
 </script>
 </body>
