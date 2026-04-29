@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hari Prasanth | Project Engineer – Electrical Projects</title>
+  <meta name="description" content="Hari Prasanth – Electrical Project Engineer with 12+ years of experience in commercial-industrial installations, substation engineering, and HV/LV distribution networks across Oman and India." />
+  <meta name="keywords" content="Hari Prasanth, Project Engineer, Electrical Engineer, Substation, HV, Oman, Tamil Nadu, Portfolio" />
+  <meta name="author" content="Hari Prasanth" />
+  <!-- Open Graph -->
+  <meta property="og:title" content="Hari Prasanth | Project Engineer – Electrical Projects" />
+  <meta property="og:description" content="12+ years in electrical projects across Gulf & India. Substations, HV networks, project management." />
+  <meta property="og:type" content="website" />
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & Variables ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:   #0f2544;
+      --blue:   #1d4ed8;
+      --blue-lt:#3b82f6;
+      --cyan:   #06b6d4;
+      --slate:  #334155;
+      --muted:  #64748b;
+      --border: #e2e8f0;
+      --bg:     #f8fafc;
+      --white:  #ffffff;
+      --card:   #ffffff;
+      --accent: #f0f7ff;
+      --gold:   #f59e0b;
+      --grad1:  linear-gradient(135deg, #0f2544 0%, #1d4ed8 60%, #06b6d4 100%);
+      --grad2:  linear-gradient(135deg, #1d4ed8, #06b6d4);
+      --shadow: 0 4px 24px rgba(15,37,68,.10);
+      --shadow-lg: 0 12px 40px rgba(15,37,68,.16);
+      --radius: 14px;
+      --radius-sm: 8px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--slate);
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
+    img { max-width: 100%; }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--blue-lt); border-radius: 3px; }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(15,37,68,.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      padding: 0 5%;
+      height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-weight: 800;
+      font-size: 1.2rem;
+      color: var(--white);
+      letter-spacing: -.5px;
+    }
+    .nav-logo span { color: var(--cyan); }
+
+    .nav-links {
+      display: flex; gap: 2rem;
+    }
+    .nav-links a {
+      color: rgba(255,255,255,.75);
+      font-size: .875rem;
+      font-weight: 500;
+      transition: color .2s;
+      letter-spacing: .3px;
+    }
+    .nav-links a:hover { color: var(--cyan); }
+
+    .nav-cta {
+      background: var(--blue);
+      color: var(--white) !important;
+      padding: .4rem 1.1rem;
+      border-radius: 6px;
+      font-weight: 600 !important;
+      transition: background .2s !important;
+    }
+    .nav-cta:hover { background: var(--blue-lt) !important; color: var(--white) !important; }
+
+    .hamburger {
+      display: none;
+      flex-direction: column; gap: 5px; cursor: pointer;
+      background: none; border: none; padding: 4px;
+    }
+    .hamburger span {
+      display: block; width: 24px; height: 2px;
+      background: var(--white); border-radius: 2px;
+      transition: transform .3s, opacity .3s;
+    }
+
+    /* ── Hero ── */
+    #home {
+      min-height: 100vh;
+      background: var(--grad1);
+      display: flex; align-items: center;
+      padding: 100px 5% 60px;
+      position: relative; overflow: hidden;
+    }
+
+    .hero-grid-bg {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+    }
+
+    .hero-glow {
+      position: absolute;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(6,182,212,.18) 0%, transparent 70%);
+      top: -100px; right: -100px;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative; z-index: 1;
+      max-width: 700px;
+    }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.2);
+      color: var(--cyan);
+      font-size: .8rem; font-weight: 600; letter-spacing: .8px;
+      text-transform: uppercase;
+      padding: .35rem .9rem;
+      border-radius: 999px;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--cyan);
+      border-radius: 50%;
+      display: block;
+    }
+
+    .hero-name {
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1.1;
+      letter-spacing: -1.5px;
+      margin-bottom: .5rem;
+    }
+
+    .hero-role {
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      font-weight: 500;
+      color: rgba(255,255,255,.7);
+      margin-bottom: 1.5rem;
+      letter-spacing: .2px;
+    }
+
+    .hero-tagline {
+      font-size: 1rem;
+      color: rgba(255,255,255,.6);
+      max-width: 560px;
+      margin-bottom: 2.5rem;
+      line-height: 1.8;
+    }
+
+    .hero-stats {
+      display: flex; gap: 2.5rem;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-stat {
+      text-align: left;
+    }
+    .hero-stat strong {
+      display: block;
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1;
+    }
+    .hero-stat span {
+      font-size: .78rem;
+      color: rgba(255,255,255,.55);
+      font-weight: 500;
+      letter-spacing: .3px;
+      text-transform: uppercase;
+    }
+
+    .hero-actions {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .75rem 1.75rem;
+      border-radius: var(--radius-sm);
+      font-weight: 600; font-size: .9rem;
+      cursor: pointer; border: none;
+      transition: all .2s;
+    }
+
+    .btn-primary {
+      background: var(--white);
+      color: var(--navy);
+    }
+    .btn-primary:hover { background: var(--cyan); color: var(--white); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(6,182,212,.35); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 1.5px solid rgba(255,255,255,.35);
+    }
+    .btn-outline:hover { border-color: var(--cyan); color: var(--cyan); transform: translateY(-2px); }
+
+    /* ── Sections ── */
+    section { padding: 90px 5%; }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-size: .75rem; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--blue);
+      background: var(--accent);
+      padding: .3rem .9rem;
+      border-radius: 999px;
+      margin-bottom: .75rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: -1px;
+      line-height: 1.15;
+    }
+
+    .section-sub {
+      color: var(--muted);
+      margin-top: .75rem;
+      font-size: .95rem;
+      max-width: 520px;
+      margin-left: auto; margin-right: auto;
+    }
+
+    /* ── About ── */
+    #about { background: var(--white); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 4rem;
+      align-items: start;
+      max-width: 1100px; margin: 0 auto;
+    }
+
+    .about-card {
+      background: var(--navy);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      color: var(--white);
+      position: sticky; top: 84px;
+    }
+
+    .about-avatar {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: var(--grad2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem; font-weight: 800; color: var(--white);
+      margin-bottom: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .about-card h3 {
+      font-size: 1.3rem; font-weight: 700; margin-bottom: .25rem;
+    }
+    .about-card .role-tag {
+      font-size: .82rem; color: var(--cyan); font-weight: 500; margin-bottom: 1.5rem;
+    }
+
+    .about-info-list {
+      display: flex; flex-direction: column; gap: .7rem;
+    }
+    .about-info-item {
+      display: flex; align-items: flex-start; gap: .75rem;
+      font-size: .85rem; color: rgba(255,255,255,.75);
+    }
+    .about-info-item .icon {
+      width: 18px; height: 18px; flex-shrink: 0;
+      color: var(--cyan); margin-top: 2px;
+    }
+
+    .about-text h3 {
+      font-size: 1.25rem; font-weight: 700; color: var(--navy); margin-bottom: 1rem;
+    }
+    .about-text p {
+      color: var(--muted); line-height: 1.8; margin-bottom: 1.25rem;
+    }
+
+    .profile-tags {
+      display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.5rem;
+    }
+    .tag {
+      background: var(--accent);
+      color: var(--blue);
+      font-size: .78rem; font-weight: 600;
+      padding: .3rem .75rem;
+      border-radius: 999px;
+      border: 1px solid rgba(29,78,216,.15);
+    }
+
+    /* ── Experience ── */
+    #experience { background: var(--bg); }
+
+    .exp-wrapper { max-width: 900px; margin: 0 auto; }
+
+    .exp-company {
+      margin-bottom: 3rem;
+    }
+
+    .exp-company-header {
+      display: flex; align-items: center; gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .exp-company-icon {
+      width: 48px; height: 48px;
+      border-radius: 10px;
+      background: var(--grad2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; font-weight: 800; color: var(--white);
+      flex-shrink: 0;
+    }
+
+    .exp-company-name {
+      font-size: 1.05rem; font-weight: 700; color: var(--navy);
+    }
+    .exp-company-meta {
+      font-size: .8rem; color: var(--muted); margin-top: .15rem;
+    }
+
+    .exp-period-badge {
+      margin-left: auto;
+      background: var(--accent);
+      color: var(--blue);
+      font-size: .75rem; font-weight: 700;
+      padding: .3rem .8rem;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .exp-role {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem 2rem;
+      position: relative;
+      margin-bottom: 1rem;
+      box-shadow: var(--shadow);
+      transition: box-shadow .2s, transform .2s;
+    }
+    .exp-role:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+
+    .exp-role-title {
+      font-size: 1rem; font-weight: 700; color: var(--navy);
+      margin-bottom: .35rem;
+    }
+
+    .exp-role-desc {
+      font-size: .875rem; color: var(--muted); line-height: 1.7;
+    }
+
+    .exp-bullets {
+      margin-top: .75rem;
+      display: flex; flex-direction: column; gap: .4rem;
+    }
+    .exp-bullet {
+      display: flex; align-items: flex-start; gap: .6rem;
+      font-size: .85rem; color: var(--slate);
+    }
+    .exp-bullet::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--blue-lt);
+      border-radius: 50%;
+      margin-top: 8px;
+      flex-shrink: 0;
+    }
+
+    /* ── Skills ── */
+    #skills { background: var(--white); }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1100px; margin: 0 auto;
+    }
+
+    .skill-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      transition: box-shadow .2s, transform .2s;
+    }
+    .skill-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); }
+
+    .skill-card-header {
+      display: flex; align-items: center; gap: .75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .skill-card-icon {
+      width: 42px; height: 42px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .skill-card h3 {
+      font-size: 1rem; font-weight: 700; color: var(--navy);
+    }
+
+    .skill-list {
+      display: flex; flex-direction: column; gap: .6rem;
+    }
+    .skill-item {
+      font-size: .875rem; color: var(--slate);
+      display: flex; align-items: flex-start; gap: .6rem;
+    }
+    .skill-item::before {
+      content: '▸';
+      color: var(--blue-lt);
+      font-size: .7rem;
+      margin-top: 4px;
+      flex-shrink: 0;
+    }
+
+    /* Software Skills Bar */
+    .software-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+      max-width: 1100px; margin: 2.5rem auto 0;
+    }
+
+    .sw-item {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.25rem;
+    }
+
+    .sw-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: .6rem;
+    }
+    .sw-name { font-size: .875rem; font-weight: 600; color: var(--navy); }
+    .sw-pct { font-size: .8rem; font-weight: 700; color: var(--blue); font-family: 'JetBrains Mono', monospace; }
+
+    .sw-bar {
+      height: 6px; background: var(--border); border-radius: 3px; overflow: hidden;
+    }
+    .sw-fill {
+      height: 100%; border-radius: 3px;
+      background: var(--grad2);
+      width: 0;
+      transition: width 1.2s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* ── Projects ── */
+    #projects { background: var(--bg); }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.75rem;
+      max-width: 1100px; margin: 0 auto;
+    }
+
+    .project-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: box-shadow .2s, transform .2s;
+      display: flex; flex-direction: column;
+    }
+    .project-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+
+    .project-banner {
+      height: 7px;
+    }
+
+    .project-body {
+      padding: 1.75rem;
+      flex: 1; display: flex; flex-direction: column;
+    }
+
+    .project-icon {
+      font-size: 1.6rem; margin-bottom: .75rem;
+    }
+
+    .project-title {
+      font-size: 1rem; font-weight: 700; color: var(--navy);
+      margin-bottom: .4rem; line-height: 1.35;
+    }
+
+    .project-client {
+      font-size: .78rem; font-weight: 600; color: var(--blue);
+      text-transform: uppercase; letter-spacing: .5px;
+      margin-bottom: .75rem;
+    }
+
+    .project-desc {
+      font-size: .875rem; color: var(--muted); line-height: 1.7;
+      flex: 1;
+    }
+
+    .project-tags {
+      display: flex; flex-wrap: wrap; gap: .4rem;
+      margin-top: 1.25rem;
+    }
+    .project-tag {
+      background: var(--accent);
+      color: var(--blue);
+      font-size: .72rem; font-weight: 600;
+      padding: .2rem .6rem; border-radius: 999px;
+    }
+
+    /* ── Certifications ── */
+    #certifications { background: var(--white); }
+
+    .cert-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      max-width: 1000px; margin: 0 auto;
+    }
+
+    .cert-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      display: flex; gap: 1rem; align-items: flex-start;
+      transition: box-shadow .2s, transform .2s;
+    }
+    .cert-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+
+    .cert-icon {
+      width: 44px; height: 44px; flex-shrink: 0;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+    }
+
+    .cert-title { font-size: .9rem; font-weight: 700; color: var(--navy); margin-bottom: .2rem; }
+    .cert-body { font-size: .8rem; color: var(--muted); }
+
+    /* ── Contact ── */
+    #contact {
+      background: var(--navy);
+      text-align: center;
+      padding: 90px 5%;
+    }
+
+    #contact .section-label { color: var(--cyan); background: rgba(6,182,212,.12); }
+    #contact .section-title { color: var(--white); }
+    #contact .section-sub { color: rgba(255,255,255,.55); }
+
+    .contact-cards {
+      display: flex; justify-content: center; flex-wrap: wrap;
+      gap: 1.25rem;
+      margin-top: 3rem; max-width: 900px; margin-left: auto; margin-right: auto;
+    }
+
+    .contact-item {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: var(--radius);
+      padding: 1.5rem 2rem;
+      display: flex; align-items: center; gap: 1rem;
+      min-width: 240px;
+      transition: background .2s, transform .2s;
+      cursor: pointer;
+    }
+    .contact-item:hover { background: rgba(255,255,255,.1); transform: translateY(-3px); }
+
+    .contact-item .ci-icon {
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      background: var(--grad2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; flex-shrink: 0;
+    }
+
+    .ci-label { font-size: .72rem; color: rgba(255,255,255,.5); text-transform: uppercase; letter-spacing: .8px; font-weight: 600; }
+    .ci-value { font-size: .9rem; color: var(--white); font-weight: 600; margin-top: .15rem; }
+
+    /* ── Footer ── */
+    footer {
+      background: #080f1d;
+      text-align: center;
+      padding: 1.75rem 5%;
+      font-size: .8rem;
+      color: rgba(255,255,255,.3);
+    }
+    footer span { color: var(--cyan); }
+
+    /* ── Reveal animation ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .about-card { position: static; }
+    }
+
+    @media (max-width: 720px) {
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex; flex-direction: column;
+        position: absolute; top: 64px; left: 0; right: 0;
+        background: rgba(15,37,68,.98);
+        padding: 1.5rem 5%;
+        border-bottom: 1px solid rgba(255,255,255,.1);
+        gap: 1.25rem;
+      }
+      .hamburger { display: flex; }
+      .hero-stats { gap: 1.5rem; }
+      .exp-company-header { flex-wrap: wrap; }
+      .exp-period-badge { margin-left: 0; }
+    }
+
+    @media (max-width: 480px) {
+      .contact-item { min-width: 100%; }
+      section { padding: 70px 5%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════ NAVBAR ═══════════════════════ -->
+<nav id="navbar">
+  <div class="nav-logo">Hari<span>.</span></div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#certifications">Certifications</a></li>
+    <li><a href="#contact" class="nav-cta">Contact</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ═══════════════════════ HERO ═══════════════════════ -->
+<section id="home">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Available for New Opportunities</div>
+    <h1 class="hero-name">Hari Prasanth</h1>
+    <p class="hero-role">Project Engineer – Electrical Projects</p>
+    <p class="hero-tagline">
+      Delivering high-voltage excellence across Gulf &amp; India — 12+ years engineering substations,
+      HV distribution networks, and large-scale electrical infrastructure with precision, safety, and leadership.
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat"><strong>12+</strong><span>Years Experience</span></div>
+      <div class="hero-stat"><strong>20+</strong><span>Major Projects</span></div>
+      <div class="hero-stat"><strong>20MVA</strong><span>Max Transformer</span></div>
+      <div class="hero-stat"><strong>2</strong><span>Regions: Gulf &amp; India</span></div>
+    </div>
+    <div class="hero-actions">
+      <a href="#projects" class="btn btn-primary">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 17l-5-5 5-5M20 12H4"/></svg>
+        View Projects
+      </a>
+      <a href="#contact" class="btn btn-outline">Get in Touch</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ ABOUT ═══════════════════════ -->
+<section id="about">
+  <div class="section-header reveal">
+    <div class="section-label">About Me</div>
+    <h2 class="section-title">Engineering Built on Experience</h2>
+    <p class="section-sub">Combining technical depth with project leadership to deliver reliable electrical infrastructure.</p>
+  </div>
+
+  <div class="about-grid">
+    <div class="about-card reveal">
+      <div class="about-avatar">HP</div>
+      <h3>Hari Prasanth</h3>
+      <div class="role-tag">Project Engineer – Electrical</div>
+      <div class="about-info-list">
+        <div class="about-info-item">
+          <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          Tamil Nadu, India &amp; Oman
+        </div>
+        <div class="about-info-item">
+          <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+          +968 97805547 (Oman)
+        </div>
+        <div class="about-info-item">
+          <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+          +91 9786424605 (India)
+        </div>
+        <div class="about-info-item">
+          <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          sohar@genuine-power.com
+        </div>
+        <div class="about-info-item">
+          <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 14l9-5-9-5-9 5 9 5z"/><path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+          BE. EEE – First Class (2013)
+        </div>
+        <div class="about-info-item">
+          <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/></svg>
+          Tamil · English · Hindi · Arabic
+        </div>
+        <div class="about-info-item">
+          <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+          NEDC CEP · OETC CP Certified
+        </div>
+      </div>
+    </div>
+
+    <div class="about-text reveal">
+      <h3>Professional Summary</h3>
+      <p>
+        With over <strong>12 years of hands-on expertise</strong> in commercial and industrial electrical installations and substation engineering, I have built a career spanning two dynamic regions — the <strong>Gulf (Oman)</strong> and <strong>India</strong>. My work encompasses the full project lifecycle: from feasibility, design coordination, and procurement to execution, testing, commissioning, and handover.
+      </p>
+      <p>
+        I specialize in <strong>33kV/11kV primary substations</strong>, HV switchgear (AIS/GIS), transformer erection and commissioning (315kVA–20MVA), overhead line construction, and LV distribution systems. I thrive in technically challenging environments and consistently deliver projects on time and within budget.
+      </p>
+      <p>
+        Beyond the technical, I excel at <strong>client coordination, HSE compliance</strong>, team leadership, and cross-functional collaboration with civil, MEP, and consultant teams. Licensed under NEDC and OETC, and trained to international electrical and safety standards.
+      </p>
+
+      <div class="profile-tags">
+        <span class="tag">Project Management</span>
+        <span class="tag">33kV / 11kV Networks</span>
+        <span class="tag">Substation Engineering</span>
+        <span class="tag">Transformer Commissioning</span>
+        <span class="tag">HSE Planning</span>
+        <span class="tag">OHL Construction</span>
+        <span class="tag">Client Coordination</span>
+        <span class="tag">SCADA</span>
+        <span class="tag">IEC Compliance</span>
+        <span class="tag">OES Standards</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ EXPERIENCE ═══════════════════════ -->
+<section id="experience">
+  <div class="section-header reveal">
+    <div class="section-label">Career Journey</div>
+    <h2 class="section-title">Professional Experience</h2>
+    <p class="section-sub">12+ years across Gulf and India, managing complex electrical infrastructure from inception to commissioning.</p>
+  </div>
+
+  <div class="exp-wrapper">
+
+    <!-- Gulf Genuine Power -->
+    <div class="exp-company reveal">
+      <div class="exp-company-header">
+        <div class="exp-company-icon">⚡</div>
+        <div>
+          <div class="exp-company-name">Gulf Genuine Power Projects LLC</div>
+          <div class="exp-company-meta">Oman – Electrical EPC Contractor</div>
+        </div>
+        <div class="exp-period-badge">2023 – Present</div>
+      </div>
+      <div class="exp-role">
+        <div class="exp-role-title">Project Engineer</div>
+        <div class="exp-role-desc">
+          Leading multiple concurrent EPC and maintenance projects across Muscat, North/South Al Batinah, Al Buraimi, and Al Dhahirah governorates.
+        </div>
+        <div class="exp-bullets">
+          <div class="exp-bullet">Nama contract: Preventive &amp; corrective maintenance for 3–20 MVA transformers, 33kV &amp; 11kV switchgear panels across 5 governorates</div>
+          <div class="exp-bullet">Al Hadeetha Copper Plant: Full 11kV distribution system — containerized substation, ICOG panel, ACDB, PDBs, HT cables, FA system</div>
+          <div class="exp-bullet">132kV JBB Ali Wind Farm: 11kV OHL feeder &amp; concrete pole works at Jalan Bani Bu Ali under M/s MADKOUR Projects LLC</div>
+          <div class="exp-bullet">33kV OHL Steel Pole 25km ring main at Fahud, PDO (Petroleum Development Oman)</div>
+          <div class="exp-bullet">Hutchison Port Sohar (OICT): Annual maintenance contract 2029 – HV substations, switchgears, transformers, generators, HV cables</div>
+          <div class="exp-bullet">OETC Grid Stations: Inverter system enhancement at 57 grid stations across Oman (Tender 46/2024)</div>
+          <div class="exp-bullet">NDS Salalah: 33kV OHL 68km concrete pole construction, 2 × 33kV outgoing feeders</div>
+          <div class="exp-bullet">Hafeet Railway – Oman Section 1: 12×6 distribution substations, 2×2MVA transformers, RMU, HFU installation &amp; commissioning</div>
+          <div class="exp-bullet">132kV Liwa Grid &amp; Sohar/Khaboura PSS: Replacement, T&amp;C of 110V DC battery banks under NEDC 55/2024</div>
+          <div class="exp-bullet">NEDC/2023/088: TX3 transfer at Al Hojrah PSS, related T&amp;C and SCADA works</div>
+          <div class="exp-bullet">Silal Khazaen Economic City: Power expansion with 11kV metering panel and AMF panel</div>
+          <div class="exp-bullet">3×20MVA Hellat Al Nahadah PSS: 33kV feeder subcontract works at Ibri</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Al Haddad -->
+    <div class="exp-company reveal">
+      <div class="exp-company-header">
+        <div class="exp-company-icon">🏗</div>
+        <div>
+          <div class="exp-company-name">Al Haddad Trading &amp; Contracting Co.</div>
+          <div class="exp-company-meta">Salalah, Oman – Civil &amp; Electrical Contractor</div>
+        </div>
+        <div class="exp-period-badge">2022 – 2023</div>
+      </div>
+      <div class="exp-role">
+        <div class="exp-role-title">Project Manager</div>
+        <div class="exp-bullets">
+          <div class="exp-bullet">Sultan's Security Force, Zeak Garrison: Complete 11kV &amp; LT electrical works — switching station, substation, ESE lightning protection, RMU, HFU, MDB/SMDB, street lighting</div>
+          <div class="exp-bullet">Managed material estimation, procurement, project scheduling, drawings, approvals, and final billing</div>
+          <div class="exp-bullet">Badminton Playground at Dhariz: Electrical &amp; civil works</div>
+          <div class="exp-bullet">Salalah Wastewater (SSDC): O&amp;M of TSE pipeline extension under M/s Galfar Engineering</div>
+          <div class="exp-bullet">Reconstruction of compound wall and rehabilitation of NDS Corporate Office surroundings</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Eastern Overseas -->
+    <div class="exp-company reveal">
+      <div class="exp-company-header">
+        <div class="exp-company-icon">🔌</div>
+        <div>
+          <div class="exp-company-name">Eastern Overseas LLC</div>
+          <div class="exp-company-meta">Oman – Electrical Contractor</div>
+        </div>
+        <div class="exp-period-badge">2014 – 2019</div>
+      </div>
+      <div class="exp-role">
+        <div class="exp-role-title">Project Engineer</div>
+        <div class="exp-bullets">
+          <div class="exp-bullet">Bidaya/Suwaiq 33/11kV Primary Substation Upgrade: 20MVA transformer, 33kV outdoor CB, 11kV AIS switchgear, SCADA, OHL lines, 11.5/.433kV DSS</div>
+          <div class="exp-bullet">Al-Batha 3×20MVA Primary Substation (Al Suwaiq, North Batinah): 3×20MVA transformers, 33kV CBs, 11kV AIS, capacitor banks, SCADA</div>
+          <div class="exp-bullet">Mobailah South, Seeb Substation Upgrade: 33kV Siemens GIS switchgear, control panels, SCADA, 33kV GIS cable terminations</div>
+          <div class="exp-bullet">Full scope: materials estimation, construction schedules, method statements, JSP, as-built drawings</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- APR Construction -->
+    <div class="exp-company reveal">
+      <div class="exp-company-header">
+        <div class="exp-company-icon">🇮🇳</div>
+        <div>
+          <div class="exp-company-name">APR Construction</div>
+          <div class="exp-company-meta">Tamil Nadu, India</div>
+        </div>
+        <div class="exp-period-badge">2019 – 2021</div>
+      </div>
+      <div class="exp-role">
+        <div class="exp-role-title">Project Engineer</div>
+        <div class="exp-bullets">
+          <div class="exp-bullet">Outdoor switchyard, 11kV indoor switchgear, LVAC panels, control &amp; relay panels installation</div>
+          <div class="exp-bullet">Commissioning of LT switchboards &amp; bus ducts; industrial ESE lightning installation</div>
+          <div class="exp-bullet">Plant &amp; equipment earthing, control room wiring, power cable terminations</div>
+          <div class="exp-bullet">CCTV installation for domestic &amp; commercial buildings; control panel and machine wiring</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════ SKILLS ═══════════════════════ -->
+<section id="skills">
+  <div class="section-header reveal">
+    <div class="section-label">Capabilities</div>
+    <h2 class="section-title">Technical &amp; Managerial Skills</h2>
+    <p class="section-sub">A broad skill set spanning high-voltage engineering, project management, safety, and technical software.</p>
+  </div>
+
+  <div class="skills-grid">
+
+    <div class="skill-card reveal">
+      <div class="skill-card-header">
+        <div class="skill-card-icon" style="background:#eff6ff;">⚡</div>
+        <h3>Electrical Infrastructure</h3>
+      </div>
+      <ul class="skill-list">
+        <li class="skill-item">33kV/11kV Distribution Network Design &amp; Construction</li>
+        <li class="skill-item">Primary Substation (AIS/GIS) Design &amp; Commissioning</li>
+        <li class="skill-item">Transformer Erection &amp; Commissioning (315kVA – 20MVA)</li>
+        <li class="skill-item">HV Power Cable Laying, Termination &amp; Hi-Pot Testing</li>
+        <li class="skill-item">Overhead Line (OHL) Construction – Wood &amp; Concrete Poles</li>
+        <li class="skill-item">RMU, HFU, OLU Installation &amp; Commissioning</li>
+        <li class="skill-item">Lightning Protection Systems (ESE)</li>
+        <li class="skill-item">SCADA System Works</li>
+      </ul>
+    </div>
+
+    <div class="skill-card reveal">
+      <div class="skill-card-header">
+        <div class="skill-card-icon" style="background:#f0fdf4;">🔧</div>
+        <h3>Technical Operations</h3>
+      </div>
+      <ul class="skill-list">
+        <li class="skill-item">Transformer Maintenance, Repair &amp; OLTC Management</li>
+        <li class="skill-item">SF₆ Gas Filling &amp; Switchgear Overhaul</li>
+        <li class="skill-item">Transformer Oil Filtration &amp; Regeneration</li>
+        <li class="skill-item">DC Hi-Pot / VLF Testing</li>
+        <li class="skill-item">Battery Bank &amp; Charger Maintenance (110V DC)</li>
+        <li class="skill-item">Capacitor Bank Operations</li>
+        <li class="skill-item">LV, HT (33kV &amp; 11kV) Power &amp; Control Cable Works</li>
+        <li class="skill-item">GIS Updating &amp; Survey</li>
+      </ul>
+    </div>
+
+    <div class="skill-card reveal">
+      <div class="skill-card-header">
+        <div class="skill-card-icon" style="background:#fffbeb;">📋</div>
+        <h3>Project Management</h3>
+      </div>
+      <ul class="skill-list">
+        <li class="skill-item">Project Planning, Scheduling &amp; Budgeting</li>
+        <li class="skill-item">Cost Estimation &amp; Material Procurement</li>
+        <li class="skill-item">Client Coordination &amp; Consultant Interface</li>
+        <li class="skill-item">Method Statements, As-Built Drawings, Document Control</li>
+        <li class="skill-item">Multi-project &amp; Multi-team Management</li>
+        <li class="skill-item">Contract Administration &amp; Final Billing</li>
+        <li class="skill-item">Site Supervision &amp; Quality Assurance</li>
+      </ul>
+    </div>
+
+    <div class="skill-card reveal">
+      <div class="skill-card-header">
+        <div class="skill-card-icon" style="background:#fdf4ff;">🛡️</div>
+        <h3>Compliance &amp; Safety (HSE)</h3>
+      </div>
+      <ul class="skill-list">
+        <li class="skill-item">Oman Electrical Standards (OES) &amp; IEC Compliance</li>
+        <li class="skill-item">NEDC-Certified Electrical Practitioner</li>
+        <li class="skill-item">HSE Plan &amp; Job Safety Plan (JSP) Preparation</li>
+        <li class="skill-item">Risk Assessment &amp; Incident Investigation</li>
+        <li class="skill-item">IOSH Training &amp; First Aid Certified</li>
+        <li class="skill-item">Fire Warden Trained</li>
+        <li class="skill-item">Electrical Safety Rules (NEDC)</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- Software Skills -->
+  <div style="text-align:center;margin-top:3.5rem;" class="reveal">
+    <div class="section-label">Software Proficiency</div>
+  </div>
+  <div class="software-grid">
+    <div class="sw-item reveal"><div class="sw-header"><span class="sw-name">MS Office Suite</span><span class="sw-pct">90%</span></div><div class="sw-bar"><div class="sw-fill" data-width="90"></div></div></div>
+    <div class="sw-item reveal"><div class="sw-header"><span class="sw-name">Premiere Pro</span><span class="sw-pct">80%</span></div><div class="sw-bar"><div class="sw-fill" data-width="80"></div></div></div>
+    <div class="sw-item reveal"><div class="sw-header"><span class="sw-name">PowerDirector</span><span class="sw-pct">85%</span></div><div class="sw-bar"><div class="sw-fill" data-width="85"></div></div></div>
+    <div class="sw-item reveal"><div class="sw-header"><span class="sw-name">MS Visio</span><span class="sw-pct">75%</span></div><div class="sw-bar"><div class="sw-fill" data-width="75"></div></div></div>
+    <div class="sw-item reveal"><div class="sw-header"><span class="sw-name">MS Project</span><span class="sw-pct">70%</span></div><div class="sw-bar"><div class="sw-fill" data-width="70"></div></div></div>
+    <div class="sw-item reveal"><div class="sw-header"><span class="sw-name">AutoCAD 2D</span><span class="sw-pct">65%</span></div><div class="sw-bar"><div class="sw-fill" data-width="65"></div></div></div>
+    <div class="sw-item reveal"><div class="sw-header"><span class="sw-name">Photoshop</span><span class="sw-pct">65%</span></div><div class="sw-bar"><div class="sw-fill" data-width="65"></div></div></div>
+    <div class="sw-item reveal"><div class="sw-header"><span class="sw-name">Primavera P6</span><span class="sw-pct">60%</span></div><div class="sw-bar"><div class="sw-fill" data-width="60"></div></div></div>
+    <div class="sw-item reveal"><div class="sw-header"><span class="sw-name">OR-CAD / Allegro</span><span class="sw-pct">60%</span></div><div class="sw-bar"><div class="sw-fill" data-width="60"></div></div></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ PROJECTS ═══════════════════════ -->
+<section id="projects">
+  <div class="section-header reveal">
+    <div class="section-label">Key Works</div>
+    <h2 class="section-title">Signature Projects</h2>
+    <p class="section-sub">A selection of landmark projects that showcase the depth and breadth of my engineering experience.</p>
+  </div>
+
+  <div class="projects-grid">
+
+    <div class="project-card reveal">
+      <div class="project-banner" style="background:linear-gradient(90deg,#1d4ed8,#06b6d4)"></div>
+      <div class="project-body">
+        <div class="project-icon">🏗️</div>
+        <div class="project-client">Eastern Overseas LLC · 2014–2019</div>
+        <div class="project-title">Al-Batha 3×20MVA Primary Substation, Al Suwaiq</div>
+        <div class="project-desc">
+          Designed and commissioned a 33/11kV primary substation with three 20MVA transformers, 33kV outdoor circuit breakers, 11kV AIS switchgear, capacitor banks, SCADA, and full 110V DC systems — serving critical grid infrastructure in North Al Batinah.
+        </div>
+        <div class="project-tags">
+          <span class="project-tag">33/11kV</span>
+          <span class="project-tag">20MVA Transformer</span>
+          <span class="project-tag">AIS Switchgear</span>
+          <span class="project-tag">SCADA</span>
+          <span class="project-tag">Capacitor Banks</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-banner" style="background:linear-gradient(90deg,#7c3aed,#1d4ed8)"></div>
+      <div class="project-body">
+        <div class="project-icon">🔌</div>
+        <div class="project-client">Eastern Overseas LLC · 2014–2019</div>
+        <div class="project-title">Mobailah South GIS Substation Upgrade, Seeb</div>
+        <div class="project-desc">
+          Upgraded 33/11kV substation with Siemens GIS switchgear, SCADA, and 33kV GIS indoor power cable terminations. Managed all pre-commissioning activities and coordination with civil, MEP, client, and consultant teams.
+        </div>
+        <div class="project-tags">
+          <span class="project-tag">33kV GIS</span>
+          <span class="project-tag">Siemens</span>
+          <span class="project-tag">SCADA</span>
+          <span class="project-tag">Cable Termination</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-banner" style="background:linear-gradient(90deg,#059669,#06b6d4)"></div>
+      <div class="project-body">
+        <div class="project-icon">🏭</div>
+        <div class="project-client">Gulf Genuine Power · 2023–2024</div>
+        <div class="project-title">Al Hadeetha Copper Plant – 11kV Distribution System</div>
+        <div class="project-desc">
+          Full turnkey supply, erection, testing, and commissioning of a containerized 11kV electrical distribution system including 40ft container-type substation, ICOG panel, ACDB, PDBs, HT cables, FA system, MEP works, and camp lighting — compliant with OES and IEC.
+        </div>
+        <div class="project-tags">
+          <span class="project-tag">11kV</span>
+          <span class="project-tag">Containerized SS</span>
+          <span class="project-tag">MEP</span>
+          <span class="project-tag">OES/IEC</span>
+          <span class="project-tag">T&amp;C</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-banner" style="background:linear-gradient(90deg,#f59e0b,#ef4444)"></div>
+      <div class="project-body">
+        <div class="project-icon">🚂</div>
+        <div class="project-client">Gulf Genuine Power / Tristar · 2023–Ongoing</div>
+        <div class="project-title">Hafeet Railway – Oman Section 1, Package B</div>
+        <div class="project-desc">
+          Power connection for the Hafeet Railway including 12×6 distribution substations, installation and commissioning of 2×2MVA transformers, RMU and HFU systems, LV electrical connections and inspections.
+        </div>
+        <div class="project-tags">
+          <span class="project-tag">2MVA Transformer</span>
+          <span class="project-tag">RMU</span>
+          <span class="project-tag">HFU</span>
+          <span class="project-tag">Distribution SS</span>
+          <span class="project-tag">Railway</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-banner" style="background:linear-gradient(90deg,#0f2544,#3b82f6)"></div>
+      <div class="project-body">
+        <div class="project-icon">💨</div>
+        <div class="project-client">MADKOUR Projects LLC · 2024–Ongoing</div>
+        <div class="project-title">132kV JBB Ali Wind Farm Grid Station</div>
+        <div class="project-desc">
+          11kV OHL feeder works and concrete pole construction for the 132kV Wind Farm Grid Station at Jalan Bani Bu Ali — part of Oman's renewable energy expansion programme.
+        </div>
+        <div class="project-tags">
+          <span class="project-tag">132kV</span>
+          <span class="project-tag">Wind Farm</span>
+          <span class="project-tag">OHL</span>
+          <span class="project-tag">Renewable Energy</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-banner" style="background:linear-gradient(90deg,#06b6d4,#6366f1)"></div>
+      <div class="project-body">
+        <div class="project-icon">🔋</div>
+        <div class="project-client">Gulf Genuine Power / NEDC · 2024</div>
+        <div class="project-title">OETC 57 Grid Stations – Inverter System Enhancement</div>
+        <div class="project-desc">
+          Enhancement of power supply for grid station security systems through installation of new inverter systems across 57 OETC grid stations nationwide, ensuring uninterrupted security infrastructure.
+        </div>
+        <div class="project-tags">
+          <span class="project-tag">OETC</span>
+          <span class="project-tag">Inverter</span>
+          <span class="project-tag">Grid Security</span>
+          <span class="project-tag">57 Stations</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-banner" style="background:linear-gradient(90deg,#be185d,#7c3aed)"></div>
+      <div class="project-body">
+        <div class="project-icon">🏛️</div>
+        <div class="project-client">Al Haddad Trading · 2022–2023</div>
+        <div class="project-title">Sultan's Security Force – Zeak Garrison</div>
+        <div class="project-desc">
+          Complete 11kV &amp; LT electrical works for soldier mess, recruit, and recreation buildings — switching station, 11kV substation, ESE lightning protection, RMU, HFU, feeder pillars, MDB/SMDB, control panels, and street lighting.
+        </div>
+        <div class="project-tags">
+          <span class="project-tag">Military</span>
+          <span class="project-tag">11kV Substation</span>
+          <span class="project-tag">ESE Lightning</span>
+          <span class="project-tag">MEP</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-banner" style="background:linear-gradient(90deg,#0f2544,#059669)"></div>
+      <div class="project-body">
+        <div class="project-icon">🛢️</div>
+        <div class="project-client">Gulf Genuine Power / PDO · 2023–Ongoing</div>
+        <div class="project-title">33kV OHL Steel Pole 25km, NATIH Ring Main – Fahud, PDO</div>
+        <div class="project-desc">
+          25km steel pole OHL construction for the NATIH Ring Main circuit at Fahud for Petroleum Development Oman — a critical network for oil field power supply.
+        </div>
+        <div class="project-tags">
+          <span class="project-tag">33kV OHL</span>
+          <span class="project-tag">PDO</span>
+          <span class="project-tag">Steel Poles</span>
+          <span class="project-tag">25km</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════ CERTIFICATIONS ═══════════════════════ -->
+<section id="certifications">
+  <div class="section-header reveal">
+    <div class="section-label">Qualifications</div>
+    <h2 class="section-title">Education &amp; Certifications</h2>
+  </div>
+
+  <div class="cert-grid">
+
+    <div class="cert-card reveal">
+      <div class="cert-icon" style="background:#eff6ff;">🎓</div>
+      <div>
+        <div class="cert-title">BE. Electrical &amp; Electronics Engineering</div>
+        <div class="cert-body">Shivani Institute of Technology, Trichy · First Class · 2013</div>
+      </div>
+    </div>
+
+    <div class="cert-card reveal">
+      <div class="cert-icon" style="background:#eff6ff;">📘</div>
+      <div>
+        <div class="cert-title">Diploma in EEE</div>
+        <div class="cert-body">Shanmuga Polytechnic College, Tanjore · Distinction · 2010</div>
+      </div>
+    </div>
+
+    <div class="cert-card reveal">
+      <div class="cert-icon" style="background:#fef3c7;">🏅</div>
+      <div>
+        <div class="cert-title">NEDC CEP License</div>
+        <div class="cert-body">No. 98931347 – Certified Electrical Practitioner, Oman</div>
+      </div>
+    </div>
+
+    <div class="cert-card reveal">
+      <div class="cert-icon" style="background:#fef3c7;">🏅</div>
+      <div>
+        <div class="cert-title">OETC CP License</div>
+        <div class="cert-body">No. 98931347 – OETC Certified Practitioner, Oman</div>
+      </div>
+    </div>
+
+    <div class="cert-card reveal">
+      <div class="cert-icon" style="background:#f0fdf4;">☀️</div>
+      <div>
+        <div class="cert-title">Solar Electric Design &amp; Installation</div>
+        <div class="cert-body">PVOL101 – Grid-Direct Solar System Design</div>
+      </div>
+    </div>
+
+    <div class="cert-card reveal">
+      <div class="cert-icon" style="background:#f0fdf4;">📹</div>
+      <div>
+        <div class="cert-title">CCTV, Security Alarm &amp; Smoke Detector</div>
+        <div class="cert-body">RSETI, Thiruvarur – Installation &amp; Commissioning</div>
+      </div>
+    </div>
+
+    <div class="cert-card reveal">
+      <div class="cert-icon" style="background:#fdf4ff;">🛡️</div>
+      <div>
+        <div class="cert-title">Safety Leadership for Managers</div>
+        <div class="cert-body">General Third-Party Certification – Oman</div>
+      </div>
+    </div>
+
+    <div class="cert-card reveal">
+      <div class="cert-icon" style="background:#fdf4ff;">🔍</div>
+      <div>
+        <div class="cert-title">Incident &amp; Accident Investigation</div>
+        <div class="cert-body">General Third-Party Certification – Oman</div>
+      </div>
+    </div>
+
+    <div class="cert-card reveal">
+      <div class="cert-icon" style="background:#fff1f2;">⚡</div>
+      <div>
+        <div class="cert-title">Electrical Safety Rules</div>
+        <div class="cert-body">NEDC – Electrical Safety Standards Certification</div>
+      </div>
+    </div>
+
+    <div class="cert-card reveal">
+      <div class="cert-icon" style="background:#fff1f2;">🚒</div>
+      <div>
+        <div class="cert-title">IOSH, First Aid &amp; Fire Warden</div>
+        <div class="cert-body">General Third-Party Certification – Oman</div>
+      </div>
+    </div>
+
+    <div class="cert-card reveal">
+      <div class="cert-icon" style="background:#eff6ff;">🖥️</div>
+      <div>
+        <div class="cert-title">Electronic Design Automation – OR-CAD</div>
+        <div class="cert-body">CADD Center, Thanjavur</div>
+      </div>
+    </div>
+
+    <div class="cert-card reveal">
+      <div class="cert-icon" style="background:#eff6ff;">🔬</div>
+      <div>
+        <div class="cert-title">Basic Electronics</div>
+        <div class="cert-body">INFOPIN Technologies, Trichy</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════ CONTACT ═══════════════════════ -->
+<section id="contact">
+  <div class="section-header reveal">
+    <div class="section-label">Let's Connect</div>
+    <h2 class="section-title">Get In Touch</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,.55);">
+      Open to project opportunities, collaborations, or engineering consultations across Oman and India.
+    </p>
+  </div>
+
+  <div class="contact-cards">
+
+    <a href="mailto:sohar@genuine-power.com" class="contact-item reveal">
+      <div class="ci-icon">
+        <svg width="20" height="20" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+      </div>
+      <div>
+        <div class="ci-label">Email</div>
+        <div class="ci-value">sohar@genuine-power.com</div>
+      </div>
+    </a>
+
+    <a href="tel:+96897805547" class="contact-item reveal">
+      <div class="ci-icon">
+        <svg width="20" height="20" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+      </div>
+      <div>
+        <div class="ci-label">Phone – Oman</div>
+        <div class="ci-value">+968 97805547</div>
+      </div>
+    </a>
+
+    <a href="tel:+919786424605" class="contact-item reveal">
+      <div class="ci-icon">
+        <svg width="20" height="20" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+      </div>
+      <div>
+        <div class="ci-label">Phone – India</div>
+        <div class="ci-value">+91 9786424605</div>
+      </div>
+    </a>
+
+    <div class="contact-item reveal">
+      <div class="ci-icon">
+        <svg width="20" height="20" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      </div>
+      <div>
+        <div class="ci-label">Location</div>
+        <div class="ci-value">Oman &amp; Tamil Nadu, India</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════ FOOTER ═══════════════════════ -->
+<footer>
+  <p>© 2025 <span>Hari Prasanth</span> · Project Engineer – Electrical Projects · Built with purpose, deployed with precision.</p>
+</footer>
+
+<!-- ═══════════════════════ JAVASCRIPT ═══════════════════════ -->
+<script>
+  // Hamburger menu
+  const hamburger = document.getElementById('hamburger');
+  const navLinks  = document.getElementById('navLinks');
+  hamburger.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+  });
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => navLinks.classList.remove('open'));
+  });
+
+  // Active nav highlight on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navAs    = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 80) current = s.id;
+    });
+    navAs.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current
+        ? 'var(--cyan)' : '';
+    });
+  }, { passive: true });
+
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        // Animate skill bars
+        e.target.querySelectorAll('.sw-fill').forEach(bar => {
+          bar.style.width = bar.dataset.width + '%';
+        });
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Also fire bars already in viewport on load
+  window.addEventListener('load', () => {
+    reveals.forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight) {
+        el.classList.add('visible');
+        el.querySelectorAll('.sw-fill').forEach(bar => {
+          bar.style.width = bar.dataset.width + '%';
+        });
+      }
+    });
+  });
+</script>
+</body>
+</html>
