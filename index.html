@@ -533,20 +533,56 @@ section{padding:110px 5%;position:relative;z-index:1}
   border-radius:50%;display:block;
   background:var(--bg2);
 }
-/* corner orbiting dots */
-.portrait-orbit-dot{
-  position:absolute;width:8px;height:8px;border-radius:50%;
-  background:var(--cyan);box-shadow:0 0 12px var(--cyan);
-  top:50%;left:50%;
-  margin:-4px 0 0 -4px;
-  transform-origin:0 0;
+/* ─── Glittering Sparkles around the photo rim ─── */
+.sparkle{
+  position:absolute;top:50%;left:50%;width:5px;height:5px;
+  margin:-2.5px 0 0 -2.5px;
+  background:radial-gradient(circle,#fff 0%,var(--cyan) 45%,transparent 70%);
+  border-radius:50%;pointer-events:none;
+  filter:drop-shadow(0 0 6px var(--cyan)) drop-shadow(0 0 12px var(--cyan));
+  opacity:0;
+  transform:rotate(var(--a,0deg)) translateX(var(--r,195px)) scale(0);
+  animation:twinkle 2.4s ease-in-out var(--d,0s) infinite;
 }
-.portrait-orbit-dot:nth-child(1){animation:orbit 6s linear infinite}
-.portrait-orbit-dot:nth-child(2){animation:orbit 8s linear -2s infinite reverse;background:var(--blue2);box-shadow:0 0 12px var(--blue2);width:6px;height:6px}
-.portrait-orbit-dot:nth-child(3){animation:orbit 10s linear -4s infinite;background:var(--cyan2);box-shadow:0 0 10px var(--cyan2);width:5px;height:5px}
-@keyframes orbit{
-  from{transform:rotate(0deg) translateX(200px) rotate(0deg)}
-  to  {transform:rotate(360deg) translateX(200px) rotate(-360deg)}
+.sparkle.big{width:8px;height:8px;margin:-4px 0 0 -4px;animation-duration:3s}
+.sparkle.cyan{background:radial-gradient(circle,#fff 0%,#22d3ee 45%,transparent 70%);filter:drop-shadow(0 0 6px #22d3ee) drop-shadow(0 0 14px #22d3ee)}
+.sparkle.blue{background:radial-gradient(circle,#fff 0%,#3b82f6 45%,transparent 70%);filter:drop-shadow(0 0 6px #3b82f6) drop-shadow(0 0 14px #3b82f6)}
+.sparkle.gold{background:radial-gradient(circle,#fff 0%,#fbbf24 45%,transparent 70%);filter:drop-shadow(0 0 6px #fbbf24) drop-shadow(0 0 14px #fbbf24)}
+@keyframes twinkle{
+  0%,100%{opacity:0;transform:rotate(var(--a,0deg)) translateX(var(--r,195px)) scale(0)}
+  50%{opacity:1;transform:rotate(var(--a,0deg)) translateX(var(--r,195px)) scale(1.6)}
+}
+
+/* ─── Lightning Cursor (whole page) ─── */
+html,body{
+  cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 24 24' fill='%2306b6d4' stroke='%23ffffff' stroke-width='1.2' stroke-linejoin='round'%3E%3Cpath d='M13 2 L4 14 L11 14 L9 22 L20 10 L13 10 Z'/%3E%3C/svg%3E") 4 0,auto;
+}
+a,button,.h-soc,.contact-card,.ccard,.proj-card,.skill-card,.cert-card,.fui-btn,.h-stat,.about-avatar,.hero-portrait,.exp-node,.tag,.p-tag,.about-item,.about-soc-link,.cv-btn,.btn,input,textarea{
+  cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='%23fbbf24' stroke='%23ffffff' stroke-width='1.5' stroke-linejoin='round'%3E%3Cpath d='M13 2 L4 14 L11 14 L9 22 L20 10 L13 10 Z'/%3E%3C/svg%3E") 4 0,pointer !important;
+}
+
+/* ─── Click Lightning Effect ─── */
+.lightning-burst{
+  position:fixed;width:80px;height:80px;
+  margin:-40px 0 0 -40px;
+  pointer-events:none;z-index:9999;
+  animation:lb-pop .55s var(--ease-out) forwards;
+}
+.lightning-burst svg{width:100%;height:100%;display:block}
+@keyframes lb-pop{
+  0%{opacity:1;transform:scale(.3) rotate(0deg);filter:drop-shadow(0 0 16px #06b6d4)}
+  40%{opacity:1;transform:scale(1.2) rotate(15deg);filter:drop-shadow(0 0 22px #fbbf24) drop-shadow(0 0 32px #06b6d4)}
+  100%{opacity:0;transform:scale(1.6) rotate(25deg);filter:drop-shadow(0 0 0 transparent)}
+}
+.click-ripple{
+  position:fixed;width:6px;height:6px;border-radius:50%;
+  background:var(--cyan);box-shadow:0 0 16px var(--cyan);
+  margin:-3px 0 0 -3px;pointer-events:none;z-index:9998;
+  animation:cr-expand .6s ease-out forwards;
+}
+@keyframes cr-expand{
+  0%{transform:scale(1);opacity:1}
+  100%{transform:scale(20);opacity:0;background:transparent;box-shadow:0 0 0 2px rgba(6,182,212,.4)}
 }
 .portrait-availability{
   position:absolute;bottom:6%;right:6%;
@@ -1154,9 +1190,23 @@ footer span{color:var(--cyan)}
   <div class="hero-portrait-wrap">
     <div class="hero-portrait" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})" title="Click to contact me" role="button" tabindex="0">
       <img src="hari-photo.png" alt="Hari Prasanth — Electrical Project Manager" loading="eager"/>
-      <div class="portrait-orbit-dot"></div>
-      <div class="portrait-orbit-dot"></div>
-      <div class="portrait-orbit-dot"></div>
+      <!-- 16 twinkling sparkles around the rim -->
+      <span class="sparkle"      style="--a:0deg;--d:0s"></span>
+      <span class="sparkle cyan big" style="--a:22deg;--d:.18s"></span>
+      <span class="sparkle blue" style="--a:45deg;--d:.36s"></span>
+      <span class="sparkle"      style="--a:67deg;--d:.54s"></span>
+      <span class="sparkle gold big" style="--a:90deg;--d:.72s"></span>
+      <span class="sparkle cyan" style="--a:112deg;--d:.9s"></span>
+      <span class="sparkle blue big" style="--a:135deg;--d:1.08s"></span>
+      <span class="sparkle"      style="--a:157deg;--d:1.26s"></span>
+      <span class="sparkle cyan big" style="--a:180deg;--d:1.44s"></span>
+      <span class="sparkle gold" style="--a:202deg;--d:1.62s"></span>
+      <span class="sparkle"      style="--a:225deg;--d:1.8s"></span>
+      <span class="sparkle blue" style="--a:247deg;--d:.1s"></span>
+      <span class="sparkle cyan big" style="--a:270deg;--d:.28s"></span>
+      <span class="sparkle"      style="--a:292deg;--d:.46s"></span>
+      <span class="sparkle gold big" style="--a:315deg;--d:.64s"></span>
+      <span class="sparkle cyan" style="--a:337deg;--d:.82s"></span>
       <div class="portrait-availability">● Available</div>
     </div>
   </div>
@@ -1808,6 +1858,31 @@ document.querySelectorAll('.tilt').forEach(card => {
   });
   card.addEventListener('mouseleave', () => card.style.transform = '');
 });
+
+/* ════ Lightning Click Effect ════ */
+(function(){
+  const LIGHTNING_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><filter id="glw"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><g filter="url(#glw)"><path d="M50 8 L30 50 L48 50 L42 92 L70 44 L52 44 Z" fill="#fbbf24" stroke="#fff" stroke-width="1.2"/><path d="M20 30 L35 38 M75 28 L62 36 M22 70 L35 60 M78 70 L65 62" stroke="#06b6d4" stroke-width="2" stroke-linecap="round" opacity=".85"/></g></svg>';
+
+  document.addEventListener('mousedown', e => {
+    // skip if right-click
+    if (e.button !== 0) return;
+    // lightning bolt
+    const lb = document.createElement('div');
+    lb.className = 'lightning-burst';
+    lb.style.left = e.clientX + 'px';
+    lb.style.top  = e.clientY + 'px';
+    lb.innerHTML = LIGHTNING_SVG;
+    document.body.appendChild(lb);
+    setTimeout(() => lb.remove(), 600);
+    // ripple
+    const rp = document.createElement('div');
+    rp.className = 'click-ripple';
+    rp.style.left = e.clientX + 'px';
+    rp.style.top  = e.clientY + 'px';
+    document.body.appendChild(rp);
+    setTimeout(() => rp.remove(), 700);
+  });
+})();
 
 /* ════ Live Timezone Clocks ════ */
 (function(){
