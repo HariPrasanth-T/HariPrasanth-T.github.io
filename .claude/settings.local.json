@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__PDF_Tools_-_View__Fill__Merge__Split__Manage_Pages__Extract__read_pdf_content"
+    ]
+  }
+}
