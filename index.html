@@ -543,15 +543,43 @@ section{padding:110px 5%;position:relative;z-index:1}
   opacity:.35;filter:blur(4px);z-index:-1;
 }
 @keyframes p-orbit{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-.planet-orbit.p1{inset:-20px;--dur:16s}
-.planet-orbit.p1 .planet{width:18px;height:18px;background:radial-gradient(circle at 32% 30%,#fff 0%,#22d3ee 35%,#0e7490 70%,#083344 100%);--p-glow:#06b6d4;box-shadow:inset -3px -3px 6px rgba(0,0,0,.45)}
-.planet-orbit.p2{inset:-40px;--dur:24s;--dir:reverse}
-.planet-orbit.p2 .planet{width:14px;height:14px;background:radial-gradient(circle at 30% 30%,#fff 0%,#fbbf24 30%,#dc2626 70%,#7f1d1d 100%);--p-glow:#fbbf24;box-shadow:inset -2px -2px 5px rgba(0,0,0,.45)}
-.planet-orbit.p3{inset:-62px;--dur:34s}
-.planet-orbit.p3 .planet{width:16px;height:16px;background:radial-gradient(circle at 30% 30%,#fff 0%,#fbbf24 35%,#b45309 75%,#451a03 100%);--p-glow:#fbbf24;box-shadow:inset -2px -2px 5px rgba(0,0,0,.55)}
-.planet-orbit.p3 .planet::before{content:'';position:absolute;top:50%;left:50%;width:38px;height:8px;margin:-4px 0 0 -19px;border:1.5px solid rgba(251,191,36,.6);border-top-color:rgba(251,191,36,.85);border-radius:50%;transform:rotate(-22deg);filter:drop-shadow(0 0 4px rgba(251,191,36,.4))}
-.planet-orbit.p4{inset:10px;--dur:9s;--dir:reverse}
-.planet-orbit.p4 .planet{width:11px;height:11px;background:radial-gradient(circle at 35% 30%,#fff 0%,#c084fc 45%,#7e22ce 80%,#3b0764 100%);--p-glow:#a855f7;box-shadow:inset -2px -2px 4px rgba(0,0,0,.4)}
+/* 1. Mercury — closest, fastest, gray-tan */
+.po-mercury{inset:-4px;--dur:6s}
+.po-mercury .planet{width:7px;height:7px;background:radial-gradient(circle at 32% 30%,#fff 0%,#d4af37 35%,#8b7355 65%,#3e2723 100%);--p-glow:#d4af37;box-shadow:inset -1px -1px 2px rgba(0,0,0,.5)}
+
+/* 2. Venus — yellow-orange */
+.po-venus{inset:-14px;--dur:10s;--dir:reverse}
+.po-venus .planet{width:11px;height:11px;background:radial-gradient(circle at 30% 30%,#fff 0%,#fbd38d 32%,#ed8936 65%,#7c2d12 100%);--p-glow:#f6ad55;box-shadow:inset -2px -2px 4px rgba(0,0,0,.45)}
+
+/* 3. Earth — blue-cyan */
+.po-earth{inset:-26px;--dur:14s}
+.po-earth .planet{width:14px;height:14px;background:radial-gradient(circle at 30% 30%,#fff 0%,#22d3ee 28%,#0e7490 60%,#063847 100%);--p-glow:#06b6d4;box-shadow:inset -2px -2px 5px rgba(0,0,0,.45)}
+
+/* 4. Mars — red */
+.po-mars{inset:-40px;--dur:19s;--dir:reverse}
+.po-mars .planet{width:11px;height:11px;background:radial-gradient(circle at 30% 30%,#fff 0%,#fc8181 28%,#c53030 62%,#742a2a 100%);--p-glow:#fc8181;box-shadow:inset -2px -2px 4px rgba(0,0,0,.45)}
+
+/* 5. Jupiter — biggest, banded orange */
+.po-jupiter{inset:-56px;--dur:24s}
+.po-jupiter .planet{width:20px;height:20px;background:radial-gradient(circle at 30% 30%,#fff 0%,#fbd38d 25%,#d69e2e 55%,#7b341e 100%);--p-glow:#d69e2e;overflow:hidden;box-shadow:inset -3px -3px 6px rgba(0,0,0,.5)}
+.po-jupiter .planet::before{content:'';position:absolute;inset:0;border-radius:50%;background:repeating-linear-gradient(180deg,transparent 0px,transparent 2px,rgba(0,0,0,.18) 2px,rgba(0,0,0,.18) 4px);pointer-events:none}
+
+/* 6. Saturn — gold with tilted ring */
+.po-saturn{inset:-76px;--dur:30s;--dir:reverse}
+.po-saturn .planet{width:15px;height:15px;background:radial-gradient(circle at 30% 30%,#fff 0%,#fbbf24 32%,#b45309 70%,#451a03 100%);--p-glow:#fbbf24;box-shadow:inset -2px -2px 5px rgba(0,0,0,.55)}
+.po-saturn .planet::before{content:'';position:absolute;top:50%;left:50%;width:36px;height:8px;margin:-4px 0 0 -18px;border:1.5px solid rgba(251,191,36,.7);border-top-color:rgba(251,191,36,.9);border-radius:50%;transform:rotate(-22deg);filter:drop-shadow(0 0 4px rgba(251,191,36,.5))}
+
+/* 7. Uranus — ice cyan */
+.po-uranus{inset:-94px;--dur:38s}
+.po-uranus .planet{width:13px;height:13px;background:radial-gradient(circle at 30% 30%,#fff 0%,#7dd3fc 35%,#0284c7 70%,#082f49 100%);--p-glow:#0ea5e9;box-shadow:inset -2px -2px 4px rgba(0,0,0,.45)}
+
+/* 8. Neptune — deep blue */
+.po-neptune{inset:-112px;--dur:46s;--dir:reverse}
+.po-neptune .planet{width:13px;height:13px;background:radial-gradient(circle at 30% 30%,#fff 0%,#60a5fa 32%,#1e3a8a 70%,#0a1638 100%);--p-glow:#3b82f6;box-shadow:inset -2px -2px 4px rgba(0,0,0,.45)}
+
+/* 9. Pluto — distant dwarf, purple-grey */
+.po-pluto{inset:-130px;--dur:56s}
+.po-pluto .planet{width:7px;height:7px;background:radial-gradient(circle at 35% 30%,#fff 0%,#cbd5e1 40%,#94a3b8 75%,#1e293b 100%);--p-glow:#a78bfa;box-shadow:inset -1px -1px 2px rgba(0,0,0,.5)}
 .hero-portrait img{
   width:100%;height:100%;object-fit:cover;object-position:center top;
   border-radius:50%;display:block;
@@ -1261,11 +1289,16 @@ footer span{color:var(--cyan)}
   <div class="hero-portrait-wrap">
     <div class="hero-portrait" id="shine-photo" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})" title="Click to contact me" role="button" tabindex="0">
       <img src="hari-photo.png" alt="Hari Prasanth — Electrical Project Manager" loading="eager"/>
-      <!-- 4 revolving planets around the photo -->
-      <div class="planet-orbit p4"><div class="planet"></div></div>
-      <div class="planet-orbit p1"><div class="planet"></div></div>
-      <div class="planet-orbit p2"><div class="planet"></div></div>
-      <div class="planet-orbit p3"><div class="planet"></div></div>
+      <!-- 9 revolving planets — complete solar system -->
+      <div class="planet-orbit po-mercury"><div class="planet"></div></div>
+      <div class="planet-orbit po-venus"><div class="planet"></div></div>
+      <div class="planet-orbit po-earth"><div class="planet"></div></div>
+      <div class="planet-orbit po-mars"><div class="planet"></div></div>
+      <div class="planet-orbit po-jupiter"><div class="planet"></div></div>
+      <div class="planet-orbit po-saturn"><div class="planet"></div></div>
+      <div class="planet-orbit po-uranus"><div class="planet"></div></div>
+      <div class="planet-orbit po-neptune"><div class="planet"></div></div>
+      <div class="planet-orbit po-pluto"><div class="planet"></div></div>
       <!-- twinkling sparkles around the rim -->
       <span class="sparkle"      style="--a:0deg;--d:0s"></span>
       <span class="sparkle cyan big" style="--a:30deg;--d:.18s"></span>
