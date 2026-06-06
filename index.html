@@ -11,9 +11,11 @@
 </script>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Hari Prasanth | Electrical Project Manager · Gulf & India</title>
-<meta name="description" content="Hari Prasanth — Electrical Project Manager with 12+ years of HV substation, OHL, and grid infrastructure delivery across Oman & India. Available for projects, consultancy, and digital collaboration."/>
-<meta name="keywords" content="Hari Prasanth, Electrical Project Manager, Substation, HV Networks, Oman, Tamil Nadu, AI, Anthropic Claude, ChatGPT, Gemini, Video Editing"/>
+<title>Hari Prasanth | Electrical Project Manager Oman · AI Automation Freelancer · Digital Creator</title>
+<meta name="description" content="Hari Prasanth — Electrical Project Manager Oman & Substation Engineer with 12+ years in HV networks, OHL, transformer commissioning across Oman & India. AI Automation Freelancer, Digital Creator: Logo/Banner/Pamphlet design, Modern CV Maker, Professional PowerPoint, Custom Quotation Estimation, Primavera Schedules, Video Editing, PWA & Custom Apps."/>
+<meta name="keywords" content="Electrical Project Manager Oman, Electrical Substation Engineer, Electrical Substation Project Manager, Electrical Project Coordinator, Electrical Project Lead, AI Automation Freelancer, Digital Creator Advertisement, Custom Quotation Estimation Online, Digital Documentation Application, Digital Documentation Template, Primavera Project Execution Schedule, Project Estimation Schedule, Cost Analysis, Logo Designer, Banner Designer, Pamphlet Designer, Company Profile Designer, Modern CV Maker, Resume Maker, Video Editing, Professional PowerPoint Presentation, Dashboard Designer, PWA Developer, Custom App Development, Hari Prasanth"/>
+<meta name="robots" content="index, follow"/>
+<meta name="googlebot" content="index, follow"/>
 <meta name="author" content="Hari Prasanth"/>
 <link rel="canonical" href="https://www.harieng.com/"/>
 <meta property="og:title" content="Hari Prasanth | Electrical Project Manager"/>
@@ -436,6 +438,30 @@ nav.scrolled{
 .btn-primary:hover{box-shadow:var(--glow-lg);transform:translateY(-3px)}
 .btn-outline{background:color-mix(in srgb,var(--cyan) 5%,transparent);color:var(--text);border:1px solid var(--line2)}
 .btn-outline:hover{background:color-mix(in srgb,var(--cyan) 10%,transparent);border-color:var(--cyan);color:var(--cyan);box-shadow:var(--glow-sm);transform:translateY(-3px)}
+
+/* ─── Hire Me CTA Button (WhatsApp green, prominent) ─── */
+.btn-hire{
+  background:linear-gradient(135deg,#25d366,#128c7e);
+  color:#fff;
+  box-shadow:0 8px 28px rgba(37,211,102,.45),0 0 0 1px rgba(255,255,255,.08) inset;
+  font-size:.92rem;letter-spacing:.4px;
+  position:relative;overflow:hidden;
+  animation:hire-pulse 3.2s ease-in-out infinite;
+}
+.btn-hire::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);
+  transform:translateX(-100%);transition:transform .65s var(--ease);
+}
+.btn-hire:hover::after{transform:translateX(100%)}
+.btn-hire:hover{
+  box-shadow:0 14px 36px rgba(37,211,102,.6),0 0 0 1px rgba(255,255,255,.15) inset;
+  transform:translateY(-4px) scale(1.02);
+}
+@keyframes hire-pulse{
+  0%,100%{box-shadow:0 8px 28px rgba(37,211,102,.45),0 0 0 1px rgba(255,255,255,.08) inset}
+  50%{box-shadow:0 10px 36px rgba(37,211,102,.7),0 0 0 1px rgba(255,255,255,.15) inset,0 0 36px rgba(37,211,102,.4)}
+}
 
 /* scroll hint */
 .scroll-hint{position:absolute;bottom:8px;right:5%;z-index:2;display:flex;align-items:center;gap:.7rem;color:var(--muted);font-size:.7rem;letter-spacing:1.3px;text-transform:uppercase;font-family:'JetBrains Mono',monospace}
@@ -1155,26 +1181,55 @@ footer span{color:var(--cyan)}
   html{font-size:15px}
   section{padding:60px 5%}
   nav{padding:0 4%}
-  #home{padding:80px 4% 0}
+  #home{padding:80px 4% 160px}
   .h-name{font-size:2.1rem;letter-spacing:-1.2px}
   .h-role{font-size:.95rem}
   .h-tagline{font-size:.92rem}
   .h-stat{min-width:100%}
-  .h-actions{flex-direction:column;width:100%}
-  .h-actions .btn{width:100%;justify-content:center}
-  .h-soc{width:40px;height:40px}
-  .h-soc svg{width:18px;height:18px}
-  .h-socials{gap:.45rem}
+  .h-actions{flex-direction:column;width:100%;gap:.7rem}
+  .h-actions .btn{width:100%;justify-content:center;padding:1rem 1.5rem;font-size:.95rem;min-height:48px}
+  .btn-hire{font-size:1rem;font-weight:800}
+  .h-soc{width:44px;height:44px;min-width:44px}
+  .h-soc svg{width:20px;height:20px}
+  .h-socials{gap:.5rem}
   .skill-card,.proj-body,.about-card{padding:1.5rem}
-  .ccard{padding:1.25rem 1.4rem}
+  .ccard{padding:1.25rem 1.4rem;min-height:64px}
   .cci{width:42px;height:42px}
   .ccvl{font-size:.78rem}
   .s-title{font-size:1.7rem}
-  .ai-tool{padding:.5rem .55rem}
-  .exp-bullet{font-size:.82rem;padding:.35rem .55rem}
+  .ai-tool{padding:.55rem .65rem;min-height:48px}
+  .exp-bullet{font-size:.82rem;padding:.4rem .6rem}
   .h-badge{padding:.35rem .9rem}
   .h-badge .txt{font-size:.65rem;letter-spacing:1.2px}
+  /* Tap-friendly: minimum 44px touch targets */
+  .h-soc,.about-soc-link,.nav-cta,.fui-btn{min-height:44px;min-width:44px}
+  .fui-btn{width:44px;height:44px}
+  /* Hide complex desktop-only effects on mobile for performance */
+  .planet-orbit{display:none}
+  .sparkle{display:none}
 }
+
+/* Sticky bottom CTA on mobile for instant Hire Me access */
+@media(max-width:760px){
+  .mobile-fab{
+    position:fixed;bottom:1rem;left:1rem;right:5rem;z-index:280;
+    display:flex;
+  }
+  .mobile-fab a{
+    flex:1;display:flex;align-items:center;justify-content:center;gap:.5rem;
+    background:linear-gradient(135deg,#25d366,#128c7e);
+    color:#fff;font-weight:800;font-size:.88rem;letter-spacing:.5px;
+    padding:.85rem 1rem;border-radius:14px;
+    box-shadow:0 10px 28px rgba(37,211,102,.45),0 0 0 1px rgba(255,255,255,.1) inset;
+    text-decoration:none;
+    animation:hire-pulse 3s ease-in-out infinite;
+  }
+  .mobile-fab a:active{transform:scale(.97)}
+  /* hide on hero section (CTA already visible there) */
+  body.in-hero .mobile-fab{opacity:0;pointer-events:none;transform:translateY(20px);transition:all .3s var(--ease)}
+  body:not(.in-hero) .mobile-fab{opacity:1;pointer-events:auto;transform:translateY(0);transition:all .3s var(--ease)}
+}
+@media(min-width:761px){.mobile-fab{display:none}}
 
 /* Tiny phone */
 @media(max-width:340px){
@@ -1253,6 +1308,14 @@ footer span{color:var(--cyan)}
 </style>
 </head>
 <body>
+
+<!-- Mobile floating Hire Me CTA -->
+<div class="mobile-fab">
+  <a href="https://wa.me/96897805547?text=Hi%20Hari,%20I'd%20like%20to%20discuss%20a%20project." target="_blank" rel="noopener" aria-label="Hire Me on WhatsApp">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487M12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.463 3.488 11.815 11.815 0 0012.05 0z"/></svg>
+    Hire Me — Chat on WhatsApp
+  </a>
+</div>
 
 <!-- Music auto-start prompt -->
 <div class="music-prompt" id="music-prompt" role="button" aria-label="Enable ambient music">
@@ -1371,13 +1434,13 @@ footer span{color:var(--cyan)}
     </div>
 
     <div class="h-actions">
+      <a href="https://wa.me/96897805547?text=Hi%20Hari,%20I'd%20like%20to%20discuss%20a%20project%20with%20you." target="_blank" class="btn btn-hire" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.463 3.488 11.815 11.815 0 0012.05 0z"/></svg>
+        Hire Me / Request a Project
+      </a>
       <button class="btn btn-primary" onclick="document.getElementById('projects').scrollIntoView({behavior:'smooth'})">
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>View Projects
       </button>
-      <a href="Hari-Prasanth-CV.pdf" download="Hari-Prasanth-CV.pdf" class="cv-btn">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Download CV
-      </a>
       <button class="btn btn-outline" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get in Touch</button>
     </div>
   </div>
@@ -1493,7 +1556,7 @@ footer span{color:var(--cyan)}
       <h3>Professional Summary</h3>
       <p>With over <strong>12 years of hands-on expertise</strong> in commercial &amp; industrial electrical installations and substation engineering across the <strong>Gulf (Oman)</strong> and <strong>India</strong>, I bring full project lifecycle capability — from feasibility and procurement to execution, testing, commissioning, and handover.</p>
       <p>I specialise in <strong>33kV/11kV primary substations</strong>, HV switchgear (AIS/GIS), transformer commissioning (315kVA–20MVA), OHL construction, and LV systems. As <strong>Electrical Project Manager</strong>, I currently lead concurrent portfolios across grid, oil &amp; gas, port, railway, and industrial sectors in Oman.</p>
-      <p>Beyond engineering, I've been <strong>learning and exploring AI and digital creation</strong> on my own. I use modern AI tools to help with productivity and automation, and I also try my hand at <strong>video editing, image design, custom worksheets, PWA and simple app development</strong>. This portfolio is meant to show both my career side and the creative projects I can take up for clients.</p>
+      <p>Beyond engineering, I am a <strong>self-taught AI practitioner and digital creator</strong>, actively exploring modern AI tools to enhance productivity and automation while engaging in creative projects such as <strong>video editing, image design, custom worksheets, websites, professional PowerPoint presentations, dashboards, progressive web apps, and custom app development for both Windows and Android</strong>. This portfolio highlights not only my professional engineering expertise but also my creative digital capabilities, offering value across <strong>career opportunities, client projects, and freelance engagements</strong>.</p>
       <div class="profile-tags">
         <span class="tag">Project Management</span><span class="tag">33kV / 11kV Networks</span><span class="tag">Substation Engineering</span><span class="tag">Transformer Commissioning</span><span class="tag">HSE Planning</span><span class="tag">OHL Construction</span><span class="tag">SCADA</span><span class="tag">IEC / OES Compliance</span><span class="tag">Primavera P6</span><span class="tag">AI Tools</span><span class="tag">Video Editing</span><span class="tag">Web Development</span>
       </div>
@@ -1892,8 +1955,33 @@ footer span{color:var(--cyan)}
   </div>
 </section>
 
+<!-- Hidden SEO semantic block — read by search engines, invisible to users -->
+<section aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden">
+  <h2>Hari Prasanth — Services &amp; Specialisations</h2>
+  <ul>
+    <li>Electrical Project Manager Oman</li>
+    <li>Electrical Substation Engineer</li>
+    <li>Electrical Substation Project Manager</li>
+    <li>Electrical Project Coordinator</li>
+    <li>Electrical Project Lead</li>
+    <li>AI Automation Freelancer</li>
+    <li>Digital Creator — Advertisement Design</li>
+    <li>Custom Quotation &amp; Estimation Online</li>
+    <li>Digital Documentation Application &amp; Template</li>
+    <li>Primavera Project Execution Schedule</li>
+    <li>Project Estimation Schedule with Cost Analysis</li>
+    <li>Logo, Banner, Pamphlet &amp; Company Profile Designer</li>
+    <li>Modern CV / Resume Maker</li>
+    <li>Video Editing Services</li>
+    <li>Professional PowerPoint Presentation Designer</li>
+    <li>Dashboard &amp; PWA Developer</li>
+    <li>Custom App Development (Windows &amp; Android)</li>
+  </ul>
+  <p>Available in Oman (Sohar, Muscat, Salalah, Al Buraimi, Ibri, Sur) and Tamil Nadu India.</p>
+</section>
+
 <footer>
-  <p>© 2026 <span>Hari Prasanth</span> · Electrical Project Manager · <span>www.harieng.com</span></p>
+  <p>© 2026 <span>Hari Prasanth</span> · Electrical Project Manager · AI Automation Freelancer · Digital Creator · <span>www.harieng.com</span></p>
 </footer>
 
 <!-- ═══════════════════════════════════════
@@ -2132,6 +2220,20 @@ document.querySelectorAll('.tilt').forEach(card => {
     setTimeout(loop, next);
   }
   setTimeout(loop, 4500);  // first shine 4.5s after load
+})();
+
+/* ════ Mobile FAB hide-on-hero ════ */
+(function(){
+  const home = document.getElementById('home');
+  if (!home) return;
+  function check(){
+    const hr = home.getBoundingClientRect();
+    const inHero = hr.bottom > 100;
+    document.body.classList.toggle('in-hero', inHero);
+  }
+  check();
+  window.addEventListener('scroll', check, { passive: true });
+  window.addEventListener('resize', check, { passive: true });
 })();
 
 /* ════ Live Timezone Clocks ════ */
