@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>11kV Mid-Span Tapping — HFX | NEDC-2024-121</title>
+<style>
+  :root {
+    --existing: #1565c0;
+    --new: #e65100;
+    --jumper: #6a1b9a;
+    --safe: #2e7d32;
+    --warn: #ef6c00;
+    --danger: #c62828;
+    --panel: #f5f5f5;
+    --border: #cfd8dc;
+    --text: #263238;
+    --accent: #1a237e;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+    margin: 0; padding: 14px;
+    background: linear-gradient(135deg, #eceff1 0%, #cfd8dc 100%);
+    color: var(--text);
+    min-height: 100vh;
+  }
+  header {
+    background: linear-gradient(135deg, var(--accent) 0%, #0d47a1 100%);
+    color: white; padding: 16px 24px;
+    border-radius: 8px 8px 0 0;
+    display: flex; justify-content: space-between;
+    align-items: center; flex-wrap: wrap; gap: 16px;
+  }
+  header h1 { margin: 0; font-size: 22px; font-weight: 700; letter-spacing: 0.3px; }
+  header h1 a { color: white; text-decoration: none; transition: color 0.3s; }
+  header h1 a:hover { color: #ffd700; }
+  header .sub { font-size: 12px; opacity: 0.9; margin-top: 4px; }
+  .badge {
+    background: rgba(255,255,255,0.18); padding: 4px 10px;
+    border-radius: 12px; font-size: 11px; font-weight: 500;
+    margin-left: 6px; text-decoration: none; color: white; cursor: pointer;
+    transition: all 0.3s;
+  }
+  .badge:hover { background: rgba(255,215,0,0.3); }
+  .site-link {
+    display: inline-block;
+    font-size: 22px;
+    font-weight: 800;
+    color: #1a237e !important;
+    text-decoration: none;
+    padding: 14px 24px;
+    background: linear-gradient(120deg, #fff7c2 0%, #ffd700 25%, #fff 45%, #ffd700 65%, #fff7c2 100%);
+    background-size: 250% 100%;
+    border-radius: 10px;
+    border: 2px solid #ffd700;
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.7), 0 4px 10px rgba(0,0,0,0.25);
+    animation: shineSweep 3s linear infinite, glowPulse 2s ease-in-out infinite alternate;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+    text-shadow: 0 1px 2px rgba(255,255,255,0.7);
+  }
+  .site-link::before {
+    content: "🌐";
+    margin-right: 8px;
+    filter: drop-shadow(0 0 4px gold);
+  }
+  .site-link:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgba(255, 215, 0, 1), 0 0 70px rgba(255, 140, 0, 0.8);
+  }
+  @keyframes shineSweep {
+    0%   { background-position: 250% 0; }
+    100% { background-position: -250% 0; }
+  }
+  @keyframes glowPulse {
+    from { box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 4px 10px rgba(0,0,0,0.25); }
+    to   { box-shadow: 0 0 45px rgba(255, 215, 0, 1), 0 0 65px rgba(255, 140, 0, 0.6), 0 4px 10px rgba(0,0,0,0.25); }
+  }
+  .site-link-sub {
+    display: block;
+    text-align: center;
+    color: #ffd700;
+    font-size: 10px;
+    font-weight: 500;
+    margin-top: 5px;
+    letter-spacing: 1.2px;
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.7);
+    animation: subPulse 2.5s ease-in-out infinite;
+  }
+  @keyframes subPulse {
+    0%, 100% { opacity: 0.85; }
+    50% { opacity: 1; text-shadow: 0 0 14px rgba(255, 215, 0, 1); }
+  }
+  .container {
+    background: white; border-radius: 0 0 8px 8px;
+    padding: 14px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+  .layout {
+    display: grid; grid-template-columns: 240px 1fr 260px;
+    gap: 12px;
+  }
+  @media (max-width: 1280px) { .layout { grid-template-columns: 1fr; } }
+  .panel {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 6px; padding: 11px;
+  }
+  .panel h3 {
+    margin: 0 0 9px 0; font-size: 11px; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 0.7px;
+    border-bottom: 2px solid var(--accent); padding-bottom: 4px;
+  }
+  .cg { margin-bottom: 10px; }
+  .cg label {
+    display: block; font-size: 11px; font-weight: 600;
+    color: #455a64; margin-bottom: 3px;
+  }
+  .cg .v {
+    font-family: 'Consolas', monospace; font-size: 14px; font-weight: 700;
+    color: var(--new); background: white; padding: 2px 7px;
+    border-radius: 4px; display: inline-block; min-width: 60px;
+    text-align: center; border: 1px solid var(--border);
+  }
+  input[type=range] { width: 100%; margin-top: 3px; }
+  .btn {
+    width: 100%; padding: 6px; background: var(--accent);
+    color: white; border: none; border-radius: 4px;
+    cursor: pointer; font-size: 11px; font-weight: 600; margin-top: 4px;
+  }
+  .btn:hover { background: #0d47a1; }
+  .btn.grey { background: #546e7a; }
+  .btn.orange { background: #ef6c00; }
+  .btn-row { display: flex; gap: 5px; }
+  .btn-row .btn { flex: 1; }
+  .preset {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 4px; margin-top: 4px;
+  }
+  .preset button {
+    padding: 4px; border: 1px solid var(--border);
+    background: white; border-radius: 3px; cursor: pointer;
+    font-size: 11px; font-weight: 600;
+  }
+  .preset button.active { background: var(--accent); color: white; }
+  .view-wrap {
+    background: white; border: 1px solid var(--border);
+    border-radius: 6px; overflow: hidden;
+  }
+  .view-head {
+    background: var(--accent); color: white; padding: 6px 12px;
+    font-size: 12px; font-weight: 600;
+    display: flex; justify-content: space-between;
+  }
+  .view-head .hint { font-size: 10px; opacity: 0.85; font-weight: 400; }
+  svg.scene {
+    display: block; width: 100%; height: 620px;
+    cursor: grab; user-select: none;
+  }
+  svg.scene.dragging { cursor: grabbing; }
+  svg.scene.panning { cursor: move; }
+  .reading {
+    background: white; padding: 7px 10px; border-radius: 4px;
+    margin-bottom: 7px; border-left: 4px solid var(--accent);
+  }
+  .reading .lbl {
+    font-size: 10px; color: #607d8b;
+    text-transform: uppercase; letter-spacing: 0.4px;
+  }
+  .reading .val {
+    font-family: 'Consolas', monospace;
+    font-size: 15px; font-weight: 700;
+  }
+  .reading.safe { border-left-color: var(--safe); }
+  .reading.warn { border-left-color: var(--warn); }
+  .reading.danger { border-left-color: var(--danger); }
+  .status {
+    display: inline-block; padding: 2px 7px; border-radius: 10px;
+    font-size: 10px; font-weight: 700; margin-left: 5px;
+  }
+  .status.safe { background: #c8e6c9; color: var(--safe); }
+  .status.warn { background: #ffe0b2; color: var(--warn); }
+  .status.danger { background: #ffcdd2; color: var(--danger); }
+  .final {
+    background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%);
+    border: 2px solid var(--safe);
+    border-radius: 8px; padding: 14px; margin-top: 12px;
+  }
+  .final h2 {
+    margin: 0 0 10px 0; color: var(--safe); font-size: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .final h2::before {
+    content: "✓"; background: var(--safe); color: white;
+    width: 24px; height: 24px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: bold;
+  }
+  .answers {
+    background: white; border-left: 4px solid var(--accent);
+    border-radius: 4px; padding: 10px 14px;
+  }
+  .answers ol { margin: 4px 0 0 18px; font-size: 13px; line-height: 1.7; }
+  .pill {
+    background: #c8e6c9; padding: 2px 8px; border-radius: 3px;
+    color: var(--safe); font-weight: bold;
+  }
+  .nama {
+    background: #fffde7; border: 1px dashed #ffd54f;
+    padding: 8px 12px; border-radius: 4px; font-size: 12px;
+    color: #4e342e; margin-top: 10px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>
+      <a href="https://www.harieng.com" target="_blank" rel="noopener">HFX</a>
+      &nbsp;—&nbsp;
+      <a href="https://www.harieng.com" target="_blank" rel="noopener">Madkour OHL work</a>
+      &nbsp;—&nbsp;Tapping Area
+    </h1>
+    <div class="sub">11kV Mid-Span Tapping · 3-Phase PG Clamp · Tap 3m from T12 · Two wooden poles 35m each side · T12 → T14 PMR (75m)</div>
+    <div style="margin-top:6px;">
+      <a href="https://www.harieng.com" target="_blank" rel="noopener" class="badge">HFX</a>
+      <a href="https://www.harieng.com" target="_blank" rel="noopener" class="badge">NEDC-2024-121</a>
+    </div>
+  </div>
+  <div style="text-align:center;">
+    <a href="https://www.harieng.com" target="_blank" rel="noopener" class="site-link">www.harieng.com</a>
+    <span class="site-link-sub">★ HARI ENGINEERING ★</span>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="layout">
+
+    <aside class="panel">
+      <h3>⚙ Settings</h3>
+
+      <div class="cg">
+        <label>T12 Planting</label>
+        <span class="v" id="t12pVal">2.50 m</span>
+        <input type="range" id="t12p" min="2.50" max="3.00" step="0.05" value="2.50">
+        <div class="preset" id="t12Preset">
+          <button data-val="2.50" class="active">2.50</button>
+          <button data-val="2.75">2.75</button>
+          <button data-val="3.00">3.00</button>
+        </div>
+      </div>
+
+      <div class="cg">
+        <label>T14 Planting</label>
+        <span class="v" id="t14pVal">3.00 m</span>
+        <input type="range" id="t14p" min="2.50" max="3.20" step="0.05" value="3.00">
+      </div>
+
+      <div class="cg">
+        <label>Wooden OHL Height</label>
+        <span class="v" id="wcVal">9.00 m</span>
+        <input type="range" id="wc" min="8.50" max="9.20" step="0.05" value="9.00">
+      </div>
+
+      <div class="cg">
+        <label>New Conductor Sag</label>
+        <span class="v" id="sagVal">1.00 m</span>
+        <input type="range" id="sag" min="0.5" max="2.0" step="0.1" value="1.0">
+      </div>
+
+      <h3 style="margin-top:12px;">📷 View</h3>
+      <div class="cg">
+        <label>Rotation</label>
+        <span class="v" id="hdgVal">25°</span>
+        <input type="range" id="hdg" min="-180" max="180" step="2" value="25">
+      </div>
+      <div class="cg">
+        <label>Tilt</label>
+        <span class="v" id="ptVal">25°</span>
+        <input type="range" id="pt" min="0" max="60" step="2" value="25">
+      </div>
+      <div class="cg">
+        <label>Zoom</label>
+        <span class="v" id="zmVal">5×</span>
+        <input type="range" id="zm" min="3" max="60" step="1" value="5">
+      </div>
+
+      <div class="btn-row">
+        <button class="btn" id="viewSide">Side</button>
+        <button class="btn" id="viewTop">Top</button>
+        <button class="btn" id="viewTap">Tap</button>
+      </div>
+      <button class="btn grey" id="viewReset" style="margin-top:5px;">↻ Reset</button>
+      <button class="btn orange" id="animBtn" style="margin-top:5px;">▶ Rotate</button>
+    </aside>
+
+    <section>
+      <div class="view-wrap">
+        <div class="view-head">
+          <span>📐 3D SCENE — drag rotate · wheel zoom · shift+drag pan</span>
+          <span class="hint" id="viewState">heading 25° · pitch 25° · zoom 5×</span>
+        </div>
+        <svg class="scene" id="scene" viewBox="0 0 1400 620" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#b3e5fc"/>
+              <stop offset="100%" stop-color="#e1f5fe"/>
+            </linearGradient>
+            <pattern id="hatch" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
+              <line x1="0" y1="0" x2="0" y2="6" stroke="#3e2723" stroke-width="0.8"/>
+            </pattern>
+            <pattern id="hatchGrey" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
+              <line x1="0" y1="0" x2="0" y2="6" stroke="#37474f" stroke-width="0.8"/>
+            </pattern>
+            <marker id="aE" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 z" fill="#37474f"/>
+            </marker>
+            <marker id="aS" markerWidth="8" markerHeight="8" refX="2" refY="4" orient="auto">
+              <path d="M8,0 L0,4 L8,8 z" fill="#37474f"/>
+            </marker>
+          </defs>
+          <rect width="1400" height="620" fill="url(#sky)"/>
+        </svg>
+      </div>
+    </section>
+
+    <aside class="panel">
+      <h3>📊 Readings</h3>
+
+      <div class="reading">
+        <div class="lbl">Wooden Poles (×2)</div>
+        <div class="val" id="wcRead" style="color:var(--existing);">9.00 m</div>
+        <small style="color:#607d8b;font-size:10px;">11m · 2m planted · 35m each side</small>
+      </div>
+
+      <div class="reading">
+        <div class="lbl">T12 Top</div>
+        <div class="val" id="t12Read" style="color:var(--new);">9.50 m</div>
+        <small style="color:#607d8b;font-size:10px;">12m · plant <span id="t12pSm">2.50</span>m</small>
+      </div>
+
+      <div class="reading">
+        <div class="lbl">T14 PMR Top</div>
+        <div class="val" id="t14Read" style="color:var(--new);">11.00 m</div>
+        <small style="color:#607d8b;font-size:10px;">14m · plant <span id="t14pSm">3.00</span>m</small>
+      </div>
+
+      <div class="reading" id="sepBox">
+        <div class="lbl">Δz at Crossing (with sag)</div>
+        <div class="val" id="sepVal">+0.41 m</div>
+        <span class="status" id="sepBadge">SAFE</span>
+        <small style="color:#607d8b;font-size:10px;display:block;margin-top:3px;">Mid-air, ~3m from T12</small>
+      </div>
+
+      <div class="reading">
+        <div class="lbl">Layout</div>
+        <div style="font-size:11px;line-height:1.6;">
+          T12 ↔ Tap point: <b>3 m</b><br>
+          Tap ↔ each wooden: <b>35 m</b><br>
+          Existing OHL span: <b>70 m</b><br>
+          T12 ↔ T14 span: <b>75 m</b>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <div class="final">
+    <h2>FINAL ENGINEERING — MID-SPAN TAPPING</h2>
+
+    <div class="answers">
+      <ol>
+        <li><b>01 T12 planting:</b> <span class="pill">2.50 m</span> → top 9.50 m AG</li>
+        <li><b>02 T14 PMR planting:</b> <span class="pill">3.00 m</span> → top 11.00 m AG</li>
+        <li><b>New conductor passes ABOVE existing — Δz ≈ 0.41 m</b> at the crossing (3m from T12, mid-air with sag)</li>
+        <li><b>3× PG-clamp jumpers</b> at the tap, conductor-to-conductor (NOT from poles)</li>
+        <li><b>Wooden poles: two existing, 35m on either side</b> of the tap — clear of new pole locations</li>
+      </ol>
+    </div>
+
+    <div class="nama">
+      <b>📋 NAMA Survey Approval — Special Tapping Condition:</b>
+      Reduced vertical clearance Δz ≈ 0.4 m at the mid-span crossing is accepted because the connection is made <b>directly conductor-to-conductor with PG clamps</b> — after clamping, both sides are at the same potential. The tap is mid-span between two existing wooden poles (35m each side); no proximity issue with T12 or T14.
+    </div>
+  </div>
+
+  <div style="text-align:center;color:#607d8b;font-size:11px;margin-top:12px;">
+    HFX · NEDC-2024-121 · 11kV cylindrical concrete pole · 4 span / 300m proposed
+  </div>
+
+</div>
+
+<script>
+'use strict';
+
+const state = {
+  heading: 25, pitch: 25, zoom: 5,
+  panX: 0, panY: 0,
+  lookAt: { x: 0, y: 25, z: 5 },
+  t12Planting: 2.50, t14Planting: 3.00, woodCondHeight: 9.00, sagMax: 1.0,
+  autoRot: null
+};
+
+const T12_TOTAL = 12;
+const T14_TOTAL = 14;
+const WOOD_TOTAL = 11;
+const WOOD_PLANTED = 2;
+const SPAN_NEW = 75;
+const WOOD_OFFSET = 35;        // each wooden pole is 35m from tap (E and W)
+
+const T12   = { x: 0, y: 0 };
+const TAP   = { x: 0, y: 3 };                       // mid-air tap point, 3m from T12
+const WOOD1 = { x: -WOOD_OFFSET, y: 3 };            // west wooden pole
+const WOOD2 = { x:  WOOD_OFFSET, y: 3 };            // east wooden pole
+const T14   = { x: 0, y: SPAN_NEW };
+
+const PH = 0.65;
+const PHASES = [-PH, 0, PH];
+
+function cam() {
+  const az = state.heading * Math.PI / 180;
+  const el = state.pitch  * Math.PI / 180;
+  const forward = {
+    x: -Math.cos(el) * Math.sin(az),
+    y: -Math.cos(el) * Math.cos(az),
+    z: -Math.sin(el)
+  };
+  let right = { x: -forward.y, y: forward.x, z: 0 };
+  const rLen = Math.hypot(right.x, right.y) || 1;
+  right = { x: right.x/rLen, y: right.y/rLen, z: 0 };
+  const up = {
+    x: forward.y * right.z - forward.z * right.y,
+    y: forward.z * right.x - forward.x * right.z,
+    z: forward.x * right.y - forward.y * right.x
+  };
+  return { forward, right, up };
+}
+
+function project(x, y, z, c) {
+  const dx = x - state.lookAt.x;
+  const dy = y - state.lookAt.y;
+  const dz = z - state.lookAt.z;
+  const sx = c.right.x * dx + c.right.y * dy + c.right.z * dz;
+  const sy = c.up.x    * dx + c.up.y    * dy + c.up.z    * dz;
+  const depth = c.forward.x * dx + c.forward.y * dy + c.forward.z * dz;
+  return {
+    sx: 700 + sx * state.zoom + state.panX,
+    sy: 320 - sy * state.zoom + state.panY,
+    d: depth
+  };
+}
+
+function ln(x1,y1,x2,y2, col, w, dash, mk) {
+  let s = `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="${col}" stroke-width="${w}"`;
+  if (dash) s += ` stroke-dasharray="${dash}"`;
+  if (mk) s += ` ${mk}`;
+  return s + '/>';
+}
+function txt(x, y, str, o={}) {
+  const fs = o.fs || 11, f = o.fill || '#37474f', w = o.weight || 'normal', a = o.anchor || 'start';
+  return `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" font-size="${fs}" fill="${f}" font-weight="${w}" text-anchor="${a}" font-family="Segoe UI, Arial, sans-serif">${str}</text>`;
+}
+function txtBg(x, y, str, o={}) {
+  const fs = o.fs || 11, f = o.fill || '#37474f', w = o.weight || 'bold', a = o.anchor || 'start';
+  const pad = 3, ww = str.length * fs * 0.55;
+  let rx = x;
+  if (a === 'middle') rx = x - ww/2;
+  else if (a === 'end') rx = x - ww;
+  return `<rect x="${(rx - pad).toFixed(1)}" y="${(y - fs).toFixed(1)}" width="${(ww + 2*pad).toFixed(1)}" height="${(fs + pad).toFixed(1)}" fill="white" fill-opacity="0.92" stroke="#cfd8dc" stroke-width="0.5" rx="2"/>` +
+    `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" font-size="${fs}" fill="${f}" font-weight="${w}" text-anchor="${a}" font-family="Segoe UI, Arial, sans-serif">${str}</text>`;
+}
+function mix(hex, f) {
+  const r = parseInt(hex.slice(1,3), 16), g = parseInt(hex.slice(3,5), 16), b = parseInt(hex.slice(5,7), 16);
+  return `rgb(${Math.max(0,Math.min(255,Math.round(r*f)))},${Math.max(0,Math.min(255,Math.round(g*f)))},${Math.max(0,Math.min(255,Math.round(b*f)))})`;
+}
+
+function newCondZ(yPos, t12H, t14H) {
+  const t = (yPos - T12.y) / SPAN_NEW;
+  const sag = 4 * state.sagMax * t * (1 - t);
+  return t12H + t * (t14H - t12H) - sag;
+}
+
+// Label with leader line connecting object position to label position
+function leaderLabel(out, objX, objY, objZ, labelDX, labelDY, str, depthHint, opts) {
+  const objP = project(objX, objY, objZ, c0);
+  const labelX = objP.sx + labelDX;
+  const labelY = objP.sy + labelDY;
+  out.push({ d: depthHint - 0.01, svg: ln(objP.sx, objP.sy, labelX - 4, labelY - 4, '#607d8b', 0.8, '2 2') });
+  out.push({ d: depthHint, svg: txtBg(labelX, labelY, str, opts) });
+}
+
+let c0;
+
+function draw() {
+  c0 = cam();
+  const c = c0;
+  const world = [];
+
+  const wcH  = state.woodCondHeight;
+  const t12H = T12_TOTAL - state.t12Planting;
+  const t14H = T14_TOTAL - state.t14Planting;
+  const woodTop = WOOD_TOTAL - WOOD_PLANTED;
+
+  const crossings = PHASES.map((phPair, i) => {
+    const crossX = T12.x + phPair;
+    const crossY = TAP.y + phPair;
+    const newZ = newCondZ(crossY, t12H, t14H);
+    const dz = newZ - wcH;
+    return { x: crossX, y: crossY, existZ: wcH, newZ, dz, idx: i };
+  });
+  const avgSep = crossings.reduce((s, x) => s + x.dz, 0) / 3;
+  const isSafe = avgSep >= 0.30;
+  const sepColor = isSafe ? '#2e7d32' : (avgSep > 0 ? '#ef6c00' : '#c62828');
+
+  // GROUND
+  const R = 100;
+  const g00 = project(-R, -R, 0, c), g01 = project(-R, R, 0, c);
+  const g10 = project(R, -R, 0, c), g11 = project(R, R, 0, c);
+  world.push({ d: 1e6, svg: `<polygon points="${g00.sx},${g00.sy} ${g10.sx},${g10.sy} ${g11.sx},${g11.sy} ${g01.sx},${g01.sy}" fill="#c5e1a5" fill-opacity="0.55"/>` });
+  for (let v = -R; v <= R; v += 10) {
+    const a = project(-R, v, 0, c), b = project(R, v, 0, c);
+    const e = project(v, -R, 0, c), f = project(v, R, 0, c);
+    world.push({ d: 999990, svg: ln(a.sx,a.sy,b.sx,b.sy, '#90a4ae', 0.4) });
+    world.push({ d: 999990, svg: ln(e.sx,e.sy,f.sx,f.sy, '#90a4ae', 0.4) });
+  }
+
+  // EXISTING OHL — 3 phases from WOOD1 to WOOD2 (70m span, tap at mid-span)
+  PHASES.forEach(phY => {
+    const yPos = TAP.y + phY;
+    const a = project(WOOD1.x, yPos, wcH, c);
+    const b = project(WOOD2.x, yPos, wcH, c);
+    world.push({ d: (a.d + b.d)/2, svg: ln(a.sx, a.sy, b.sx, b.sy, '#1565c0', 2.5) });
+  });
+
+  // POLES
+  drawCyl(world, WOOD1.x, WOOD1.y, WOOD_TOTAL, WOOD_PLANTED, '#8d6e63', '#3e2723', c, 'wooden');
+  drawCyl(world, WOOD2.x, WOOD2.y, WOOD_TOTAL, WOOD_PLANTED, '#8d6e63', '#3e2723', c, 'wooden');
+  drawCyl(world, T12.x,   T12.y,   T12_TOTAL,  state.t12Planting, '#90a4ae', '#263238', c, 'concrete');
+  drawCyl(world, T14.x,   T14.y,   T14_TOTAL,  state.t14Planting, '#90a4ae', '#263238', c, 'concrete');
+
+  // NEW CONDUCTOR T12→T14
+  PHASES.forEach(phX => {
+    drawConductor(world, T12.x + phX, T12.y, t12H, T14.x + phX, T14.y, t14H, '#e65100', c);
+  });
+
+  // 3× PG-CLAMP JUMPERS at mid-air crossings
+  crossings.forEach(cr => {
+    pgClamp(world, cr.x, cr.y, cr.existZ, c, 'existing');
+    pgClamp(world, cr.x, cr.y, cr.newZ, c, 'new');
+    const a = project(cr.x, cr.y, cr.existZ + 0.05, c);
+    const b = project(cr.x, cr.y, cr.newZ - 0.05, c);
+    world.push({ d: (a.d + b.d)/2 - 0.6, svg: ln(a.sx, a.sy, b.sx, b.sy, '#6a1b9a', 3) });
+  });
+
+  // Single Δz dimension arrow at centre crossing
+  const ctrCr = crossings[1];
+  const dzA = project(ctrCr.x + 0.5, ctrCr.y, ctrCr.existZ, c);
+  const dzB = project(ctrCr.x + 0.5, ctrCr.y, ctrCr.newZ, c);
+  world.push({ d: (dzA.d + dzB.d)/2 - 0.7, svg: ln(dzA.sx, dzA.sy, dzB.sx, dzB.sy, sepColor, 1.8, '', 'marker-start="url(#aS)" marker-end="url(#aE)"') });
+
+  // 3m tap dim — T12 to tap point on ground
+  const t12Gnd = project(T12.x, T12.y, 0, c);
+  const tapGnd = project(TAP.x, TAP.y, 0, c);
+  world.push({ d: -1000, svg: ln(t12Gnd.sx, t12Gnd.sy, tapGnd.sx, tapGnd.sy, '#6a1b9a', 1.5, '4 3', 'marker-start="url(#aS)" marker-end="url(#aE)"') });
+  world.push({ d: -1001, svg: txtBg((t12Gnd.sx + tapGnd.sx)/2 + 8, (t12Gnd.sy + tapGnd.sy)/2 + 4, '3 m', { fs: 11, fill: '#6a1b9a' }) });
+
+  // 75m span dim T12→T14
+  const t12Off = project(T12.x + 3, T12.y, 0, c);
+  const t14Off = project(T14.x + 3, T14.y, 0, c);
+  world.push({ d: -1010, svg: ln(t12Off.sx, t12Off.sy, t14Off.sx, t14Off.sy, '#37474f', 1.5, '', 'marker-start="url(#aS)" marker-end="url(#aE)"') });
+  world.push({ d: -1011, svg: txtBg((t12Off.sx + t14Off.sx)/2 + 10, (t12Off.sy + t14Off.sy)/2, '75 m SPAN', { fs: 12, fill: '#37474f' }) });
+
+  // 35m each side dims along existing OHL
+  const w1off = project(WOOD1.x, WOOD1.y - 2.5, 0, c);
+  const tapOff1 = project(TAP.x, TAP.y - 2.5, 0, c);
+  const w2off = project(WOOD2.x, WOOD2.y - 2.5, 0, c);
+  world.push({ d: -1020, svg: ln(w1off.sx, w1off.sy, tapOff1.sx, tapOff1.sy, '#1565c0', 1.3, '', 'marker-start="url(#aS)" marker-end="url(#aE)"') });
+  world.push({ d: -1021, svg: ln(tapOff1.sx, tapOff1.sy, w2off.sx, w2off.sy, '#1565c0', 1.3, '', 'marker-start="url(#aS)" marker-end="url(#aE)"') });
+  world.push({ d: -1022, svg: txtBg((w1off.sx + tapOff1.sx)/2, (w1off.sy + tapOff1.sy)/2 + 14, '35 m', { fs: 11, fill: '#1565c0' }) });
+  world.push({ d: -1023, svg: txtBg((tapOff1.sx + w2off.sx)/2, (tapOff1.sy + w2off.sy)/2 + 14, '35 m', { fs: 11, fill: '#1565c0' }) });
+
+  // Tap marker
+  const tapM = project(TAP.x, TAP.y, wcH, c);
+  world.push({ d: tapM.d + 0.05, svg: `<circle cx="${tapM.sx}" cy="${tapM.sy}" r="5" fill="#ffeb3b" stroke="#f57c00" stroke-width="1.5" opacity="0.7"/>` });
+
+  // ===== POLE LABELS — placed far ABOVE pole tops with leader lines =====
+  // Use camera-up offset to ensure labels are above the geometry visually
+  const labelOffsetPx = 60;  // pixels above pole top
+
+  // WOOD1 label
+  const wood1Top = project(WOOD1.x, WOOD1.y, woodTop, c);
+  world.push({ d: -2000, svg: ln(wood1Top.sx, wood1Top.sy, wood1Top.sx - 30, wood1Top.sy - labelOffsetPx + 5, '#607d8b', 0.8, '2 2') });
+  world.push({ d: -2001, svg: txtBg(wood1Top.sx - 30, wood1Top.sy - labelOffsetPx, 'Wooden #1 · 11m / 9m AG', { fs: 11, fill: '#1565c0', anchor: 'end' }) });
+
+  // WOOD2 label
+  const wood2Top = project(WOOD2.x, WOOD2.y, woodTop, c);
+  world.push({ d: -2010, svg: ln(wood2Top.sx, wood2Top.sy, wood2Top.sx + 30, wood2Top.sy - labelOffsetPx + 5, '#607d8b', 0.8, '2 2') });
+  world.push({ d: -2011, svg: txtBg(wood2Top.sx + 30, wood2Top.sy - labelOffsetPx, 'Wooden #2 · 11m / 9m AG', { fs: 11, fill: '#1565c0' }) });
+
+  // T12 label — to the left
+  const t12Top = project(T12.x, T12.y, t12H, c);
+  world.push({ d: -2020, svg: ln(t12Top.sx, t12Top.sy, t12Top.sx - 40, t12Top.sy - labelOffsetPx + 5, '#607d8b', 0.8, '2 2') });
+  world.push({ d: -2021, svg: txtBg(t12Top.sx - 40, t12Top.sy - labelOffsetPx, `01 T12 · ${t12H.toFixed(1)}m AG`, { fs: 11, fill: '#e65100', anchor: 'end' }) });
+
+  // T14 label — to the right
+  const t14Top = project(T14.x, T14.y, t14H, c);
+  world.push({ d: -2030, svg: ln(t14Top.sx, t14Top.sy, t14Top.sx + 40, t14Top.sy - labelOffsetPx + 5, '#607d8b', 0.8, '2 2') });
+  world.push({ d: -2031, svg: txtBg(t14Top.sx + 40, t14Top.sy - labelOffsetPx, `02 T14 PMR · ${t14H.toFixed(1)}m AG`, { fs: 11, fill: '#e65100' }) });
+
+  // Δz label — to the side of the crossing, not on top
+  const dzMid = project(ctrCr.x + 0.5, ctrCr.y, (ctrCr.existZ + ctrCr.newZ) / 2, c);
+  world.push({ d: -2040, svg: ln(dzMid.sx + 1, dzMid.sy, dzMid.sx + 80, dzMid.sy - 30, '#607d8b', 0.8, '2 2') });
+  world.push({ d: -2041, svg: txtBg(dzMid.sx + 80, dzMid.sy - 30, `Δz ≈ ${avgSep.toFixed(2)} m`, { fs: 12, fill: sepColor, weight: 'bold' }) });
+
+  // Jumper label
+  const jLab = project(ctrCr.x, ctrCr.y, Math.max(ctrCr.existZ, ctrCr.newZ), c);
+  world.push({ d: -2050, svg: ln(jLab.sx, jLab.sy, jLab.sx - 80, jLab.sy - 50, '#607d8b', 0.8, '2 2') });
+  world.push({ d: -2051, svg: txtBg(jLab.sx - 80, jLab.sy - 50, '3× PG-clamp jumpers', { fs: 11, fill: '#6a1b9a', anchor: 'end' }) });
+
+  // EXIST OHL label — at far right end of OHL
+  const ohlLabP = project(WOOD2.x + 5, WOOD2.y, wcH, c);
+  world.push({ d: -2060, svg: txtBg(ohlLabP.sx + 5, ohlLabP.sy - 4, 'EXIST. 11kV OHL · 70m span', { fs: 11, fill: '#1565c0' }) });
+
+  // ===== SORT & RENDER =====
+  world.sort((a, b) => b.d - a.d);
+  let svgInner = world.map(i => i.svg).join('');
+
+  // Status banner — narrower, less obtrusive
+  const stCol = isSafe ? '#2e7d32' : (avgSep > 0 ? '#ef6c00' : '#c62828');
+  const stTx = isSafe ? `✓ APPROVED — Δz ${avgSep.toFixed(2)} m · 3× PG-clamp · per NAMA`
+            : avgSep > 0 ? `⚠ MARGINAL Δz ${avgSep.toFixed(2)} m`
+            : `✗ UNSAFE`;
+  svgInner += `<rect x="400" y="10" width="500" height="30" rx="6" fill="${stCol}" opacity="0.95"/>`;
+  svgInner += txt(650, 30, stTx, { fs: 12, fill: 'white', weight: 'bold', anchor: 'middle' });
+
+  // HUD card
+  svgInner += hudCard(20, 55, avgSep, wcH, t12H, t14H);
+
+  // Compass
+  svgInner += compass(1310, 70, c);
+
+  document.getElementById('scene').innerHTML = svgInner;
+
+  // side-panel updates
+  document.getElementById('wcRead').textContent  = wcH.toFixed(2) + ' m';
+  document.getElementById('t12Read').textContent = t12H.toFixed(2) + ' m';
+  document.getElementById('t14Read').textContent = t14H.toFixed(2) + ' m';
+  document.getElementById('t12pSm').textContent  = state.t12Planting.toFixed(2);
+  document.getElementById('t14pSm').textContent  = state.t14Planting.toFixed(2);
+  document.getElementById('sepVal').textContent  = (avgSep >= 0 ? '+' : '') + avgSep.toFixed(2) + ' m';
+  const sepBox = document.getElementById('sepBox');
+  sepBox.className = 'reading ' + (isSafe ? 'safe' : avgSep > 0 ? 'warn' : 'danger');
+  const badge = document.getElementById('sepBadge');
+  badge.className = 'status ' + (isSafe ? 'safe' : avgSep > 0 ? 'warn' : 'danger');
+  badge.textContent = isSafe ? '✓ SAFE' : avgSep > 0 ? '⚠ MARGINAL' : '✗ UNSAFE';
+  document.getElementById('viewState').textContent =
+    `heading ${Math.round(state.heading)}° · pitch ${Math.round(state.pitch)}° · zoom ${state.zoom.toFixed(0)}×`;
+}
+
+function drawCyl(out, x, y, total, planted, color, edge, c, kind) {
+  const top = total - planted;
+  const r = 0.20;
+  const SEGS = 14;
+  const angles = [];
+  for (let i = 0; i < SEGS; i++) angles.push((i / SEGS) * 2 * Math.PI);
+
+  const topP = angles.map(a => project(x + r * Math.cos(a), y + r * Math.sin(a), top, c));
+  const botP = angles.map(a => project(x + r * Math.cos(a), y + r * Math.sin(a), 0, c));
+  const undP = angles.map(a => project(x + r * Math.cos(a), y + r * Math.sin(a), -planted, c));
+
+  for (let i = 0; i < SEGS; i++) {
+    const j = (i + 1) % SEGS;
+    const midA = (angles[i] + angles[j]) / 2;
+    const shade = 0.45 + 0.55 * Math.max(0.1, Math.cos(midA - Math.PI * 0.7));
+    const fill = mix(color, shade);
+    const p1 = topP[i], p2 = topP[j], p3 = botP[j], p4 = botP[i];
+    const avgD = (p1.d + p3.d) / 2;
+    out.push({ d: avgD, svg: `<polygon points="${p1.sx.toFixed(1)},${p1.sy.toFixed(1)} ${p2.sx.toFixed(1)},${p2.sy.toFixed(1)} ${p3.sx.toFixed(1)},${p3.sy.toFixed(1)} ${p4.sx.toFixed(1)},${p4.sy.toFixed(1)}" fill="${fill}"/>` });
+  }
+  const topPoly = topP.map(p => `${p.sx.toFixed(1)},${p.sy.toFixed(1)}`).join(' ');
+  const avgTopD = topP.reduce((s, p) => s + p.d, 0) / SEGS;
+  out.push({ d: avgTopD - 0.1, svg: `<polygon points="${topPoly}" fill="${edge}" stroke="${edge}" stroke-width="0.5"/>` });
+
+  const hatchPat = kind === 'wooden' ? 'hatch' : 'hatchGrey';
+  for (let i = 0; i < SEGS; i++) {
+    const j = (i + 1) % SEGS;
+    const midA = (angles[i] + angles[j]) / 2;
+    if (Math.cos(midA - Math.PI * 0.7) < 0) continue;
+    const p1 = botP[i], p2 = botP[j], p3 = undP[j], p4 = undP[i];
+    const avgD = (p1.d + p3.d) / 2;
+    out.push({ d: avgD + 0.1, svg: `<polygon points="${p1.sx.toFixed(1)},${p1.sy.toFixed(1)} ${p2.sx.toFixed(1)},${p2.sy.toFixed(1)} ${p3.sx.toFixed(1)},${p3.sy.toFixed(1)} ${p4.sx.toFixed(1)},${p4.sy.toFixed(1)}" fill="url(#${hatchPat})" stroke="${edge}" stroke-width="0.4" stroke-dasharray="3 2" opacity="0.75"/>` });
+  }
+
+  const armZ = top - 0.25;
+  if (kind === 'wooden') {
+    const a = project(x, y - PH * 1.3, armZ, c);
+    const b = project(x, y + PH * 1.3, armZ, c);
+    out.push({ d: Math.min(a.d, b.d) + 0.05, svg: ln(a.sx, a.sy, b.sx, b.sy, edge, 5) });
+    PHASES.forEach(off => {
+      const ins = project(x, y + off, top, c);
+      const ins2 = project(x, y + off, armZ - 0.1, c);
+      out.push({ d: ins.d + 0.06, svg: ln(ins.sx, ins.sy, ins2.sx, ins2.sy, edge, 1.5) });
+      out.push({ d: ins.d + 0.07, svg: `<circle cx="${ins.sx}" cy="${ins.sy}" r="3" fill="#eceff1" stroke="${edge}" stroke-width="0.7"/>` });
+    });
+  } else {
+    const a = project(x - PH * 1.3, y, armZ, c);
+    const b = project(x + PH * 1.3, y, armZ, c);
+    out.push({ d: Math.min(a.d, b.d) + 0.05, svg: ln(a.sx, a.sy, b.sx, b.sy, edge, 5) });
+    PHASES.forEach(off => {
+      const ins = project(x + off, y, top, c);
+      const ins2 = project(x + off, y, armZ - 0.1, c);
+      out.push({ d: ins.d + 0.06, svg: ln(ins.sx, ins.sy, ins2.sx, ins2.sy, edge, 1.5) });
+      out.push({ d: ins.d + 0.07, svg: `<circle cx="${ins.sx}" cy="${ins.sy}" r="3" fill="#eceff1" stroke="${edge}" stroke-width="0.7"/>` });
+    });
+  }
+
+  const fR = 0.55, fSegs = 12;
+  const fPts = [];
+  for (let i = 0; i < fSegs; i++) {
+    const a = (i / fSegs) * 2 * Math.PI;
+    fPts.push(project(x + fR * Math.cos(a), y + fR * Math.sin(a), -planted - 0.05, c));
+  }
+  const fPoly = fPts.map(p => `${p.sx.toFixed(1)},${p.sy.toFixed(1)}`).join(' ');
+  const avgFD = fPts.reduce((s, p) => s + p.d, 0) / fSegs;
+  out.push({ d: avgFD + 0.2, svg: `<polygon points="${fPoly}" fill="#546e7a" stroke="#263238" stroke-width="0.6"/>` });
+}
+
+function drawConductor(out, x1, y1, z1, x2, y2, z2, color, c) {
+  const N = 30;
+  const pts = [];
+  let avgD = 0;
+  for (let i = 0; i <= N; i++) {
+    const t = i / N;
+    const sag = 4 * state.sagMax * t * (1 - t);
+    const x = x1 + t*(x2-x1);
+    const y = y1 + t*(y2-y1);
+    const z = z1 + t*(z2-z1) - sag;
+    const p = project(x, y, z, c);
+    pts.push(`${p.sx.toFixed(1)},${p.sy.toFixed(1)}`);
+    avgD += p.d;
+  }
+  avgD /= (N + 1);
+  out.push({ d: avgD, svg: `<polyline points="${pts.join(' ')}" stroke="${color}" stroke-width="2.2" fill="none" stroke-linecap="round"/>` });
+}
+
+function pgClamp(out, x, y, z, c, kind) {
+  const L = 0.18, W = 0.08, H = 0.09;
+  let p1, p2, p3, p4, p5, p6, p7, p8;
+  if (kind === 'existing') {
+    p1 = project(x - L, y - W, z - H, c); p2 = project(x + L, y - W, z - H, c);
+    p3 = project(x + L, y + W, z - H, c); p4 = project(x - L, y + W, z - H, c);
+    p5 = project(x - L, y - W, z + H, c); p6 = project(x + L, y - W, z + H, c);
+    p7 = project(x + L, y + W, z + H, c); p8 = project(x - L, y + W, z + H, c);
+  } else {
+    p1 = project(x - W, y - L, z - H, c); p2 = project(x + W, y - L, z - H, c);
+    p3 = project(x + W, y + L, z - H, c); p4 = project(x - W, y + L, z - H, c);
+    p5 = project(x - W, y - L, z + H, c); p6 = project(x + W, y - L, z + H, c);
+    p7 = project(x + W, y + L, z + H, c); p8 = project(x - W, y + L, z + H, c);
+  }
+  const avgD = (p1.d + p7.d) / 2;
+  out.push({ d: avgD - 0.5, svg: `<polygon points="${p5.sx},${p5.sy} ${p6.sx},${p6.sy} ${p7.sx},${p7.sy} ${p8.sx},${p8.sy}" fill="#546e7a" stroke="#263238" stroke-width="0.6"/>` });
+  out.push({ d: avgD - 0.4, svg: `<polygon points="${p1.sx},${p1.sy} ${p2.sx},${p2.sy} ${p6.sx},${p6.sy} ${p5.sx},${p5.sy}" fill="#37474f" stroke="#263238" stroke-width="0.6"/>` });
+  out.push({ d: avgD - 0.3, svg: `<polygon points="${p2.sx},${p2.sy} ${p3.sx},${p3.sy} ${p7.sx},${p7.sy} ${p6.sx},${p6.sy}" fill="#455a64" stroke="#263238" stroke-width="0.6"/>` });
+  const topMid = project(x, y, z + H, c);
+  out.push({ d: avgD - 0.6, svg: `<circle cx="${topMid.sx}" cy="${topMid.sy}" r="1.5" fill="#cfd8dc" stroke="#263238" stroke-width="0.5"/>` });
+}
+
+function hudCard(x, y, sep, wc, t12, t14) {
+  const W = 280, H = 195;
+  const isSafe = sep >= 0.30;
+  const col = isSafe ? '#2e7d32' : (sep > 0 ? '#ef6c00' : '#c62828');
+  const bdg = isSafe ? '✓ APPROVED' : (sep > 0 ? '⚠ MARGINAL' : '✗ UNSAFE');
+  let s = `<rect x="${x}" y="${y}" width="${W}" height="${H}" rx="8" fill="white" fill-opacity="0.96" stroke="#37474f" stroke-width="1.4"/>`;
+  s += `<rect x="${x}" y="${y}" width="${W}" height="24" rx="8" fill="#1a237e"/>`;
+  s += `<rect x="${x}" y="${y+12}" width="${W}" height="12" fill="#1a237e"/>`;
+  s += txt(x + W/2, y + 17, '📊 KEY DATA', { fs: 12, fill: 'white', weight: 'bold', anchor: 'middle' });
+  let r = y + 40;
+  const row = (l, v, cc) => {
+    s += txt(x + 10, r, l, { fs: 11, fill: '#455a64' });
+    s += txt(x + W - 10, r, v, { fs: 11, fill: cc || '#263238', weight: 'bold', anchor: 'end' });
+    r += 16;
+  };
+  row('Wooden ×2 (35m each side)', wc.toFixed(2) + ' m AG', '#1565c0');
+  row('T12 / plant', t12.toFixed(2) + ' / ' + state.t12Planting.toFixed(2) + ' m', '#e65100');
+  row('T14 / plant', t14.toFixed(2) + ' / ' + state.t14Planting.toFixed(2) + ' m', '#e65100');
+  row('T12 ↔ Tap', '3 m', '#6a1b9a');
+  row('Existing OHL span', '70 m', '#37474f');
+  row('T12 ↔ T14 span', '75 m', '#37474f');
+  row('Δz at crossing', (sep >= 0 ? '+' : '') + sep.toFixed(2) + ' m', col);
+  s += `<rect x="${x + 10}" y="${y + H - 26}" width="${W - 20}" height="18" rx="3" fill="${col}"/>`;
+  s += txt(x + W/2, y + H - 13, bdg + ' · 3× PG-clamp · NAMA', { fs: 11, fill: 'white', weight: 'bold', anchor: 'middle' });
+  return s;
+}
+
+function compass(cx, cy, c) {
+  const a0 = project(0, 0, 0, c);
+  const ax = project(2, 0, 0, c);
+  const ay = project(0, 2, 0, c);
+  const az = project(0, 0, 2, c);
+  const dx = (p) => p.sx - a0.sx;
+  const dy = (p) => p.sy - a0.sy;
+  let s = `<circle cx="${cx}" cy="${cy}" r="42" fill="white" fill-opacity="0.95" stroke="#37474f" stroke-width="1.2"/>`;
+  s += txt(cx, cy - 30, 'AXES', { fs: 10, fill: '#37474f', weight: 'bold', anchor: 'middle' });
+  s += `<line x1="${cx}" y1="${cy}" x2="${cx + dx(ax)*0.8}" y2="${cy + dy(ax)*0.8}" stroke="#d32f2f" stroke-width="2.4" marker-end="url(#aE)"/>`;
+  s += txt(cx + dx(ax)*0.95, cy + dy(ax)*0.95 + 4, 'OHL', { fs: 10, fill: '#d32f2f', weight: 'bold' });
+  s += `<line x1="${cx}" y1="${cy}" x2="${cx + dx(ay)*0.8}" y2="${cy + dy(ay)*0.8}" stroke="#388e3c" stroke-width="2.4" marker-end="url(#aE)"/>`;
+  s += txt(cx + dx(ay)*0.95, cy + dy(ay)*0.95 + 4, 'NEW', { fs: 10, fill: '#388e3c', weight: 'bold' });
+  s += `<line x1="${cx}" y1="${cy}" x2="${cx + dx(az)*0.8}" y2="${cy + dy(az)*0.8}" stroke="#1976d2" stroke-width="2.4" marker-end="url(#aE)"/>`;
+  s += txt(cx + dx(az)*0.95, cy + dy(az)*0.95 + 4, 'Z↑', { fs: 10, fill: '#1976d2', weight: 'bold' });
+  return s;
+}
+
+const scene = document.getElementById('scene');
+let dragMode = null, dragLast = null;
+scene.addEventListener('mousedown', (e) => {
+  e.preventDefault();
+  dragLast = { x: e.clientX, y: e.clientY };
+  if (e.shiftKey || e.button === 2 || e.button === 1) { dragMode = 'pan'; scene.classList.add('panning'); }
+  else { dragMode = 'rotate'; scene.classList.add('dragging'); }
+});
+scene.addEventListener('contextmenu', (e) => e.preventDefault());
+document.addEventListener('mousemove', (e) => {
+  if (!dragMode) return;
+  const dx = e.clientX - dragLast.x, dy = e.clientY - dragLast.y;
+  dragLast = { x: e.clientX, y: e.clientY };
+  if (dragMode === 'rotate') {
+    state.heading = ((state.heading + dx * 0.5 + 540) % 360) - 180;
+    state.pitch = Math.max(0, Math.min(60, state.pitch + dy * 0.3));
+    document.getElementById('hdg').value = state.heading;
+    document.getElementById('pt').value = state.pitch;
+    document.getElementById('hdgVal').textContent = Math.round(state.heading) + '°';
+    document.getElementById('ptVal').textContent = Math.round(state.pitch) + '°';
+  } else { state.panX += dx; state.panY += dy; }
+  draw();
+});
+document.addEventListener('mouseup', () => {
+  dragMode = null;
+  scene.classList.remove('dragging');
+  scene.classList.remove('panning');
+});
+scene.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  const f = e.deltaY < 0 ? 1.12 : 0.89;
+  state.zoom = Math.max(3, Math.min(60, state.zoom * f));
+  document.getElementById('zm').value = state.zoom;
+  document.getElementById('zmVal').textContent = state.zoom.toFixed(0) + '×';
+  draw();
+}, { passive: false });
+
+function bind(id, k, v, f) {
+  document.getElementById(id).addEventListener('input', (e) => {
+    state[k] = parseFloat(e.target.value);
+    document.getElementById(v).textContent = f(state[k]);
+    draw();
+  });
+}
+bind('t12p', 't12Planting', 't12pVal', v => v.toFixed(2) + ' m');
+bind('t14p', 't14Planting', 't14pVal', v => v.toFixed(2) + ' m');
+bind('wc',   'woodCondHeight', 'wcVal', v => v.toFixed(2) + ' m');
+bind('sag',  'sagMax', 'sagVal', v => v.toFixed(2) + ' m');
+bind('hdg',  'heading', 'hdgVal', v => Math.round(v) + '°');
+bind('pt',   'pitch', 'ptVal', v => Math.round(v) + '°');
+bind('zm',   'zoom', 'zmVal', v => v.toFixed(0) + '×');
+
+document.querySelectorAll('#t12Preset button').forEach(b => {
+  b.addEventListener('click', () => {
+    state.t12Planting = parseFloat(b.dataset.val);
+    document.getElementById('t12p').value = state.t12Planting;
+    document.getElementById('t12pVal').textContent = state.t12Planting.toFixed(2) + ' m';
+    document.querySelectorAll('#t12Preset button').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    draw();
+  });
+});
+
+document.getElementById('viewSide').addEventListener('click', () => {
+  state.heading = 90; state.pitch = 3; state.zoom = 5;
+  state.lookAt = { x: 0, y: 25, z: 5 };
+  state.panX = 0; state.panY = 0;
+  sync(); draw();
+});
+document.getElementById('viewTop').addEventListener('click', () => {
+  state.heading = 0; state.pitch = 58; state.zoom = 5;
+  state.lookAt = { x: 0, y: 25, z: 0 };
+  state.panX = 0; state.panY = 0;
+  sync(); draw();
+});
+document.getElementById('viewTap').addEventListener('click', () => {
+  state.heading = 35; state.pitch = 18; state.zoom = 32;
+  state.lookAt = { x: 0, y: 3, z: 9.2 };
+  state.panX = 0; state.panY = 0;
+  sync(); draw();
+});
+document.getElementById('viewReset').addEventListener('click', () => {
+  state.heading = 25; state.pitch = 25; state.zoom = 5;
+  state.lookAt = { x: 0, y: 25, z: 5 };
+  state.panX = 0; state.panY = 0;
+  sync(); draw();
+});
+function sync() {
+  document.getElementById('hdg').value = state.heading;
+  document.getElementById('pt').value = state.pitch;
+  document.getElementById('zm').value = state.zoom;
+  document.getElementById('hdgVal').textContent = Math.round(state.heading) + '°';
+  document.getElementById('ptVal').textContent = Math.round(state.pitch) + '°';
+  document.getElementById('zmVal').textContent = state.zoom.toFixed(0) + '×';
+}
+
+document.getElementById('animBtn').addEventListener('click', function() {
+  if (state.autoRot) {
+    clearInterval(state.autoRot); state.autoRot = null;
+    this.textContent = '▶ Rotate'; return;
+  }
+  this.textContent = '⏸ Stop';
+  state.autoRot = setInterval(() => {
+    state.heading = ((state.heading + 1.2 + 540) % 360) - 180;
+    document.getElementById('hdg').value = state.heading;
+    document.getElementById('hdgVal').textContent = Math.round(state.heading) + '°';
+    draw();
+  }, 60);
+});
+
+draw();
+</script>
+
+</body>
+</html>
