@@ -182,17 +182,20 @@ function curRow(){return curSec().rows[$.ar];}
 // CALC ENGINE
 // ═══════════════════════════════
 function cFloor(s,c){
+  if(!s.len||!s.spc)return[['F.01','Support Legs','—',0,'nos','Enter length & spacing'],['F.02','Total Unistrut','—',0,'m',''],['F.03','Channel Qty','—',0,'pcs',''],['F.04','Base Plates','—',0,'nos',''],['F.05','Anchor Bolt','—',0,'nos',''],['F.06','Spring BNW','—',0,'nos',''],['F.07','L Clamps','—',0,'nos',''],['F.08','BNW L Clamp','—',0,'nos',''],['F.09','End Cap','—',0,'nos',''],['F.10','Cable Cleats','—',0,'nos','']];
   const sp=Math.ceil(s.len/s.spc),C=sp*2,F=Math.round(((C*s.legH)+(s.legW*s.tiers*sp))*100)/100;
   const uQ=Math.ceil(F/c.chL),G=C+c.bpX,H=G*c.anPP,I=G*c.spPP,J=sp*s.tiers*c.lcS,K=J*c.bnPC,L=C*c.ecM,O=s.trfPT*s.tiers;
-  return[['F.01','Support Legs (both sides)',`⌈${s.len}÷${s.spc}⌉×2`,C,'nos'],['F.02','Total Unistrut Length',`(C×D)+(E×A×⌈B/S⌉)`,F,'m'],['F.03',`41×41 Channel Qty (${c.chL}m)`,`⌈F÷${c.chL}⌉`,uQ,'pcs'],['F.04','Base Plates',`C+${c.bpX}`,G,'nos'],['F.05','Anchor Bolt (Baseplate)',`G×${c.anPP}`,H,'nos'],['F.06','Spring BNW (Base→Leg)',`G×${c.spPP}`,I,'nos'],['F.07','L Clamps',`⌈B/S⌉×A×${c.lcS}`,J,'nos'],['F.08','BNW for L Clamp',`J×${c.bnPC}`,K,'nos'],['F.09','End Cap',`C×${c.ecM}`,L,'nos'],['F.10','Cable Cleats',`Trefoil×Tiers`,O,'nos']];}
+  return[['F.01','Support Legs (both sides)',`⌈${s.len}÷${s.spc}⌉×2`,C,'nos',`⌈${s.len}÷${s.spc}⌉=${sp} per side × 2 = ${C}`],['F.02','Total Unistrut Length',`(C×D)+(E×A×⌈B/S⌉)`,F,'m',`(${C}×${s.legH})+(${s.legW}×${s.tiers}×${sp}) = ${F}m`],['F.03',`41×41 Channel Qty (${c.chL}m)`,`⌈F÷${c.chL}⌉`,uQ,'pcs',`⌈${F}÷${c.chL}⌉ = ${uQ} pieces`],['F.04','Base Plates',`C+${c.bpX}`,G,'nos',`${C} legs + ${c.bpX} extra = ${G}`],['F.05','Anchor Bolt (Baseplate)',`G×${c.anPP}`,H,'nos',`${G} plates × ${c.anPP} bolts = ${H}`],['F.06','Spring BNW (Base→Leg)',`G×${c.spPP}`,I,'nos',`${G} plates × ${c.spPP} = ${I}`],['F.07','L Clamps',`⌈B/S⌉×A×${c.lcS}`,J,'nos',`${sp} supports × ${s.tiers} tiers × ${c.lcS} = ${J}`],['F.08','BNW for L Clamp',`J×${c.bnPC}`,K,'nos',`${J} clamps × ${c.bnPC} = ${K}`],['F.09','End Cap',`C×${c.ecM}`,L,'nos',`${C} × ${c.ecM} = ${L}`],['F.10','Cable Cleats',`Trefoil×Tiers`,O,'nos',`${s.trfPT} × ${s.tiers} = ${O}`]];}
 
 function cWall(s,c){
+  if(!s.len||!s.spc)return[['W.01','Wall Brackets','—',0,'nos','Enter length & spacing'],['W.02','Back Channel','—',0,'m',''],['W.03','Channel Qty','—',0,'pcs',''],['W.04','Anchor Bolt','—',0,'nos',''],['W.05','Rawl Plug','—',0,'nos',''],['W.06','Spring Nut','—',0,'nos',''],['W.07','End Cap','—',0,'nos',''],['W.08','Cable Cleats','—',0,'nos','']];
   const sp=Math.ceil(s.len/s.spc),brk=sp*s.walls,bkL=Math.round(s.len*s.walls*100)/100,bkQ=Math.ceil(bkL/c.chL),ab=brk*c.wbB,rp=ab,sn=brk*c.wsN,ec=s.walls*c.weC,O=s.trfPT*s.tiers;
-  return[['W.01','Wall Brackets',`⌈${s.len}÷${s.spc}⌉×${s.walls}`,brk,'nos'],['W.02','Back Channel Len',`${s.len}×${s.walls}`,bkL,'m'],['W.03',`Channel Qty (${c.chL}m)`,`⌈${bkL}÷${c.chL}⌉`,bkQ,'pcs'],['W.04','Anchor Bolt (Wall)',`${brk}×${c.wbB}`,ab,'nos'],['W.05','Rawl Plug',`=anchors`,rp,'nos'],['W.06','Spring Ch. Nut',`${brk}×${c.wsN}`,sn,'nos'],['W.07','Ch. End Cap',`${s.walls}×${c.weC}`,ec,'nos'],['W.08','Cable Cleats',`Trefoil×Tiers`,O,'nos']];}
+  return[['W.01','Wall Brackets',`⌈${s.len}÷${s.spc}⌉×${s.walls}`,brk,'nos',`⌈${s.len}÷${s.spc}⌉=${sp} × ${s.walls} walls = ${brk}`],['W.02','Back Channel Len',`${s.len}×${s.walls}`,bkL,'m',`${s.len}m × ${s.walls} walls = ${bkL}m`],['W.03',`Channel Qty (${c.chL}m)`,`⌈${bkL}÷${c.chL}⌉`,bkQ,'pcs',`⌈${bkL}÷${c.chL}⌉ = ${bkQ}`],['W.04','Anchor Bolt (Wall)',`${brk}×${c.wbB}`,ab,'nos',`${brk} brackets × ${c.wbB} = ${ab}`],['W.05','Rawl Plug',`=anchors`,rp,'nos',`Same as anchor bolts = ${rp}`],['W.06','Spring Ch. Nut',`${brk}×${c.wsN}`,sn,'nos',`${brk} × ${c.wsN} = ${sn}`],['W.07','Ch. End Cap',`${s.walls}×${c.weC}`,ec,'nos',`${s.walls} walls × ${c.weC} = ${ec}`],['W.08','Cable Cleats',`Trefoil×Tiers`,O,'nos',`${s.trfPT} × ${s.tiers} = ${O}`]];}
 
 function cRoof(s,c){
+  if(!s.len||!s.spc)return[['R.01','Supports/Side','—',0,'nos','Enter length & spacing'],['R.02','Drop Points','—',0,'nos',''],['R.03','Rod Length','—',0,'m',''],['R.04','Rod Qty','—',0,'pcs',''],['R.05','Hz Channel','—',0,'m',''],['R.06','Total Unistrut','—',0,'m',''],['R.07','Unistrut Qty','—',0,'pcs',''],['R.08','Ceiling Anchor','—',0,'nos',''],['R.09','Channel Nut','—',0,'nos',''],['R.10','Spring Nut','—',0,'nos',''],['R.11','Washer','—',0,'nos',''],['R.12','Hex Nut','—',0,'nos',''],['R.13','Cable Cleats','—',0,'nos','']];
   const sp=Math.ceil(s.len/s.spc),dp=sp*2,rT=Math.round(dp*s.dropH*100)/100,rQ=Math.ceil(rT/c.rsL),hz=Math.round(s.legW*s.tiers*sp*100)/100,tU=Math.round((rT+hz)*100)/100,uQ=Math.ceil(tU/c.chL),ca=dp*c.caP,cn=dp*c.cnD,sn2=dp*c.snD,wa=dp*c.waD,hn=dp*c.hnD,O=s.trfPT*s.tiers;
-  return[['R.01','Supports/Side',`⌈${s.len}÷${s.spc}⌉`,sp,'nos'],['R.02','Drop Points',`${sp}×2`,dp,'nos'],['R.03','Rod Length',`${dp}×${s.dropH}`,rT,'m'],['R.04',`Rod Qty (${c.rsL}m)`,`⌈R.03÷${c.rsL}⌉`,rQ,'pcs'],['R.05','Hz. Channel Len',`${s.legW}×${s.tiers}×${sp}`,hz,'m'],['R.06','Total Unistrut',`R.03+R.05`,tU,'m'],['R.07',`Unistrut Qty (${c.chL}m)`,`⌈÷${c.chL}⌉`,uQ,'pcs'],['R.08','Ceiling Anchor',`${dp}×${c.caP}`,ca,'nos'],['R.09','Channel Nut',`${dp}×${c.cnD}`,cn,'nos'],['R.10','Spring Nut',`${dp}×${c.snD}`,sn2,'nos'],['R.11','Washer',`${dp}×${c.waD}`,wa,'nos'],['R.12','Hex Nut',`${dp}×${c.hnD}`,hn,'nos'],['R.13','Cable Cleats',`Trefoil×Tiers`,O,'nos']];}
+  return[['R.01','Supports/Side',`⌈${s.len}÷${s.spc}⌉`,sp,'nos',`⌈${s.len}÷${s.spc}⌉ = ${sp}`],['R.02','Drop Points',`${sp}×2`,dp,'nos',`${sp} × 2 sides = ${dp}`],['R.03','Rod Length',`${dp}×${s.dropH}`,rT,'m',`${dp} drops × ${s.dropH}m = ${rT}m`],['R.04',`Rod Qty (${c.rsL}m)`,`⌈R.03÷${c.rsL}⌉`,rQ,'pcs',`⌈${rT}÷${c.rsL}⌉ = ${rQ}`],['R.05','Hz. Channel Len',`${s.legW}×${s.tiers}×${sp}`,hz,'m',`${s.legW}×${s.tiers}×${sp} = ${hz}m`],['R.06','Total Unistrut',`R.03+R.05`,tU,'m',`${rT}+${hz} = ${tU}m`],['R.07',`Unistrut Qty (${c.chL}m)`,`⌈÷${c.chL}⌉`,uQ,'pcs',`⌈${tU}÷${c.chL}⌉ = ${uQ}`],['R.08','Ceiling Anchor',`${dp}×${c.caP}`,ca,'nos',`${dp}×${c.caP} = ${ca}`],['R.09','Channel Nut',`${dp}×${c.cnD}`,cn,'nos',`${dp}×${c.cnD} = ${cn}`],['R.10','Spring Nut',`${dp}×${c.snD}`,sn2,'nos',`${dp}×${c.snD} = ${sn2}`],['R.11','Washer',`${dp}×${c.waD}`,wa,'nos',`${dp}×${c.waD} = ${wa}`],['R.12','Hex Nut',`${dp}×${c.hnD}`,hn,'nos',`${dp}×${c.hnD} = ${hn}`],['R.13','Cable Cleats',`Trefoil×Tiers`,O,'nos',`${s.trfPT}×${s.tiers} = ${O}`]];}
 
 function cTray(t,c){
   const tpt=Math.ceil(t.tLen/c.tpL),tT=tpt*t.tiers;
@@ -206,16 +209,16 @@ function cTray(t,c){
   const na=noCant?'[N/A] ':'';
   const ty=t.type||'';
   return[
-    ['T.01',`Cable Tray ${ty} (${c.tpL}m)`,`⌈${t.tLen}÷${c.tpL}⌉`,tpt,'pcs'],
-    ['T.02',`Total Cable Tray ${ty}`,`${tpt}×${t.tiers}`,tT,'pcs'],
-    ['T.03',`${na}Cantilever Arm`,noCant?'N/A':`(${t.cCt}+bends)×${t.tiers}`,cQ,'nos'],
-    ['T.04',`${na}Cant. Anchor Bolt`,noCant?'N/A':`${cQ}${cl}`,cB,'nos'],
-    ['T.05','Tray Joint Plate',`${tpt}×${c.jpPJ}×${t.tiers}`,jP,'nos'],
-    ['T.06','M6 Bolt+Flange Nut',`${jP}×${c.bPP}`,m6,'nos'],
-    ['T.07',`${na}Holding Clamp`,noCant?'N/A':`${t.cCt}×${c.hcPA}×${t.tiers}`,hC,'nos'],
-    ['T.08',`${na}Spring Nut/Bolt/Washer`,noCant?'N/A':'=clamp',sN,'nos'],
-    ['T.09',`${na}Cant. End Cap`,noCant?'N/A':'=cant',eC,'nos'],
-    ['T.10','Earthing Jumper+BNW',`=joint plate qty`,eJ,'nos']
+    ['T.01',`Cable Tray ${ty} (${c.tpL}m)`,`⌈${t.tLen}÷${c.tpL}⌉`,tpt,'pcs',`⌈${t.tLen}÷${c.tpL}⌉ = ${tpt} per tier`],
+    ['T.02',`Total Cable Tray ${ty}`,`${tpt}×${t.tiers}`,tT,'pcs',`${tpt} trays × ${t.tiers} tiers = ${tT}`],
+    ['T.03',`${na}Cantilever Arm`,noCant?'N/A':`(${t.cCt}+${t.b90}+${t.b45})×${t.tiers}`,cQ,'nos',noCant?'No cantilever':`(${t.cCt} arms + ${t.b90} bends90 + ${t.b45} bends45) × ${t.tiers} tiers = ${cQ}`],
+    ['T.04',`${na}Cant. Anchor Bolt`,noCant?'N/A':`${cQ}${cl}`,cB,'nos',noCant?'No cantilever':`${cQ} cant × ${t.cTy==='2S'?c.cb2:c.cb1} bolts = ${cB}`],
+    ['T.05','Tray Joint Plate',`${tpt}×${c.jpPJ}×${t.tiers}`,jP,'nos',`${tpt} trays × ${c.jpPJ} plates × ${t.tiers} tiers = ${jP}`],
+    ['T.06','M6 Bolt+Flange Nut',`${jP}×${c.bPP}`,m6,'nos',`${jP} plates × ${c.bPP} bolts = ${m6}`],
+    ['T.07',`${na}Holding Clamp`,noCant?'N/A':`${t.cCt}×${c.hcPA}×${t.tiers}`,hC,'nos',noCant?'No cantilever':`${t.cCt} arms × ${c.hcPA} × ${t.tiers} tiers = ${hC}`],
+    ['T.08',`${na}Spring Nut/Bolt/Washer`,noCant?'N/A':'=clamp',sN,'nos',`Same as Holding Clamp = ${sN}`],
+    ['T.09',`${na}Cant. End Cap`,noCant?'N/A':'=cant',eC,'nos',`Same as Cantilever Qty = ${eC}`],
+    ['T.10','Earthing Jumper+BNW',`=joint plate qty`,eJ,'nos',`Same as Joint Plates = ${eJ}`]
   ];
 }
 
@@ -233,7 +236,7 @@ function rTB(){
   document.getElementById('tB').innerHTML=tabs.map(t=>`<button class="tt ${t.id===$.at?'a':''}" onclick="swT('${t.id}')">${t.l}</button>`).join('')+(viewOnly?'<span style="margin-left:auto;padding:8px;font-size:10px;color:var(--mu)">👁 VIEW ONLY MODE</span>':'');
 }
 function rCt(){const s=$.ses[$.as];if(!s)return;const mc=document.getElementById('mc');const ph=mc.querySelector('.ph');let h=ph?ph.outerHTML:'';
-  if($.at==='rows')h+=rRows(s);else if($.at==='dwg')h+=rDwg(s);else if($.at==='cfg')h+=rCfg();else if($.at==='sum')h+=rSum(s);mc.innerHTML=h;}
+  if($.at==='rows'||$.at==='info')h+=rRows(s);else if($.at==='dwg')h+=rDwg(s);else if($.at==='cfg')h+=rCfg();else if($.at==='sum')h+=rSum(s);mc.innerHTML=h;}
 
 function rInfo(){const f=curSec().info;const d=dis();return`<div class="c"><div class="ch"><h3>${curSec().name} — Details</h3></div><div class="cb"><div class="fg">${iF('Building/Area','building',f.building,d)}${iF('Location','location',f.location,d)}${iF('Drawing Ref','drawRef',f.drawRef,d)}${iF('Section','section',f.section,d)}${iF('Manual Ref','manRef',f.manRef,d)}</div><div class="fi" style="margin-top:8px"><label>Notes</label><textarea class="im" rows="2" onchange="uI('note',this.value)" ${d} style="resize:vertical">${f.note}</textarea></div></div></div>`;}
 function iF(l,k,v,d){return`<div class="fi"><label>${l}</label><input class="im" value="${v||''}" onchange="uI('${k}',this.value)" ${d}></div>`;}
@@ -304,7 +307,7 @@ function supInputs(row,d){
 function trayInputs(row,d){
   const noCant=row.t.cTy==='NONE';
   return`<div class="c"><div class="ch"><h3>Manual Inputs — Tray</h3><span class="mt2 mt-m">ENTER</span></div><div class="cb"><div class="fg">
-    <div class="fi"><label>Tray Type / Size</label><select class="im" onchange="uT('type',this.value)" ${d}>${['600 PERFORATED','900 PERFORATED','300 PERFORATED','450 PERFORATED','150 PERFORATED','LADDER TYPE','CUSTOM'].map(t=>`<option ${row.t.type===t?'selected':''}>${t}</option>`).join('')}</select></div>
+    <div class="fi"><label>Tray Type / Size</label><select class="im" onchange="uT('type',this.value)" ${d}><option value="" ${!row.t.type?'selected':''}>— Select Tray Type —</option>${['600 PERFORATED','900 PERFORATED','300 PERFORATED','450 PERFORATED','150 PERFORATED','LADDER TYPE','CUSTOM'].map(t=>`<option ${row.t.type===t?'selected':''}>${t}</option>`).join('')}</select></div>
     ${nI('Tray Tiers','ut','tiers',row.t.tiers,'layers',1,d)}
     ${nI('Cable Tray Length','ut','tLen',row.t.tLen,'m (for 3m pcs calc)',1,d)}
     <div class="fi"><label>Cantilever Type</label><select class="im" onchange="uT('cTy',this.value)" ${d}>
@@ -321,7 +324,7 @@ function cTbl(title,items,row,rmK){
   const d=dis();const sec=rmK==='rmS'?'S':'T';
   let h=`<div class="c"><div class="ch"><h3>Calculated — ${title}</h3><div style="display:flex;gap:4px;align-items:center"><span class="mt2 mt-c">AUTO</span>${editMode?`<button class="b bs bg2" onclick="addCI('${sec}')">＋ Custom Item</button>`:''}</div></div><div class="cb"><div style="overflow-x:auto"><table class="dt">
   <tr><th style="width:40px">Ref</th><th style="min-width:160px">Item Description</th><th>Formula</th><th style="width:55px;text-align:right">Qty</th><th style="width:30px">Unit</th><th style="width:70px">Override</th><th style="width:110px">Remark</th></tr>`;
-  items.forEach(([ref,item,fm,calcQty,unit])=>{
+  items.forEach(([ref,item,fm,calcQty,unit,tip])=>{
     const hasOv=row.ov&&row.ov[ref]!==undefined;
     const displayQty=hasOv?row.ov[ref]:calcQty;
     const tag=hasOv?'<span class="mt2 mt-ov">MAN</span>':'';
@@ -330,7 +333,7 @@ function cTbl(title,items,row,rmK){
     const dispName=descOv||item;
     h+=`<tr><td class="rf">${ref}</td>
       <td>${editMode?`<input style="width:100%;padding:2px 4px;border:1px solid transparent;border-radius:3px;font-size:11px;background:transparent" value="${dispName}" onfocus="this.style.borderColor='var(--st)';this.style.background='var(--ib)'" onblur="this.style.borderColor='transparent';this.style.background='transparent'" onchange="uDsc('${ref}',this.value,'${item}')" title="Click to edit description">`:dispName}</td>
-      <td class="fm">${fm}</td>
+      <td class="fm" title="${tip||fm}" style="cursor:help">${fm}</td>
       <td class="v">${typeof displayQty==='number'?displayQty.toLocaleString():displayQty} ${tag}</td><td>${unit}</td>
       <td>${editMode?`<input type="number" class="ov-inp" value="${hasOv?row.ov[ref]:''}" placeholder="${calcQty}" style="width:55px;font-size:10px" onchange="uOvVal('${ref}',this.value)" title="Empty=auto">`:(hasOv?'⚡'+displayQty:'—')}</td>
       <td><textarea class="rk" rows="1" placeholder="..." onchange="uRk('${rmK}','${ref}',this.value)" ${d}>${rk}</textarea></td></tr>`;
@@ -526,11 +529,9 @@ function exPr(){
   let h='';
   sessions.forEach((s,si)=>{
     if(si>0)h+=`<div class="print-page-break"></div>`;
-    h+=`<div class="ph" style="display:block!important"><h2>CABLE TRAY & SUPPORT — MATERIAL ESTIMATION</h2><p>${s.name} | ${s.info.building||''} | GGPL | ${new Date().toLocaleDateString()} | Developed by Hari +968 97805547</p></div>`;
-    // Project info
-    h+=`<div class="c"><div class="ch"><h3>Project — ${s.name}</h3></div><div class="cb"><table style="font-size:10px;width:100%"><tr><td style="width:100px;font-weight:600;color:var(--mu)">Building</td><td>${s.info.building||'—'}</td><td style="width:100px;font-weight:600;color:var(--mu)">Location</td><td>${s.info.location||'—'}</td></tr><tr><td style="font-weight:600;color:var(--mu)">Dwg Ref</td><td>${s.info.drawRef||'—'}</td><td style="font-weight:600;color:var(--mu)">Section</td><td>${s.info.section||'—'}</td></tr></table></div></div>`;
-    // Row summary table
-    h+=`<div class="c"><div class="ch"><h3>Row Input Summary</h3></div><div class="cb"><table class="dt"><tr><th>Row</th><th>Mount</th><th>Tiers</th><th>Len</th><th>Spc</th><th>Tray</th><th>T.Len</th><th>T.Tiers</th></tr>${s.rows.map(r=>`<tr><td style="font-weight:600">${r.name}</td><td style="text-transform:capitalize">${r.mt}</td><td class="v">${r.s.tiers}</td><td class="v">${r.s.len}m</td><td class="v">${r.s.spc}m</td><td>${r.t.type}</td><td class="v">${r.t.tLen}m</td><td class="v">${r.t.tiers}</td></tr>`).join('')}</table></div></div>`;
+    h+=`<div class="ph" style="display:block!important"><h2>CABLE TRAY & SUPPORT — MATERIAL ESTIMATION</h2><p>${s.name} | GGPL | ${new Date().toLocaleDateString()} | Developed by Hari +968 97805547</p></div>`;
+    // Sections info
+    h+=`<div class="c"><div class="ch"><h3>Project Sections</h3></div><div class="cb"><table class="dt"><tr><th>Section</th><th>Building</th><th>Location</th><th>Dwg Ref</th><th>Rows</th></tr>${s.secs.map(sc=>`<tr><td style="font-weight:600">${sc.name}</td><td>${sc.info.building||'—'}</td><td>${sc.info.location||'—'}</td><td>${sc.info.drawRef||'—'}</td><td class="v">${sc.rows.length}</td></tr>`).join('')}</table></div></div>`;
     // Per-row detail
     s.secs.forEach(sec=>{sec.rows.forEach(row=>{
       const c=gc(row);const sup=getSup(row);const tray=cTray(row.t,c);
@@ -596,7 +597,7 @@ function exXLSX(){
 
   // Sheet 3: BOQ
   const bqRows=buildBOQ(s);
-  const bq=[['CONSOLIDATED BILL OF QUANTITIES'],['Project: '+s.name],['Building: '+(s.info.building||'')],['Date: '+new Date().toLocaleDateString()],[''],['S.No','Ref','Section','Material Description','Qty','Unit']];
+  const bq=[['CONSOLIDATED BILL OF QUANTITIES'],['Project: '+s.name],['Sections: '+s.secs.map(sc=>sc.name).join(', ')],['Date: '+new Date().toLocaleDateString()],[''],['S.No','Ref','Section','Material Description','Qty','Unit']];
   bqRows.forEach((r,i)=>bq.push([i+1,r.ref,r.sec,r.name,r.qty,r.unit]));
   bq.push([]);bq.push(['','','','TOTAL ITEMS:',bqRows.length,'']);
   const ws3=XLSX.utils.aoa_to_sheet(bq);
@@ -640,7 +641,7 @@ function migrate(){
     if(!s.dwg)s.dwg=[{id:'d1',num:'',title:'',rev:'R0',sts:'Not Started',pct:0,resp:'',due:'',cmt:''}];
     // Convert old flat rows+info → sections
     if(!s.secs){s.secs=[{id:'sc_mig',name:s.info?.section||'Section 1',info:s.info||{building:'',location:'',drawRef:'',section:'',manRef:'',note:''},rows:s.rows||[mkR(1)]}];delete s.rows;delete s.info;}
-    if(!$.asc)$.asc=0;
+    if(!$.asc)$.asc=0;if($.at==='info')$.at='rows';
     s.secs.forEach(sc=>{
       if(!sc.info)sc.info={building:'',location:'',drawRef:'',section:'',manRef:'',note:''};
       sc.rows.forEach(r=>{if(!r.mt)r.mt='floor';if(!r.rmS)r.rmS={};if(!r.rmT)r.rmT={};if(!r.ov)r.ov={};if(r.co===undefined)r.co=null;if(!r.s.walls)r.s.walls=2;if(!r.s.dropH)r.s.dropH=0.8;if(r.pr===undefined)r.pr=true;if(!r.dsc)r.dsc={};if(!r.ci)r.ci=[];if(!r.area)r.area='';delete r.t.run;});
