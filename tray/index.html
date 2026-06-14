@@ -478,14 +478,14 @@ function swT(id){$.at=id;$.ar=0;R();}
 function swSec(i){$.asc=i;$.ar=0;R();}
 function addSec(){const s=$.ses[$.as];const n=prompt('Section/Room name:','Section '+(s.secs.length+1));if(!n)return;snap();s.secs.push(mkSec(n));$.asc=s.secs.length-1;$.ar=0;editMode=true;updEditUI();R();tw('✅ Section: '+n);}
 function rmSec(i){if(!askPw('Delete section "'+$.ses[$.as].secs[i].name+'"?'))return;const s=$.ses[$.as];if(s.secs.length<2)return tw('Cannot delete last');snap();s.secs.splice(i,1);if($.asc>=s.secs.length)$.asc--;$.ar=0;R();}
-function rnSec(){if(!editMode)return;const sc=curSec();const n=prompt('Rename section:',sc.name);if(!n)return;snap();sc.name=n;R();}
+function rnSec(){const sc=curSec();const n=prompt('Rename section:',sc.name);if(!n)return;snap();sc.name=n;R();}
 function swR(i){$.ar=i;R();}
 function addS(){const n=prompt('Session name:','Est '+($.ses.length+1));if(!n)return;snap();$.ses.push(mkS(n));$.as=$.ses.length-1;$.ar=0;editMode=true;updEditUI();R();tw('✅ Session created: '+n+' (Edit mode ON)');}
 function rmS(i){if(!askPw('Delete session "'+$.ses[i].name+'"?'))return;if($.ses.length<2)return tw('Cannot delete last');snap();$.ses.splice(i,1);if($.as>=$.ses.length)$.as--;R();}
-function rnS(){if(!editMode)return;const s=$.ses[$.as];const n=prompt('Rename:',s.name);if(!n)return;snap();s.name=n;R();}
+function rnS(){const s=$.ses[$.as];const n=prompt('Rename:',s.name);if(!n)return;snap();s.name=n;R();}
 function addR(){const sc=curSec();const n=prompt('Row name:','Row '+(sc.rows.length+1));if(!n)return;snap();const r=mkR(sc.rows.length+1);r.name=n;sc.rows.push(r);$.ar=sc.rows.length-1;editMode=true;updEditUI();R();tw('✅ Row created: '+n);}
 function rmR(i){if(!askPw('Delete row "'+curSec().rows[i].name+'"?'))return;if(curSec().rows.length<2)return tw('Cannot delete last');snap();curSec().rows.splice(i,1);if($.ar>=curSec().rows.length)$.ar--;R();}
-function rnR(){if(!editMode)return;const r=curRow();const n=prompt('Rename:',r.name);if(!n)return;snap();r.name=n;R();}
+function rnR(){const r=curRow();const n=prompt('Rename:',r.name);if(!n)return;snap();r.name=n;R();}
 
 // ═══════════════════════════════
 // SAVE / LOAD (MANUAL ONLY)
