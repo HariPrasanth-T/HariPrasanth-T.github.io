@@ -527,43 +527,69 @@ function cloudLoad(){
 // EXPORT
 // ═══════════════════════════════
 function exPr(){
-  const choice=prompt('Print options:\n1 = Current session only ("'+$.ses[$.as].name+'")\n2 = ALL sessions combined\n\nEnter 1 or 2:','1');
+  const choice=prompt('Print options:\n1 = Current session\n2 = ALL sessions\n\nEnter 1 or 2:','1');
   if(!choice)return;
   const all=choice.trim()==='2';
   const sessions=all?$.ses:[$.ses[$.as]];
-  // Build print HTML
-  const mc=document.getElementById('mc');
-  let h='';
-  sessions.forEach((s,si)=>{
-    if(si>0)h+=`<div class="print-page-break"></div>`;
-    h+=`<div class="ph" style="display:block!important"><h2>CABLE TRAY & SUPPORT — MATERIAL ESTIMATION</h2><p>${s.name} | GGPL | ${new Date().toLocaleDateString()} | Developed by Hari +968 97805547</p></div>`;
-    // Sections info
-    h+=`<div class="c"><div class="ch"><h3>Project Sections</h3></div><div class="cb"><table class="dt"><tr><th>Section</th><th>Building</th><th>Location</th><th>Dwg Ref</th><th>Rows</th></tr>${s.secs.map(sc=>`<tr><td style="font-weight:600">${sc.name}</td><td>${sc.info.building||'—'}</td><td>${sc.info.location||'—'}</td><td>${sc.info.drawRef||'—'}</td><td class="v">${sc.rows.length}</td></tr>`).join('')}</table></div></div>`;
-    // Per-row detail
-    s.secs.forEach(sec=>{sec.rows.forEach(row=>{
-      const c=gc(row);const sup=getSup(row);const tray=cTray(row.t,c);
-      const mtL={floor:'FLOOR',wall:'WALL',roof:'ROOF'};
-      h+=`<div class="c"><div class="ch"><h3>${row.name} — ${mtL[row.mt]} Support</h3></div><div class="cb"><table class="dt"><tr><th>Ref</th><th>Item</th><th style="text-align:right">Qty</th><th>Unit</th></tr>`;
-      sup.forEach(([ref,item,,cv,unit])=>{const v=getVal(row,ref,cv);h+=`<tr><td class="rf">${ref}</td><td>${item}</td><td class="v">${v}</td><td>${unit}</td></tr>`;});
-      h+=`</table></div></div>`;
-      h+=`<div class="c"><div class="ch"><h3>${row.name} — Cable Tray</h3></div><div class="cb"><table class="dt"><tr><th>Ref</th><th>Item</th><th style="text-align:right">Qty</th><th>Unit</th></tr>`;
-      tray.forEach(([ref,item,,cv,unit])=>{const v=getVal(row,ref,cv);h+=`<tr><td class="rf">${ref}</td><td>${item}</td><td class="v">${v}</td><td>${unit}</td></tr>`;});
-      h+=`</table></div></div>`;
-    });});
-    // BOQ
-    const bqRows=buildBOQ(s,true);let sn2=0,curS2='';
-    h+=`<div class="c"><div class="ch"><h3>Consolidated BOQ — ${s.name}</h3></div><div class="cb"><table class="bq"><tr><th>No</th><th>Ref</th><th>Material</th><th style="text-align:right">Qty</th><th>Unit</th></tr>`;
-    bqRows.forEach(r=>{sn2++;h+=`<tr><td style="text-align:center">${sn2}</td><td class="rf">${r.ref}</td><td>${r.name}</td><td class="qy">${r.qty}</td><td>${r.unit}</td></tr>`;});
-    h+=`</table></div></div>`;
-    // Drawings
-    if(s.dwg.some(d=>d.num)){
-      h+=`<div class="c"><div class="ch"><h3>Drawings — ${s.name}</h3></div><div class="cb"><table class="dt"><tr><th>Sl</th><th>Dwg No</th><th>Title</th><th>Rev</th><th>Status</th><th>%</th></tr>`;
-      s.dwg.forEach((d,i)=>{if(d.num)h+=`<tr><td>${i+1}</td><td>${d.num}</td><td>${d.title}</td><td>${d.rev}</td><td>${d.sts}</td><td>${d.pct||0}%</td></tr>`;});
-      h+=`</table></div></div>`;
-    }
+  // Build BOQ data for all sessions
+  let allItems=[];
+  sessions.forEach(s=>{
+    const bq=buildBOQ(s,true);
+    const secInfo=s.secs.map(sc=>sc.name+': '+(sc.info.building||'')+' '+(sc.info.location||'')).join(' | ');
+    allItems.push({type:'session',name:s.name,info:secInfo,items:bq});
   });
-  h+='<div class="no-print" style="text-align:center;padding:20px"><button onclick="window.print()" style="padding:14px 40px;font-size:16px;background:var(--st);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:700">🖨 CLICK TO PRINT</button>  <button onclick="R()" style="padding:14px 30px;font-size:14px;background:var(--mu);color:#fff;border:none;border-radius:8px;cursor:pointer;margin-left:10px">← Back to App</button></div>';
-  mc.innerHTML=h;
+  // Open print window
+  const pw=window.open('','_blank','width=800,height=900');
+  if(!pw){tw('❌ Popup blocked! Allow popups for this site.');return;}
+  let ph=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Print — GGPL Tray Estimation</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;font-size:11px;color:#1e293b;padding:20px}
+@page{size:A4;margin:12mm 10mm 15mm 10mm}
+@media print{.no-print{display:none!important}body{padding:0}}
+h2{font-size:16px;text-align:center;margin-bottom:2px;color:#0f2340}
+.sub{text-align:center;font-size:10px;color:#64748b;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #0f2340}
+.session-hdr{background:#0f2340;color:#fff;padding:6px 12px;font-size:12px;font-weight:700;margin:12px 0 4px;border-radius:4px}
+.info{font-size:10px;color:#64748b;margin-bottom:8px;padding:4px 8px;background:#f8fafc;border-radius:4px}
+table{width:100%;border-collapse:collapse;margin-bottom:12px}
+th{background:#0f2340;color:#fff;padding:5px 8px;font-size:9px;text-transform:uppercase;text-align:left;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+td{padding:4px 8px;border-bottom:1px solid #e2e8f0;font-size:11px}
+tr:nth-child(even){background:#f8fafc}
+.qty{font-family:Consolas,monospace;font-weight:700;text-align:right;font-size:12px;color:#0f2340}
+.sec-row{background:#1e3a5f!important;color:#fff!important;font-weight:700;font-size:10px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.sec-row td{color:#fff;border:none}
+.cb{margin-right:6px;transform:scale(1.2)}
+.btn{padding:10px 30px;font-size:14px;border:none;border-radius:6px;cursor:pointer;font-weight:600;margin:4px}
+.btn-p{background:#2563eb;color:#fff}.btn-d{background:#64748b;color:#fff}
+.actions{text-align:center;margin:16px 0;padding:16px;background:#f1f5f9;border-radius:8px}
+.foot{text-align:center;font-size:9px;color:#94a3b8;margin-top:20px;padding-top:8px;border-top:1px solid #e2e8f0}
+</style></head><body>
+<h2>GGPL — CABLE TRAY & SUPPORT ESTIMATION</h2>
+<div class="sub">${sessions.map(s=>s.name).join(' | ')} | ${new Date().toLocaleDateString()}</div>
+<div class="actions no-print">
+  <div style="margin-bottom:8px;font-size:12px;font-weight:600">☑ Uncheck items to exclude from print. Serial numbers auto-adjust.</div>
+  <button class="btn btn-p" onclick="doPrint()">🖨 Print / Save as PDF</button>
+  <button class="btn btn-d" onclick="window.close()">✕ Close</button>
+</div>`;
+  // Build tables
+  allItems.forEach(sess=>{
+    ph+=`<div class="session-hdr">${sess.name}</div>`;
+    if(sess.info)ph+=`<div class="info">${sess.info}</div>`;
+    ph+=`<table><tr><th class="no-print" style="width:30px">☑</th><th style="width:35px">No</th><th style="width:45px">Ref</th><th>Material Description</th><th style="width:55px;text-align:right">Qty</th><th style="width:40px">Unit</th></tr>`;
+    let curS='';
+    sess.items.forEach((item,idx)=>{
+      if(item.sec!==curS){curS=item.sec;ph+=`<tr class="sec-row"><td class="no-print"></td><td colspan="5">${item.sec.toUpperCase()}</td></tr>`;}
+      ph+=`<tr data-row="item"><td class="no-print"><input type="checkbox" class="cb" checked onchange="renum()"></td><td class="sn" style="text-align:center">${idx+1}</td><td style="font-family:Consolas;font-weight:700;color:#2563eb;font-size:10px">${item.ref}</td><td>${item.name}</td><td class="qty">${item.qty.toLocaleString()}</td><td>${item.unit}</td></tr>`;
+    });
+    ph+=`</table>`;
+  });
+  ph+=`<div class="foot">GGPL — Gulf Genuine Power Projects LLC</div>`;
+  ph+=`<script>
+function renum(){const rows=document.querySelectorAll('tr[data-row="item"]');let n=0;rows.forEach(r=>{const cb=r.querySelector('.cb');const sn=r.querySelector('.sn');if(cb&&cb.checked){n++;sn.textContent=n;r.style.display='';}else{r.style.display='none';}});}
+function doPrint(){window.print();}
+<\/script></body></html>`;
+  pw.document.write(ph);
+  pw.document.close();
 }
 
 function exCSV(){
