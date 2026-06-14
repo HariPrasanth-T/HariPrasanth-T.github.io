@@ -187,20 +187,27 @@ function cFloor(s,c,ov){
   const sp=Math.ceil(s.len/s.spc);
   const sides=s.supSides||2;const bpS=s.bpSides||2;const lc=s.lClamp!==false;
   // Cascading: each uses override if set, else formula from previous
+  const noBP=bpS===0;
   const C=ov['F.01']!==undefined?ov['F.01']:sp*sides;
   const F_raw=(C*s.legH)+(s.legW*s.tiers*sp);
   const F=ov['F.02']!==undefined?ov['F.02']:Math.round(F_raw*100)/100;
   const uQ=ov['F.03']!==undefined?ov['F.03']:Math.ceil(F/c.chL);
-  const bpBase=bpS===1?sp:C;
-  const G=ov['F.04']!==undefined?ov['F.04']:bpBase+c.bpX;
-  const H=ov['F.05']!==undefined?ov['F.05']:G*c.anPP;
-  const I=ov['F.06']!==undefined?ov['F.06']:G*c.spPP;
+  const bpBase=noBP?0:(bpS===1?sp:C);
+  const G=ov['F.04']!==undefined?ov['F.04']:(noBP?0:bpBase+c.bpX);
+  const H=ov['F.05']!==undefined?ov['F.05']:(noBP?0:G*c.anPP);
+  const I=ov['F.06']!==undefined?ov['F.06']:(noBP?0:G*c.spPP);
   const J=ov['F.07']!==undefined?ov['F.07']:(lc?sp*s.tiers*c.lcS:0);
   const K=ov['F.08']!==undefined?ov['F.08']:(lc?J*c.bnPC:0);
   const L=ov['F.09']!==undefined?ov['F.09']:C*c.ecM;
   const O=s.trfPT*s.tiers;
-  const sLbl=sides===1?'1 side':'both sides';const bpLbl=bpS===1?'1 side':'both sides';const lcLbl=lc?'':'[N/A] ';
-  return[['F.01',`Support Legs (${sLbl})`,`⌈${s.len}÷${s.spc}⌉×${sides}`,C,'nos',`⌈${s.len}÷${s.spc}⌉=${sp} × ${sides} side(s) = ${C}`],['F.02','Total Unistrut Length',`(C×D)+(E×A×⌈B/S⌉)`,F,'m',`(${C}×${s.legH})+(${s.legW}×${s.tiers}×${sp}) = ${F}m`],['F.03',`41×41 Channel Qty (${c.chL}m)`,`⌈F÷${c.chL}⌉`,uQ,'pcs',`⌈${F}÷${c.chL}⌉ = ${uQ}`],['F.04',`Base Plates (${bpLbl})`,`${bpS===1?'sp':'C'}+${c.bpX}`,G,'nos',`${bpBase} (${bpLbl}) + ${c.bpX} extra = ${G}`],['F.05','Anchor Bolt (Baseplate)',`G×${c.anPP}`,H,'nos',`${G} plates × ${c.anPP} = ${H}`],['F.06','Spring BNW (Base→Leg)',`G×${c.spPP}`,I,'nos',`${G} × ${c.spPP} = ${I}`],['F.07',`${lcLbl}L Clamps`,lc?`⌈B/S⌉×A×${c.lcS}`:'N/A',J,'nos',lc?`${sp}×${s.tiers}×${c.lcS} = ${J}`:'L Clamp not required'],['F.08',`${lcLbl}BNW for L Clamp`,lc?`J×${c.bnPC}`:'N/A',K,'nos',lc?`${J}×${c.bnPC} = ${K}`:'L Clamp not required'],['F.09','End Cap',`C×${c.ecM}`,L,'nos',`${C}×${c.ecM} = ${L}`],['F.10','Cable Cleats',`Trefoil×Tiers`,O,'nos',`${s.trfPT}×${s.tiers} = ${O}`]];}
+  // Track which items are affected by parent overrides
+  const afx={};
+  if(ov['F.01']!==undefined){afx['F.02']='F.01='+C;afx['F.04']='F.01='+C;afx['F.09']='F.01='+C;}
+  if(ov['F.02']!==undefined){afx['F.03']='F.02='+F;}
+  if(ov['F.04']!==undefined){afx['F.05']='F.04='+G;afx['F.06']='F.04='+G;}
+  if(ov['F.07']!==undefined){afx['F.08']='F.07='+J;}
+  const sLbl=sides===1?'1 side':'both sides';const bpLbl=noBP?'none':bpS===1?'1 side':'both sides';const lcLbl=lc?'':'[N/A] ';const nbLbl=noBP?'[N/A] ':'';
+  return[['F.01',`Support Legs (${sLbl})`,`⌈${s.len}÷${s.spc}⌉×${sides}`,C,'nos',`⌈${s.len}÷${s.spc}⌉=${sp} × ${sides} side(s) = ${C}`,null],['F.02','Total Unistrut Length',`(C×D)+(E×A×⌈B/S⌉)`,F,'m',`(${C}×${s.legH})+(${s.legW}×${s.tiers}×${sp}) = ${F}m`],['F.03',`41×41 Channel Qty (${c.chL}m)`,`⌈F÷${c.chL}⌉`,uQ,'pcs',`⌈${F}÷${c.chL}⌉ = ${uQ}`],['F.04',`${nbLbl}Base Plates (${bpLbl})`,noBP?'N/A':`${bpS===1?'sp':'C'}+${c.bpX}`,G,'nos',`${bpBase} (${bpLbl}) + ${c.bpX} extra = ${G}`],['F.05',`${nbLbl}Anchor Bolt (Baseplate)`,noBP?'N/A':`G×${c.anPP}`,H,'nos',`${G} plates × ${c.anPP} = ${H}`],['F.06',`${nbLbl}Spring BNW (Base→Leg)`,noBP?'N/A':`G×${c.spPP}`,I,'nos',`${G} × ${c.spPP} = ${I}`],['F.07',`${lcLbl}L Clamps`,lc?`⌈B/S⌉×A×${c.lcS}`:'N/A',J,'nos',lc?`${sp}×${s.tiers}×${c.lcS} = ${J}`:'L Clamp not required'],['F.08',`${lcLbl}BNW for L Clamp`,lc?`J×${c.bnPC}`:'N/A',K,'nos',lc?`${J}×${c.bnPC} = ${K}`:'L Clamp not required'],['F.09','End Cap',`C×${c.ecM}`,L,'nos',`${C}×${c.ecM} = ${L}`],['F.10','Cable Cleats',`Trefoil×Tiers`,O,'nos',`${s.trfPT}×${s.tiers} = ${O}`]];}
 
 function cWall(s,c){
   if(!s.len||!s.spc)return[['W.01','Wall Brackets','—',0,'nos','Enter length & spacing'],['W.02','Back Channel','—',0,'m',''],['W.03','Channel Qty','—',0,'pcs',''],['W.04','Anchor Bolt','—',0,'nos',''],['W.05','Rawl Plug','—',0,'nos',''],['W.06','Spring Nut','—',0,'nos',''],['W.07','End Cap','—',0,'nos',''],['W.08','Cable Cleats','—',0,'nos','']];
@@ -318,7 +325,8 @@ function supInputs(row,d){
       <option value="1" ${row.s.supSides===1?'selected':''}>One Side Only (×1)</option></select></div>`;
     h+=`<div class="fi"><label>Base Plate</label><select class="im" onchange="uS('bpSides',parseInt(this.value))" ${d}>
       <option value="2" ${(row.s.bpSides||2)===2?'selected':''}>Both Sides</option>
-      <option value="1" ${row.s.bpSides===1?'selected':''}>One Side Only</option></select></div>`;
+      <option value="1" ${row.s.bpSides===1?'selected':''}>One Side Only</option>
+      <option value="0" ${row.s.bpSides===0?'selected':''}>No Base Plate</option></select></div>`;
     h+=`<div class="fi"><label>L Clamp</label><select class="im" onchange="uS('lClamp',this.value==='true')" ${d}>
       <option value="true" ${row.s.lClamp!==false?'selected':''}>Required</option>
       <option value="false" ${row.s.lClamp===false?'selected':''}>Not Required (zero)</option></select></div>`;}
@@ -348,17 +356,18 @@ function cTbl(title,items,row,rmK){
   const d=dis();const sec=rmK==='rmS'?'S':'T';
   let h=`<div class="c"><div class="ch"><h3>Calculated — ${title}</h3><div style="display:flex;gap:4px;align-items:center"><span class="mt2 mt-c">AUTO</span>${editMode?`<button class="b bs bg2" onclick="addCI('${sec}')">＋ Custom Item</button>`:''}</div></div><div class="cb"><div style="overflow-x:auto"><table class="dt">
   <tr><th style="width:40px">Ref</th><th style="min-width:160px">Item Description</th><th>Formula</th><th style="width:55px;text-align:right">Qty</th><th style="width:30px">Unit</th><th style="width:70px">Override</th><th style="width:110px">Remark</th></tr>`;
-  items.forEach(([ref,item,fm,calcQty,unit,tip])=>{
+  items.forEach(([ref,item,fm,calcQty,unit,tip,aff])=>{
     const hasOv=row.ov&&row.ov[ref]!==undefined;
     const displayQty=hasOv?row.ov[ref]:calcQty;
     const tag=hasOv?'<span class="mt2 mt-ov">MAN</span>':'';
+    const cascade=(!hasOv&&aff)?'<span title="Uses overridden '+aff+'. Verify or override." style="cursor:help;color:var(--wn);font-size:10px"> ⚠</span>':'';
     const rk=(row[rmK]&&row[rmK][ref])||'';
     const descOv=(row.dsc&&row.dsc[ref])||'';
     const dispName=descOv||item;
     h+=`<tr><td class="rf">${ref}</td>
       <td>${editMode?`<input style="width:100%;padding:2px 4px;border:1px solid transparent;border-radius:3px;font-size:11px;background:transparent" value="${dispName}" onfocus="this.style.borderColor='var(--st)';this.style.background='var(--ib)'" onblur="this.style.borderColor='transparent';this.style.background='transparent'" onchange="uDsc('${ref}',this.value,'${item}')" title="Click to edit description">`:dispName}</td>
       <td class="fm" title="${tip||fm}" style="cursor:help">${fm}</td>
-      <td class="v" ${hasOv&&displayQty===0?'style="color:var(--dn)"':''}>${typeof displayQty==='number'?displayQty.toLocaleString():displayQty} ${tag}</td><td>${unit}</td>
+      <td class="v" ${hasOv&&displayQty===0?'style="color:var(--dn)"':''}>${typeof displayQty==='number'?displayQty.toLocaleString():displayQty} ${tag}${cascade}</td><td>${unit}</td>
       <td>${editMode?`<input type="number" class="ov-inp" value="${hasOv?row.ov[ref]:''}" placeholder="${calcQty}" style="width:55px;font-size:10px" onchange="uOvVal('${ref}',this.value)" title="Empty=auto">`:(hasOv?'⚡'+displayQty:'—')}</td>
       <td><textarea class="rk" rows="1" placeholder="..." onchange="uRk('${rmK}','${ref}',this.value)" ${d}>${rk}</textarea></td></tr>`;
   });
