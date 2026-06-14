@@ -171,7 +171,7 @@ function updUndoUI(){const u=document.getElementById('undoBtn'),r=document.getEl
 document.addEventListener('keydown',e=>{if(e.ctrlKey&&e.key==='z'&&!e.shiftKey){e.preventDefault();undo();}if(e.ctrlKey&&(e.key==='y'||(e.key==='z'&&e.shiftKey))){e.preventDefault();redo();}});
 
 function mkS(n){return{id:'s'+Date.now(),name:n||'Est '+($.ses.length+1),info:{building:'',location:'',drawRef:'',section:'',manRef:'',note:''},rows:[mkR(1)],dwg:[{id:'d1',num:'',title:'',rev:'R0',sts:'Not Started',pct:0,resp:'',due:'',cmt:''}]}}
-function mkR(n){return{id:'r'+Date.now()+Math.random().toString(36).slice(2,5),name:'Row '+n,mt:'floor',s:{tiers:5,len:36,spc:1,legH:1.65,legW:0.65,dropH:0.8,walls:2,cblSz:'',trfPT:0},t:{type:'600 PERFORATED',run:36,tiers:4,tLen:30,cCt:20,cTy:'1S',b90:0,b45:0},co:null,ov:{},rmS:{},rmT:{}}}
+function mkR(n){return{id:'r'+Date.now()+Math.random().toString(36).slice(2,5),name:'Row '+n,mt:'floor',pr:true,s:{tiers:5,len:36,spc:1,legH:1.65,legW:0.65,dropH:0.8,walls:2,cblSz:'',trfPT:0},t:{type:'600 PERFORATED',run:36,tiers:4,tLen:30,cCt:20,cTy:'1S',b90:0,b45:0},co:null,ov:{},dsc:{},ci:[],rmS:{},rmT:{}}}
 function gc(r){return r.co?{...$.cfg,...r.co}:$.cfg;}
 
 // ═══════════════════════════════
@@ -211,13 +211,13 @@ function rTB(){
 function rCt(){const s=$.ses[$.as];if(!s)return;const mc=document.getElementById('mc');const ph=mc.querySelector('.ph');let h=ph?ph.outerHTML:'';
   if($.at==='info')h+=rInfo(s);else if($.at==='rows')h+=rRows(s);else if($.at==='dwg')h+=rDwg(s);else if($.at==='cfg')h+=rCfg();else if($.at==='sum')h+=rSum(s);mc.innerHTML=h;}
 
-function rInfo(s){const f=s.info;const d=dis();return`<div class="c"><div class="ch"><h3>Project — ${s.name}</h3>${editMode?`<button class="b bs bg2" onclick="rnS()">✏ Rename</button>`:''}</div><div class="cb"><div class="fg">${iF('Building/Area','building',f.building,d)}${iF('Location','location',f.location,d)}${iF('Drawing Ref','drawRef',f.drawRef,d)}${iF('Section','section',f.section,d)}${iF('Manual Ref','manRef',f.manRef,d)}</div><div class="fi" style="margin-top:10px"><label>Notes</label><textarea class="im" rows="2" oninput="uI('note',this.value)" ${d} style="resize:vertical">${f.note}</textarea></div></div></div>`;}
-function iF(l,k,v,d){return`<div class="fi"><label>${l}</label><input class="im" value="${v||''}" oninput="uI('${k}',this.value)" ${d}></div>`;}
+function rInfo(s){const f=s.info;const d=dis();return`<div class="c"><div class="ch"><h3>Project — ${s.name}</h3>${editMode?`<button class="b bs bg2" onclick="rnS()">✏ Rename</button>`:''}</div><div class="cb"><div class="fg">${iF('Building/Area','building',f.building,d)}${iF('Location','location',f.location,d)}${iF('Drawing Ref','drawRef',f.drawRef,d)}${iF('Section','section',f.section,d)}${iF('Manual Ref','manRef',f.manRef,d)}</div><div class="fi" style="margin-top:10px"><label>Notes</label><textarea class="im" rows="2" onchange="uI('note',this.value)" ${d} style="resize:vertical">${f.note}</textarea></div></div></div>`;}
+function iF(l,k,v,d){return`<div class="fi"><label>${l}</label><input class="im" value="${v||''}" onchange="uI('${k}',this.value)" ${d}></div>`;}
 
 function rRows(s){
   if($.ar>=s.rows.length)$.ar=0;const row=s.rows[$.ar];const c=gc(row);
   const supI=getSup(row);const trayI=cTray(row.t,c);const d=dis();
-  let h=`<div class="rb">${s.rows.map((r,i)=>`<span class="rt2 ${i===$.ar?'a':''}" onclick="swR(${i})">${r.name}${s.rows.length>1&&editMode?`<span style="margin-left:3px;font-size:8px;opacity:.5;cursor:pointer" onclick="event.stopPropagation();rmR(${i})">✕</span>`:''}</span>`).join('')}<button class="b bs bp" onclick="addR()">＋ Add</button>${editMode?`<button class="b bs bg2" onclick="rnR()">✏</button>`:''}</div>`;
+  let h=`<div class="rb">${s.rows.map((r,i)=>`<span class="rt2 ${i===$.ar?'a':''}" onclick="swR(${i})" style="display:inline-flex;align-items:center;gap:3px">${editMode?`<input type="checkbox" ${r.pr?'checked':''} onclick="event.stopPropagation();togPr(${i},this.checked)" title="Include in print" style="margin:0">`:''}${r.name}${!r.pr?'<span style="font-size:8px;opacity:.5">🚫</span>':''}${s.rows.length>1&&editMode?`<span style="margin-left:2px;font-size:8px;opacity:.5;cursor:pointer" onclick="event.stopPropagation();rmR(${i})">✕</span>`:''}</span>`).join('')}<button class="b bs bp" onclick="addR()">＋ Add</button>${editMode?`<button class="b bs bg2" onclick="rnR()">✏</button>`:''}</div>`;
 
   h+=`<div class="msel">
     <div class="mo ${row.mt==='floor'?'a':''}" onclick="if(editMode)uMt('floor')"><span class="ic">🏗</span>Floor</div>
@@ -239,10 +239,15 @@ function rRows(s){
   h+=cTbl('Cable Tray Materials',trayI,row,'rmT');
 
   if(editMode&&row.co){
-    h+=`<div class="c"><div class="ch"><h3>⚙ Custom Constants — ${row.name}</h3><button class="b bs bd2" onclick="clrOv()">✕ Clear</button></div><div class="cb" style="font-size:10px">`;
-    const oc=gc(row);Object.keys(DF).forEach(k=>{const isO=row.co&&row.co[k]!==undefined;
-      h+=`<span style="display:inline-flex;align-items:center;gap:3px;margin:2px 4px;padding:2px 5px;border-radius:3px;background:${isO?'#fffbeb':'#f8fafc'}"><span style="font-family:var(--m);font-size:9px;color:var(--mu)">${k}:</span><input type="number" step="0.01" value="${oc[k]}" class="ov-inp" style="width:48px" onchange="uOv('${k}',parseFloat(this.value))"></span>`;
-    });h+=`</div></div>`;}
+    h+=`<div class="c"><div class="ch"><h3>⚙ Custom Constants — ${row.name}</h3><button class="b bs bd2" onclick="clrOv()">✕ Reset to Global</button></div><div class="cb">
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;font-size:11px">`;
+    const oc=gc(row);const labels={chL:'Channel Len(m)',bpX:'Base Plate +',anPP:'Anchor/Plate',spPP:'Spring/Plate',lcS:'L-Clamp ×',bnPC:'BNW/Clamp',ecM:'EndCap ×',tpL:'Tray Len(m)',jpPJ:'Joint/Joint',bPP:'M6/Plate',hcPA:'Clamp/Arm',cb1:'CantBolt 1S',cb2:'CantBolt 2S',wbB:'Wall Bolts',wsN:'Wall SprNut',weC:'Wall EndCap',rsL:'Rod Len(m)',caP:'Ceil Anchor',cnD:'Ch.Nut/Drop',snD:'Spr.Nut/Drop',waD:'Washer/Drop',hnD:'HexNut/Drop'};
+    Object.keys(DF).forEach(k=>{const isO=row.co&&row.co[k]!==undefined;
+      h+=`<div style="padding:6px;border-radius:5px;border:1px solid ${isO?'var(--wn)':'var(--bd)'};background:${isO?'#fffbeb':'#fff'}">
+        <div style="font-size:9px;color:var(--mu);margin-bottom:3px">${labels[k]||k}</div>
+        <input type="number" step="0.01" value="${oc[k]}" style="width:100%;padding:4px 6px;border:1px solid ${isO?'var(--wn)':'var(--bd)'};border-radius:3px;font-family:var(--m);font-size:12px;text-align:center;background:${isO?'#fffbeb':'#fff'}" onchange="uOv('${k}',parseFloat(this.value))">
+      </div>`;
+    });h+=`</div></div></div>`;}
   return h;
 }
 
@@ -252,7 +257,7 @@ function supInputs(row,d){
   if(row.mt==='floor')h+=nI('Leg Height','us','legH',row.s.legH,'m',0.01,d)+nI('Legger Width','us','legW',row.s.legW,'m',0.01,d);
   if(row.mt==='wall')h+=`<div class="fi"><label>Walls</label><select class="im" onchange="uS('walls',parseInt(this.value))" ${d}><option value="1" ${row.s.walls===1?'selected':''}>1 — Single</option><option value="2" ${row.s.walls===2?'selected':''}>2 — Both</option></select></div>`;
   if(row.mt==='roof')h+=nI('Drop Height','us','dropH',row.s.dropH,'m',0.01,d)+nI('Hz Channel W','us','legW',row.s.legW,'m',0.01,d);
-  h+=`<div class="fi"><label>Cable Size</label><input class="im" value="${row.s.cblSz}" oninput="uS('cblSz',this.value)" ${d}></div>${nI('Trefoil/Tier','us','trfPT',row.s.trfPT,'nos',1,d)}</div></div></div>`;
+  h+=`<div class="fi"><label>Cable Size</label><input class="im" value="${row.s.cblSz}" onchange="uS('cblSz',this.value)" ${d}></div>${nI('Trefoil/Tier','us','trfPT',row.s.trfPT,'nos',1,d)}</div></div></div>`;
   return h;
 }
 
@@ -269,23 +274,37 @@ function trayInputs(row,d){
 }
 
 function cTbl(title,items,row,rmK){
-  const d=dis();
-  let h=`<div class="c"><div class="ch"><h3>Calculated — ${title}</h3><span class="mt2 mt-c">AUTO</span></div><div class="cb"><table class="dt">
-  <tr><th style="width:40px">Ref</th><th>Item</th><th>Formula</th><th style="width:55px;text-align:right">Qty</th><th style="width:30px">Unit</th><th style="width:80px">Override</th><th style="width:120px">Remark</th></tr>`;
+  const d=dis();const sec=rmK==='rmS'?'S':'T';
+  let h=`<div class="c"><div class="ch"><h3>Calculated — ${title}</h3><div style="display:flex;gap:4px;align-items:center"><span class="mt2 mt-c">AUTO</span>${editMode?`<button class="b bs bg2" onclick="addCI('${sec}')">＋ Custom Item</button>`:''}</div></div><div class="cb"><div style="overflow-x:auto"><table class="dt">
+  <tr><th style="width:40px">Ref</th><th style="min-width:160px">Item Description</th><th>Formula</th><th style="width:55px;text-align:right">Qty</th><th style="width:30px">Unit</th><th style="width:70px">Override</th><th style="width:110px">Remark</th></tr>`;
   items.forEach(([ref,item,fm,calcQty,unit])=>{
     const hasOv=row.ov&&row.ov[ref]!==undefined;
     const displayQty=hasOv?row.ov[ref]:calcQty;
-    const tag=hasOv?'<span class="mt2 mt-ov">MANUAL</span>':'<span class="mt2 mt-c">AUTO</span>';
+    const tag=hasOv?'<span class="mt2 mt-ov">MAN</span>':'';
     const rk=(row[rmK]&&row[rmK][ref])||'';
-    h+=`<tr><td class="rf">${ref}</td><td>${item}</td><td class="fm">${fm}</td>
+    const descOv=(row.dsc&&row.dsc[ref])||'';
+    const dispName=descOv||item;
+    h+=`<tr><td class="rf">${ref}</td>
+      <td>${editMode?`<input style="width:100%;padding:2px 4px;border:1px solid transparent;border-radius:3px;font-size:11px;background:transparent" value="${dispName}" onfocus="this.style.borderColor='var(--st)';this.style.background='var(--ib)'" onblur="this.style.borderColor='transparent';this.style.background='transparent'" onchange="uDsc('${ref}',this.value,'${item}')" title="Click to edit description">`:dispName}</td>
+      <td class="fm">${fm}</td>
       <td class="v">${typeof displayQty==='number'?displayQty.toLocaleString():displayQty} ${tag}</td><td>${unit}</td>
-      <td>${editMode?`<input type="number" class="ov-inp" value="${hasOv?row.ov[ref]:''}" placeholder="${calcQty}" style="width:55px;font-size:10px" onchange="uOvVal('${ref}',this.value)" title="Leave empty for auto">`:'—'}</td>
-      <td><textarea class="rk" rows="1" placeholder="..." oninput="uRk('${rmK}','${ref}',this.value)" ${d}>${rk}</textarea></td></tr>`;
+      <td>${editMode?`<input type="number" class="ov-inp" value="${hasOv?row.ov[ref]:''}" placeholder="${calcQty}" style="width:55px;font-size:10px" onchange="uOvVal('${ref}',this.value)" title="Empty=auto">`:(hasOv?'⚡'+displayQty:'—')}</td>
+      <td><textarea class="rk" rows="1" placeholder="..." onchange="uRk('${rmK}','${ref}',this.value)" ${d}>${rk}</textarea></td></tr>`;
   });
-  h+=`</table></div></div>`;return h;
+  // Custom items
+  if(row.ci){row.ci.filter(c=>c.sec===sec).forEach((ci,idx)=>{
+    h+=`<tr style="background:#fffbeb"><td class="rf" style="color:var(--wn)">${ci.ref||'X.'+(idx+1)}</td>
+      <td>${editMode?`<input style="width:100%;padding:2px 4px;border:1px solid var(--wn);border-radius:3px;font-size:11px;background:#fffbeb" value="${ci.name}" onchange="uCI(${idx},'${sec}','name',this.value)">`:`<span style="color:var(--wn)">${ci.name}</span>`}</td>
+      <td class="fm" style="color:var(--wn)">custom</td>
+      <td class="v">${editMode?`<input type="number" class="ov-inp" value="${ci.qty}" style="width:55px;background:#fffbeb;border-color:var(--wn)" onchange="uCI(${idx},'${sec}','qty',parseFloat(this.value)||0)">`:ci.qty}</td>
+      <td>${editMode?`<input style="width:30px;padding:2px;border:1px solid var(--wn);border-radius:3px;font-size:10px;text-align:center;background:#fffbeb" value="${ci.unit}" onchange="uCI(${idx},'${sec}','unit',this.value)">`:ci.unit}</td>
+      <td>${editMode?`<button class="b bs" style="background:var(--dn);color:#fff;font-size:8px" onclick="rmCI(${idx},'${sec}')">✕</button>`:''}</td>
+      <td><textarea class="rk" rows="1" onchange="uCI(${idx},'${sec}','remark',this.value)" ${d}>${ci.remark||''}</textarea></td></tr>`;
+  });}
+  h+=`</table></div></div></div>`;return h;
 }
 
-function nI(l,pfx,k,v,u,step,d){const fn=pfx==='us'?'uS':'uT';return`<div class="fi"><label>${l}</label><input type="number" class="im" value="${v}" step="${step||1}" min="0" oninput="${fn}('${k}',parseFloat(this.value)||0)" ${d}><div class="u">${u}</div></div>`;}
+function nI(l,pfx,k,v,u,step,d){const fn=pfx==='us'?'uS':'uT';return`<div class="fi"><label>${l}</label><input type="number" class="im" value="${v}" step="${step||1}" min="0" onchange="${fn}('${k}',parseFloat(this.value)||0)" ${d}><div class="u">${u}</div></div>`;}
 
 // ═══ DRAWINGS ═══
 function rDwg(s){
@@ -294,14 +313,14 @@ function rDwg(s){
   <tr><th>Sl</th><th>Dwg No.</th><th>Title</th><th>Rev</th><th>Status</th><th>%</th><th>Resp.</th><th>Due</th><th>Issues</th>${editMode?'<th></th>':''}</tr>`;
   s.dwg.forEach((dw,i)=>{const p=parseInt(dw.pct)||0;const cl=p>=100?'var(--ok)':p>=50?'var(--st)':p>0?'var(--wn)':'#e2e8f0';
     h+=`<tr><td style="text-align:center;font-weight:600">${i+1}</td>
-    <td><input class="im" style="width:80px;padding:2px 4px;font-size:10px" value="${dw.num}" oninput="uD(${i},'num',this.value)" ${d}></td>
-    <td><input class="im" style="width:100%;padding:2px 4px;font-size:10px" value="${dw.title}" oninput="uD(${i},'title',this.value)" ${d}></td>
-    <td><input class="im" style="width:35px;padding:2px;font-size:10px;text-align:center" value="${dw.rev}" oninput="uD(${i},'rev',this.value)" ${d}></td>
+    <td><input class="im" style="width:80px;padding:2px 4px;font-size:10px" value="${dw.num}" onchange="uD(${i},'num',this.value)" ${d}></td>
+    <td><input class="im" style="width:100%;padding:2px 4px;font-size:10px" value="${dw.title}" onchange="uD(${i},'title',this.value)" ${d}></td>
+    <td><input class="im" style="width:35px;padding:2px;font-size:10px;text-align:center" value="${dw.rev}" onchange="uD(${i},'rev',this.value)" ${d}></td>
     <td><select style="font-size:9px;padding:2px;width:85px;border:1px solid var(--bd);border-radius:3px" onchange="uD(${i},'sts',this.value)" ${d}>${sts.map(x=>`<option ${dw.sts===x?'selected':''}>${x}</option>`).join('')}</select></td>
-    <td><div style="display:flex;align-items:center;gap:2px"><input type="number" min="0" max="100" value="${p}" style="width:32px;padding:2px;font-size:10px;text-align:center;border:1px solid var(--bd);border-radius:3px;font-family:var(--m)" oninput="uD(${i},'pct',this.value)" ${d}><div class="pr"><div class="pr-f" style="width:${p}%;background:${cl}"></div></div></div></td>
-    <td><input class="im" style="width:65px;padding:2px 4px;font-size:10px" value="${dw.resp}" oninput="uD(${i},'resp',this.value)" ${d}></td>
-    <td><input type="date" style="font-size:9px;padding:2px;border:1px solid var(--bd);border-radius:3px" value="${dw.due}" oninput="uD(${i},'due',this.value)" ${d}></td>
-    <td><textarea class="rk" rows="1" oninput="uD(${i},'cmt',this.value)" ${d}>${dw.cmt||''}</textarea></td>
+    <td><div style="display:flex;align-items:center;gap:2px"><input type="number" min="0" max="100" value="${p}" style="width:32px;padding:2px;font-size:10px;text-align:center;border:1px solid var(--bd);border-radius:3px;font-family:var(--m)" onchange="uD(${i},'pct',this.value)" ${d}><div class="pr"><div class="pr-f" style="width:${p}%;background:${cl}"></div></div></div></td>
+    <td><input class="im" style="width:65px;padding:2px 4px;font-size:10px" value="${dw.resp}" onchange="uD(${i},'resp',this.value)" ${d}></td>
+    <td><input type="date" style="font-size:9px;padding:2px;border:1px solid var(--bd);border-radius:3px" value="${dw.due}" onchange="uD(${i},'due',this.value)" ${d}></td>
+    <td><textarea class="rk" rows="1" onchange="uD(${i},'cmt',this.value)" ${d}>${dw.cmt||''}</textarea></td>
     ${editMode&&s.dwg.length>1?`<td><button class="b bs bd2" onclick="rmD(${i})">✕</button></td>`:''}</tr>`;
   });h+=`</table></div></div></div>`;
   const tot=s.dwg.length,avg=tot?Math.round(s.dwg.reduce((a,x)=>a+(parseInt(x.pct)||0),0)/tot):0,apr=s.dwg.filter(x=>x.sts==='Approved'||x.sts==='As-Built').length,iss=s.dwg.filter(x=>x.cmt&&x.cmt.trim()).length;
@@ -357,24 +376,20 @@ function adminCloudAccess(){
 
 // ═══ SUMMARY BOQ ═══
 function rSum(s){
-  const agg={};let ord=[];
-  function add(sec,key,val,unit){const k=sec+'|'+key;if(!agg[k]){agg[k]={q:0,u:unit,s:sec};ord.push(k);}agg[k].q+=val;}
-  s.rows.forEach(row=>{const c=gc(row);const sup=getSup(row);const tray=cTray(row.t,c);const p=row.mt==='floor'?'Floor':row.mt==='wall'?'Wall':'Roof';
-    sup.forEach(([ref,name,,cv,u])=>{const v=getVal(row,ref,cv);if(v>0)add(p+' Support',name,v,u);});
-    tray.forEach(([ref,name,,cv,u])=>{const v=getVal(row,ref,cv);if(v>0)add('Cable Tray',name,v,u);});});
+  const bqRows=buildBOQ(s,false);
   let h=viewOnly?'':`<div style="display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap">
     <button class="b bp" onclick="exPr()">🖨 Print / PDF (Select or All)</button>
     <button class="b bk" onclick="exXLSX()">📗 Export Excel</button>
     <button class="b bg2" onclick="exCSV()">📄 CSV</button>
     <button class="b bg2" onclick="exJSON()">💾 JSON</button></div>`;
-  h+=`<div style="background:#eff6ff;border:1px solid var(--st);border-radius:5px;padding:6px 10px;margin-bottom:10px;font-size:10px;color:var(--nv)">📋 <strong>${s.name}</strong> — ${s.rows.length} row(s)</div>`;
+  h+=`<div style="background:#eff6ff;border:1px solid var(--st);border-radius:5px;padding:6px 10px;margin-bottom:10px;font-size:10px;color:var(--nv)">📋 <strong>${s.name}</strong> — ${s.rows.length} row(s) | Printable: ${s.rows.filter(r=>r.pr).length}</div>`;
   h+=`<div class="c"><div class="ch"><h3>Project</h3></div><div class="cb"><table style="font-size:10px;width:100%"><tr><td style="width:100px;font-weight:600;color:var(--mu)">Building</td><td>${s.info.building||'—'}</td><td style="width:100px;font-weight:600;color:var(--mu)">Location</td><td>${s.info.location||'—'}</td></tr><tr><td style="font-weight:600;color:var(--mu)">Dwg Ref</td><td>${s.info.drawRef||'—'}</td><td style="font-weight:600;color:var(--mu)">Section</td><td>${s.info.section||'—'}</td></tr></table></div></div>`;
-  h+=`<div class="c"><div class="ch"><h3>Row Summary</h3></div><div class="cb"><div style="overflow-x:auto"><table class="dt"><tr><th>Row</th><th>Mount</th><th>Tiers</th><th>Len</th><th>Spc</th><th>Tray</th><th>T.Len</th><th>T.Tiers</th><th>Custom</th><th>Overrides</th></tr>
-    ${s.rows.map(r=>`<tr><td style="font-weight:600">${r.name}</td><td style="text-transform:capitalize">${r.mt}</td><td class="v">${r.s.tiers}</td><td class="v">${r.s.len}m</td><td class="v">${r.s.spc}m</td><td>${r.t.type}</td><td class="v">${r.t.tLen}m</td><td class="v">${r.t.tiers}</td><td>${r.co?'⚠':'—'}</td><td>${Object.keys(r.ov||{}).length||'—'}</td></tr>`).join('')}
+  h+=`<div class="c"><div class="ch"><h3>Row Summary</h3></div><div class="cb"><div style="overflow-x:auto"><table class="dt"><tr><th>🖨</th><th>Row</th><th>Mount</th><th>Tiers</th><th>Len</th><th>Spc</th><th>Tray</th><th>T.Len</th><th>T.Tiers</th><th>Custom</th></tr>
+    ${s.rows.map(r=>`<tr style="${r.pr?'':'opacity:.5'}"><td style="text-align:center">${r.pr?'✅':'🚫'}</td><td style="font-weight:600">${r.name}</td><td style="text-transform:capitalize">${r.mt}</td><td class="v">${r.s.tiers}</td><td class="v">${r.s.len}m</td><td class="v">${r.s.spc}m</td><td>${r.t.type}</td><td class="v">${r.t.tLen}m</td><td class="v">${r.t.tiers}</td><td>${(r.ci||[]).length||'—'}</td></tr>`).join('')}
   </table></div></div></div>`;
   let sn=0,curS='';
   h+=`<div class="c"><div class="ch"><h3>Consolidated BOQ</h3></div><div class="cb"><table class="bq" id="bqT"><tr><th style="width:35px">No</th><th style="width:50px">Ref</th><th>Material</th><th style="width:60px;text-align:right">Qty</th><th style="width:40px">Unit</th></tr>`;
-  ord.forEach(k=>{const v=agg[k];if(!v||v.q===0)return;if(v.s!==curS){curS=v.s;h+=`<tr class="sr"><td colspan="5">${v.s.toUpperCase()}</td></tr>`;}sn++;h+=`<tr><td style="text-align:center">${sn}</td><td class="rf">${sn.toString().padStart(2,'0')}</td><td>${k.split('|')[1]}</td><td class="qy">${v.q.toLocaleString()}</td><td>${v.u}</td></tr>`;});
+  bqRows.forEach(r=>{if(r.sec!==curS){curS=r.sec;h+=`<tr class="sr"><td colspan="5">${r.sec.toUpperCase()}</td></tr>`;}sn++;h+=`<tr><td style="text-align:center">${sn}</td><td class="rf">${r.ref}</td><td>${r.name}</td><td class="qy">${r.qty.toLocaleString()}</td><td>${r.unit}</td></tr>`;});
   h+=`</table></div></div>`;return h;}
 
 // ═══════════════════════════════
@@ -396,6 +411,11 @@ function uOvVal(ref,val){
   if(val===''||val===null){delete r.ov[ref];}else{r.ov[ref]=parseFloat(val);}R();
 }
 function uRk(type,ref,v){const r=$.ses[$.as].rows[$.ar];if(!r[type])r[type]={};r[type][ref]=v;}
+function togPr(i,v){snap();$.ses[$.as].rows[i].pr=v;R();}
+function uDsc(ref,val,orig){snap();const r=$.ses[$.as].rows[$.ar];if(!r.dsc)r.dsc={};if(val===orig||val==='')delete r.dsc[ref];else r.dsc[ref]=val;}
+function addCI(sec){snap();const r=$.ses[$.as].rows[$.ar];if(!r.ci)r.ci=[];r.ci.push({sec,ref:'X.'+(r.ci.filter(c=>c.sec===sec).length+1),name:'New Item',qty:0,unit:'nos',remark:''});R();}
+function uCI(idx,sec,key,val){snap();const r=$.ses[$.as].rows[$.ar];const items=r.ci.filter(c=>c.sec===sec);if(items[idx])items[idx][key]=val;}
+function rmCI(idx,sec){if(!askPw('Delete custom item?'))return;snap();const r=$.ses[$.as].rows[$.ar];const items=r.ci.filter(c=>c.sec===sec);const item=items[idx];r.ci=r.ci.filter(c=>c!==item);R();}
 function uD(i,k,v){snap();$.ses[$.as].dwg[i][k]=v;}
 function addD(){snap();$.ses[$.as].dwg.push({id:'d'+Date.now(),num:'',title:'',rev:'R0',sts:'Not Started',pct:0,resp:'',due:'',cmt:''});editMode=true;updEditUI();R();tw('✅ Drawing entry added');}
 function rmD(i){if(!askPw('Delete this drawing entry?'))return;snap();$.ses[$.as].dwg.splice(i,1);R();}
@@ -476,7 +496,7 @@ function exPr(){
       h+=`</table></div></div>`;
     });
     // BOQ
-    const bqRows=buildBOQ(s);let sn2=0,curS2='';
+    const bqRows=buildBOQ(s,true);let sn2=0,curS2='';
     h+=`<div class="c"><div class="ch"><h3>Consolidated BOQ — ${s.name}</h3></div><div class="cb"><table class="bq"><tr><th>No</th><th>Ref</th><th>Material</th><th style="text-align:right">Qty</th><th>Unit</th></tr>`;
     bqRows.forEach(r=>{sn2++;h+=`<tr><td style="text-align:center">${sn2}</td><td class="rf">${r.ref}</td><td>${r.name}</td><td class="qy">${r.qty}</td><td>${r.unit}</td></tr>`;});
     h+=`</table></div></div>`;
@@ -549,12 +569,15 @@ function exXLSX(){
   tw('📗 Excel exported');
 }
 
-function buildBOQ(s){
+function buildBOQ(s,printOnly){
   const agg={};let ord=[];
   function add(sec,key,val,unit){const k=sec+'|'+key;if(!agg[k]){agg[k]={q:0,u:unit,s:sec};ord.push(k);}agg[k].q+=val;}
-  s.rows.forEach(row=>{const c=gc(row);const sup=getSup(row);const tray=cTray(row.t,c);const p=row.mt==='floor'?'Floor':row.mt==='wall'?'Wall':'Roof';
-    sup.forEach(([ref,name,,cv,u])=>{const v=getVal(row,ref,cv);if(v>0)add(p+' Support',name,v,u);});
-    tray.forEach(([ref,name,,cv,u])=>{const v=getVal(row,ref,cv);if(v>0)add('Cable Tray',name,v,u);});});
+  const rows=printOnly?s.rows.filter(r=>r.pr):s.rows;
+  rows.forEach(row=>{const c=gc(row);const sup=getSup(row);const tray=cTray(row.t,c);const p=row.mt==='floor'?'Floor':row.mt==='wall'?'Wall':'Roof';
+    sup.forEach(([ref,name,,cv,u])=>{const v=getVal(row,ref,cv);const dn=(row.dsc&&row.dsc[ref])||name;if(v>0)add(p+' Support',dn,v,u);});
+    tray.forEach(([ref,name,,cv,u])=>{const v=getVal(row,ref,cv);const dn=(row.dsc&&row.dsc[ref])||name;if(v>0)add('Cable Tray',dn,v,u);});
+    if(row.ci)row.ci.forEach(ci=>{if(ci.qty>0)add(ci.sec==='S'?p+' Support':'Cable Tray',ci.name,ci.qty,ci.unit);});
+  });
   let sn=0;return ord.map(k=>{const v=agg[k];if(!v||v.q===0)return null;sn++;return{ref:sn.toString().padStart(2,'0'),sec:v.s,name:k.split('|')[1],qty:v.q,unit:v.u};}).filter(Boolean);
 }
 
@@ -566,7 +589,7 @@ function tw(m){const t=document.getElementById('to');t.textContent=m;t.classList
 // ═══════════════════════════════
 function migrate(){
   $.ses.forEach(s=>{if(!s.dwg)s.dwg=[{id:'d1',num:'',title:'',rev:'R0',sts:'Not Started',pct:0,resp:'',due:'',cmt:''}];
-    s.rows.forEach(r=>{if(!r.mt)r.mt='floor';if(!r.rmS)r.rmS={};if(!r.rmT)r.rmT={};if(!r.ov)r.ov={};if(r.co===undefined)r.co=null;if(!r.s.walls)r.s.walls=2;if(!r.s.dropH)r.s.dropH=0.8;});});}
+    s.rows.forEach(r=>{if(!r.mt)r.mt='floor';if(!r.rmS)r.rmS={};if(!r.rmT)r.rmT={};if(!r.ov)r.ov={};if(r.co===undefined)r.co=null;if(!r.s.walls)r.s.walls=2;if(!r.s.dropH)r.s.dropH=0.8;if(r.pr===undefined)r.pr=true;if(!r.dsc)r.dsc={};if(!r.ci)r.ci=[];});});}
 (function(){
   const d=localStorage.getItem(SK);
   if(d){try{$=JSON.parse(d);if(!$.cfg)$.cfg={...DF};migrate();}catch(e){$.ses=[mkS('Estimation 1')];}}
