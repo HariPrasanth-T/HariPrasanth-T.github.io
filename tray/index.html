@@ -173,7 +173,7 @@ document.addEventListener('keydown',e=>{if(e.ctrlKey&&e.key==='z'&&!e.shiftKey){
 
 function mkS(n){return{id:'s'+Date.now(),name:n||'Est '+($.ses.length+1),secs:[mkSec('Section 1')],dwg:[{id:'d1',num:'',title:'',rev:'R0',sts:'Not Started',pct:0,resp:'',due:'',cmt:''}]}}
 function mkSec(n){return{id:'sc'+Date.now()+Math.random().toString(36).slice(2,5),name:n||'Section',info:{building:'',location:'',drawRef:'',section:'',manRef:'',note:''},rows:[mkR(1)]}}
-function mkR(n){return{id:'r'+Date.now()+Math.random().toString(36).slice(2,5),name:'Row '+n,mt:'floor',pr:true,area:'',s:{tiers:0,len:0,spc:1,legH:0,legW:0,dropH:0,walls:2,cblSz:'',trfPT:0},t:{type:'',tiers:0,tLen:0,cCt:0,cTy:'1S',b90:0,b45:0},co:null,ov:{},dsc:{},ci:[],rmS:{},rmT:{}}}
+function mkR(n){return{id:'r'+Date.now()+Math.random().toString(36).slice(2,5),name:'Row '+n,mt:'floor',pr:true,area:'',s:{tiers:0,len:0,spc:1,legH:0,legW:0,dropH:0,walls:2,supSides:2,bpSides:2,lClamp:true,cblSz:'',trfPT:0},t:{type:'',tiers:0,tLen:0,cCt:0,cTy:'1S',b90:0,b45:0},co:null,ov:{},dsc:{},ci:[],rmS:{},rmT:{}}}
 function gc(r){return r.co?{...$.cfg,...r.co}:$.cfg;}
 function curSec(){return $.ses[$.as].secs[$.asc];}
 function curRow(){return curSec().rows[$.ar];}
@@ -181,11 +181,26 @@ function curRow(){return curSec().rows[$.ar];}
 // ═══════════════════════════════
 // CALC ENGINE
 // ═══════════════════════════════
-function cFloor(s,c){
+function cFloor(s,c,ov){
+  if(!ov)ov={};
   if(!s.len||!s.spc)return[['F.01','Support Legs','—',0,'nos','Enter length & spacing'],['F.02','Total Unistrut','—',0,'m',''],['F.03','Channel Qty','—',0,'pcs',''],['F.04','Base Plates','—',0,'nos',''],['F.05','Anchor Bolt','—',0,'nos',''],['F.06','Spring BNW','—',0,'nos',''],['F.07','L Clamps','—',0,'nos',''],['F.08','BNW L Clamp','—',0,'nos',''],['F.09','End Cap','—',0,'nos',''],['F.10','Cable Cleats','—',0,'nos','']];
-  const sp=Math.ceil(s.len/s.spc),C=sp*2,F=Math.round(((C*s.legH)+(s.legW*s.tiers*sp))*100)/100;
-  const uQ=Math.ceil(F/c.chL),G=C+c.bpX,H=G*c.anPP,I=G*c.spPP,J=sp*s.tiers*c.lcS,K=J*c.bnPC,L=C*c.ecM,O=s.trfPT*s.tiers;
-  return[['F.01','Support Legs (both sides)',`⌈${s.len}÷${s.spc}⌉×2`,C,'nos',`⌈${s.len}÷${s.spc}⌉=${sp} per side × 2 = ${C}`],['F.02','Total Unistrut Length',`(C×D)+(E×A×⌈B/S⌉)`,F,'m',`(${C}×${s.legH})+(${s.legW}×${s.tiers}×${sp}) = ${F}m`],['F.03',`41×41 Channel Qty (${c.chL}m)`,`⌈F÷${c.chL}⌉`,uQ,'pcs',`⌈${F}÷${c.chL}⌉ = ${uQ} pieces`],['F.04','Base Plates',`C+${c.bpX}`,G,'nos',`${C} legs + ${c.bpX} extra = ${G}`],['F.05','Anchor Bolt (Baseplate)',`G×${c.anPP}`,H,'nos',`${G} plates × ${c.anPP} bolts = ${H}`],['F.06','Spring BNW (Base→Leg)',`G×${c.spPP}`,I,'nos',`${G} plates × ${c.spPP} = ${I}`],['F.07','L Clamps',`⌈B/S⌉×A×${c.lcS}`,J,'nos',`${sp} supports × ${s.tiers} tiers × ${c.lcS} = ${J}`],['F.08','BNW for L Clamp',`J×${c.bnPC}`,K,'nos',`${J} clamps × ${c.bnPC} = ${K}`],['F.09','End Cap',`C×${c.ecM}`,L,'nos',`${C} × ${c.ecM} = ${L}`],['F.10','Cable Cleats',`Trefoil×Tiers`,O,'nos',`${s.trfPT} × ${s.tiers} = ${O}`]];}
+  const sp=Math.ceil(s.len/s.spc);
+  const sides=s.supSides||2;const bpS=s.bpSides||2;const lc=s.lClamp!==false;
+  // Cascading: each uses override if set, else formula from previous
+  const C=ov['F.01']!==undefined?ov['F.01']:sp*sides;
+  const F_raw=(C*s.legH)+(s.legW*s.tiers*sp);
+  const F=ov['F.02']!==undefined?ov['F.02']:Math.round(F_raw*100)/100;
+  const uQ=ov['F.03']!==undefined?ov['F.03']:Math.ceil(F/c.chL);
+  const bpBase=bpS===1?sp:C;
+  const G=ov['F.04']!==undefined?ov['F.04']:bpBase+c.bpX;
+  const H=ov['F.05']!==undefined?ov['F.05']:G*c.anPP;
+  const I=ov['F.06']!==undefined?ov['F.06']:G*c.spPP;
+  const J=ov['F.07']!==undefined?ov['F.07']:(lc?sp*s.tiers*c.lcS:0);
+  const K=ov['F.08']!==undefined?ov['F.08']:(lc?J*c.bnPC:0);
+  const L=ov['F.09']!==undefined?ov['F.09']:C*c.ecM;
+  const O=s.trfPT*s.tiers;
+  const sLbl=sides===1?'1 side':'both sides';const bpLbl=bpS===1?'1 side':'both sides';const lcLbl=lc?'':'[N/A] ';
+  return[['F.01',`Support Legs (${sLbl})`,`⌈${s.len}÷${s.spc}⌉×${sides}`,C,'nos',`⌈${s.len}÷${s.spc}⌉=${sp} × ${sides} side(s) = ${C}`],['F.02','Total Unistrut Length',`(C×D)+(E×A×⌈B/S⌉)`,F,'m',`(${C}×${s.legH})+(${s.legW}×${s.tiers}×${sp}) = ${F}m`],['F.03',`41×41 Channel Qty (${c.chL}m)`,`⌈F÷${c.chL}⌉`,uQ,'pcs',`⌈${F}÷${c.chL}⌉ = ${uQ}`],['F.04',`Base Plates (${bpLbl})`,`${bpS===1?'sp':'C'}+${c.bpX}`,G,'nos',`${bpBase} (${bpLbl}) + ${c.bpX} extra = ${G}`],['F.05','Anchor Bolt (Baseplate)',`G×${c.anPP}`,H,'nos',`${G} plates × ${c.anPP} = ${H}`],['F.06','Spring BNW (Base→Leg)',`G×${c.spPP}`,I,'nos',`${G} × ${c.spPP} = ${I}`],['F.07',`${lcLbl}L Clamps`,lc?`⌈B/S⌉×A×${c.lcS}`:'N/A',J,'nos',lc?`${sp}×${s.tiers}×${c.lcS} = ${J}`:'L Clamp not required'],['F.08',`${lcLbl}BNW for L Clamp`,lc?`J×${c.bnPC}`:'N/A',K,'nos',lc?`${J}×${c.bnPC} = ${K}`:'L Clamp not required'],['F.09','End Cap',`C×${c.ecM}`,L,'nos',`${C}×${c.ecM} = ${L}`],['F.10','Cable Cleats',`Trefoil×Tiers`,O,'nos',`${s.trfPT}×${s.tiers} = ${O}`]];}
 
 function cWall(s,c){
   if(!s.len||!s.spc)return[['W.01','Wall Brackets','—',0,'nos','Enter length & spacing'],['W.02','Back Channel','—',0,'m',''],['W.03','Channel Qty','—',0,'pcs',''],['W.04','Anchor Bolt','—',0,'nos',''],['W.05','Rawl Plug','—',0,'nos',''],['W.06','Spring Nut','—',0,'nos',''],['W.07','End Cap','—',0,'nos',''],['W.08','Cable Cleats','—',0,'nos','']];
@@ -222,7 +237,7 @@ function cTray(t,c){
   ];
 }
 
-function getSup(row){const c=gc(row);return row.mt==='floor'?cFloor(row.s,c):row.mt==='wall'?cWall(row.s,c):cRoof(row.s,c);}
+function getSup(row){const c=gc(row);return row.mt==='floor'?cFloor(row.s,c,row.ov):row.mt==='wall'?cWall(row.s,c):cRoof(row.s,c);}
 function getVal(row,ref,calcVal){return(row.ov&&row.ov[ref]!==undefined)?row.ov[ref]:calcVal;}
 
 // ═══════════════════════════════
@@ -297,7 +312,16 @@ function rRows(s){
 function supInputs(row,d){
   let h=`<div class="c"><div class="ch"><h3>Manual Inputs — Support</h3><span class="mt2 mt-m">ENTER</span></div><div class="cb"><div class="fg">
     ${nI('Tiers','us','tiers',row.s.tiers,'layers',1,d)}${nI('Support Length','us','len',row.s.len,'m',1,d)}${nI('Spacing','us','spc',row.s.spc,'m',0.01,d)}`;
-  if(row.mt==='floor')h+=nI('Leg Height','us','legH',row.s.legH,'m',0.01,d)+nI('Legger Width','us','legW',row.s.legW,'m',0.01,d);
+  if(row.mt==='floor'){h+=nI('Leg Height','us','legH',row.s.legH,'m',0.01,d)+nI('Legger Width','us','legW',row.s.legW,'m',0.01,d);
+    h+=`<div class="fi"><label>Support Legs</label><select class="im" onchange="uS('supSides',parseInt(this.value))" ${d}>
+      <option value="2" ${(row.s.supSides||2)===2?'selected':''}>Both Sides (×2)</option>
+      <option value="1" ${row.s.supSides===1?'selected':''}>One Side Only (×1)</option></select></div>`;
+    h+=`<div class="fi"><label>Base Plate</label><select class="im" onchange="uS('bpSides',parseInt(this.value))" ${d}>
+      <option value="2" ${(row.s.bpSides||2)===2?'selected':''}>Both Sides</option>
+      <option value="1" ${row.s.bpSides===1?'selected':''}>One Side Only</option></select></div>`;
+    h+=`<div class="fi"><label>L Clamp</label><select class="im" onchange="uS('lClamp',this.value==='true')" ${d}>
+      <option value="true" ${row.s.lClamp!==false?'selected':''}>Required</option>
+      <option value="false" ${row.s.lClamp===false?'selected':''}>Not Required (zero)</option></select></div>`;}
   if(row.mt==='wall')h+=`<div class="fi"><label>Walls</label><select class="im" onchange="uS('walls',parseInt(this.value))" ${d}><option value="1" ${row.s.walls===1?'selected':''}>1 — Single</option><option value="2" ${row.s.walls===2?'selected':''}>2 — Both</option></select></div>`;
   if(row.mt==='roof')h+=nI('Drop Height','us','dropH',row.s.dropH,'m',0.01,d)+nI('Hz Channel W','us','legW',row.s.legW,'m',0.01,d);
   h+=`<div class="fi"><label>Cable Size</label><input class="im" value="${row.s.cblSz}" onchange="uS('cblSz',this.value)" ${d}></div>${nI('Trefoil/Tier','us','trfPT',row.s.trfPT,'nos',1,d)}</div></div></div>`;
@@ -687,7 +711,7 @@ function migrate(){
     if(!$.asc)$.asc=0;if($.at==='info')$.at='rows';
     s.secs.forEach(sc=>{
       if(!sc.info)sc.info={building:'',location:'',drawRef:'',section:'',manRef:'',note:''};
-      sc.rows.forEach(r=>{if(!r.mt)r.mt='floor';if(!r.rmS)r.rmS={};if(!r.rmT)r.rmT={};if(!r.ov)r.ov={};if(r.co===undefined)r.co=null;if(!r.s.walls)r.s.walls=2;if(!r.s.dropH)r.s.dropH=0.8;if(r.pr===undefined)r.pr=true;if(!r.dsc)r.dsc={};if(!r.ci)r.ci=[];if(!r.area)r.area='';delete r.t.run;});
+      sc.rows.forEach(r=>{if(!r.mt)r.mt='floor';if(!r.rmS)r.rmS={};if(!r.rmT)r.rmT={};if(!r.ov)r.ov={};if(r.co===undefined)r.co=null;if(!r.s.walls)r.s.walls=2;if(!r.s.supSides)r.s.supSides=2;if(!r.s.bpSides)r.s.bpSides=2;if(r.s.lClamp===undefined)r.s.lClamp=true;if(!r.s.dropH)r.s.dropH=0.8;if(r.pr===undefined)r.pr=true;if(!r.dsc)r.dsc={};if(!r.ci)r.ci=[];if(!r.area)r.area='';delete r.t.run;});
     });
   });}
 (function(){
