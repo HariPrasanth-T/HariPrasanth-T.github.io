@@ -259,7 +259,7 @@ function rRows(s){
 
   h+=`<div class="c" style="padding:8px 12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
     <div class="fi" style="flex:1;min-width:180px"><label>Area / Section / Room</label><input class="im" value="${row.area||''}" placeholder="e.g. MV Room, LV Panel, Building A" onchange="uRow('area',this.value)" ${d}></div>
-    <div style="font-size:10px;color:var(--mu)">Tray: <strong>${row.t.type}</strong> | Mount: <strong style="text-transform:capitalize">${row.mt}</strong> | Cant: <strong>${row.t.cTy==='NONE'?'None':row.t.cTy==='1S'?'1-Side':'2-Side'}</strong></div>
+    <div style="font-size:10px;color:var(--mu)">${Object.keys(row.ov||{}).length?`<button class="b bs" style="background:var(--wn);color:#fff;font-size:9px" onclick="clrAllOv()">⚠ Clear ${Object.keys(row.ov).length} Override(s)</button> `:''}Tray: <strong>${row.t.type||'—'}</strong> | Mount: <strong style="text-transform:capitalize">${row.mt}</strong> | Cant: <strong>${row.t.cTy==='NONE'?'None':row.t.cTy==='1S'?'1-Side':'2-Side'}</strong></div>
   </div>`;
 
   h+=`<div class="msel">
@@ -334,7 +334,7 @@ function cTbl(title,items,row,rmK){
     h+=`<tr><td class="rf">${ref}</td>
       <td>${editMode?`<input style="width:100%;padding:2px 4px;border:1px solid transparent;border-radius:3px;font-size:11px;background:transparent" value="${dispName}" onfocus="this.style.borderColor='var(--st)';this.style.background='var(--ib)'" onblur="this.style.borderColor='transparent';this.style.background='transparent'" onchange="uDsc('${ref}',this.value,'${item}')" title="Click to edit description">`:dispName}</td>
       <td class="fm" title="${tip||fm}" style="cursor:help">${fm}</td>
-      <td class="v">${typeof displayQty==='number'?displayQty.toLocaleString():displayQty} ${tag}</td><td>${unit}</td>
+      <td class="v" ${hasOv&&displayQty===0?'style="color:var(--dn)"':''}>${typeof displayQty==='number'?displayQty.toLocaleString():displayQty} ${tag}</td><td>${unit}</td>
       <td>${editMode?`<input type="number" class="ov-inp" value="${hasOv?row.ov[ref]:''}" placeholder="${calcQty}" style="width:55px;font-size:10px" onchange="uOvVal('${ref}',this.value)" title="Empty=auto">`:(hasOv?'⚡'+displayQty:'—')}</td>
       <td><textarea class="rk" rows="1" placeholder="..." onchange="uRk('${rmK}','${ref}',this.value)" ${d}>${rk}</textarea></td></tr>`;
   });
@@ -432,8 +432,14 @@ function rSum(s){
   h+=`<div class="c"><div class="ch"><h3>Row Summary</h3></div><div class="cb"><div style="overflow-x:auto"><table class="dt"><tr><th>🖨</th><th>Section</th><th>Row</th><th>Mount</th><th>Tiers</th><th>Len</th><th>Tray Type</th><th>T.Len</th><th>T.Tiers</th></tr>
     ${s.secs.map(sc=>sc.rows.map(r=>`<tr style="${r.pr?'':'opacity:.5'}"><td style="text-align:center">${r.pr?'✅':'🚫'}</td><td style="font-weight:600">${sc.name}</td><td>${r.name}</td><td style="text-transform:capitalize">${r.mt}</td><td class="v">${r.s.tiers}</td><td class="v">${r.s.len}m</td><td>${r.t.type||'—'}</td><td class="v">${r.t.tLen}m</td><td class="v">${r.t.tiers}</td></tr>`).join('')).join('')}
   </table></div></div></div>`;
+  // Per-section mini BOQ
+  h+=`<div class="c"><div class="ch"><h3>Per-Section Breakdown</h3></div><div class="cb"><div style="overflow-x:auto"><table class="dt">
+    <tr><th>Section</th><th>Rows</th><th>Mount Types</th><th>Tray Types</th></tr>
+    ${s.secs.map(sc=>{const mts=[...new Set(sc.rows.map(r=>r.mt))].join(', ');const tts=[...new Set(sc.rows.map(r=>r.t.type).filter(Boolean))].join(', ');
+      return`<tr><td style="font-weight:600">${sc.name}</td><td class="v">${sc.rows.length}</td><td style="text-transform:capitalize">${mts}</td><td>${tts||'—'}</td></tr>`;}).join('')}
+  </table></div></div></div>`;
   let sn=0,curS='';
-  h+=`<div class="c"><div class="ch"><h3>Consolidated BOQ</h3></div><div class="cb"><table class="bq" id="bqT"><tr><th style="width:35px">No</th><th style="width:50px">Ref</th><th>Material</th><th style="width:60px;text-align:right">Qty</th><th style="width:40px">Unit</th></tr>`;
+  h+=`<div class="c"><div class="ch"><h3>Consolidated BOQ (All Sections Combined)</h3></div><div class="cb"><table class="bq" id="bqT"><tr><th style="width:35px">No</th><th style="width:50px">Ref</th><th>Material</th><th style="width:60px;text-align:right">Qty</th><th style="width:40px">Unit</th></tr>`;
   bqRows.forEach(r=>{if(r.sec!==curS){curS=r.sec;h+=`<tr class="sr"><td colspan="5">${r.sec.toUpperCase()}</td></tr>`;}sn++;h+=`<tr><td style="text-align:center">${sn}</td><td class="rf">${r.ref}</td><td>${r.name}</td><td class="qy">${r.qty.toLocaleString()}</td><td>${r.unit}</td></tr>`;});
   h+=`</table></div></div>`;return h;}
 
@@ -452,6 +458,7 @@ function pushCfgExcept(){if(!askPw('Push to rows WITHOUT manual overrides?'))ret
 function togOv(on){snap();const r=curRow();r.co=on?{}:null;R();}
 function uOv(k,v){snap();const r=curRow();if(!r.co)r.co={};r.co[k]=v;R();}
 function clrOv(){snap();curRow().co=null;R();tw('Override cleared');}
+function clrAllOv(){if(!confirm('Clear ALL manual overrides for this row? Formula values will be restored.'))return;snap();curRow().ov={};R();tw('✅ All overrides cleared — formula values restored');}
 function uOvVal(ref,val){
   snap();const r=curRow();
   if(val===''||val===null){delete r.ov[ref];}else{r.ov[ref]=parseFloat(val);}R();
@@ -555,9 +562,8 @@ function exPr(){
       h+=`</table></div></div>`;
     }
   });
+  h+='<div class="no-print" style="text-align:center;padding:20px"><button onclick="window.print()" style="padding:14px 40px;font-size:16px;background:var(--st);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:700">🖨 CLICK TO PRINT</button>  <button onclick="R()" style="padding:14px 30px;font-size:14px;background:var(--mu);color:#fff;border:none;border-radius:8px;cursor:pointer;margin-left:10px">← Back to App</button></div>';
   mc.innerHTML=h;
-  setTimeout(()=>window.print(),300);
-  setTimeout(()=>R(),1000);
 }
 
 function exCSV(){
@@ -622,7 +628,18 @@ function buildBOQ(s,printOnly){
   function add(sec,key,val,unit){const k=sec+'|'+key;if(!agg[k]){agg[k]={q:0,u:unit,s:sec};ord.push(k);}agg[k].q+=val;}
   const allRows=s.secs.flatMap(sc=>sc.rows);
   const rows=printOnly?allRows.filter(r=>r.pr):allRows;
-  rows.forEach(row=>{const c=gc(row);const sup=getSup(row);const tray=cTray(row.t,c);const p=row.mt==='floor'?'Floor':row.mt==='wall'?'Wall':'Roof';
+  // Pass 1: Register ALL items in correct order (even if qty=0) using first row per mount type
+  const mtSeen={};
+  rows.forEach(row=>{
+    const c=gc(row);const sup=getSup(row);const tray=cTray(row.t,c);
+    const p=row.mt==='floor'?'Floor':row.mt==='wall'?'Wall':'Roof';
+    if(!mtSeen[p]){mtSeen[p]=true;sup.forEach(([ref,name,,cv,u])=>{const dn=(row.dsc&&row.dsc[ref])||name;add(p+' Support',dn,0,u);});}
+    if(!mtSeen['Tray']){mtSeen['Tray']=true;tray.forEach(([ref,name,,cv,u])=>{const dn=(row.dsc&&row.dsc[ref])||name;add('Cable Tray',dn,0,u);});}
+  });
+  // Pass 2: Accumulate actual quantities
+  rows.forEach(row=>{
+    const c=gc(row);const sup=getSup(row);const tray=cTray(row.t,c);
+    const p=row.mt==='floor'?'Floor':row.mt==='wall'?'Wall':'Roof';
     sup.forEach(([ref,name,,cv,u])=>{const v=getVal(row,ref,cv);const dn=(row.dsc&&row.dsc[ref])||name;if(v>0)add(p+' Support',dn,v,u);});
     tray.forEach(([ref,name,,cv,u])=>{const v=getVal(row,ref,cv);const dn=(row.dsc&&row.dsc[ref])||name;if(v>0)add('Cable Tray',dn,v,u);});
     if(row.ci)row.ci.forEach(ci=>{if(ci.qty>0)add(ci.sec==='S'?p+' Support':'Cable Tray',ci.name,ci.qty,ci.unit);});
